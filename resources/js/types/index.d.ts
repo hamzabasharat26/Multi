@@ -28,6 +28,8 @@ export interface SharedData {
     auth: Auth;
     sidebarOpen: boolean;
     isDeveloper: boolean;
+    authRole: string | null;
+    authUsername: string | null;
     [key: string]: unknown;
 }
 

@@ -10,7 +10,7 @@ import brandRoutes from '@/routes/brands';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router, useForm } from '@inertiajs/react';
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface Brand {
     id: number;
@@ -35,6 +35,7 @@ interface Measurement {
     measurement: string;
     tol_plus: number | null;
     tol_minus: number | null;
+    side: string;
     sizes: MeasurementSize[];
 }
 
@@ -47,7 +48,6 @@ interface Props {
 interface SizeSection {
     size: string;
     value: string;
-    unit: string;
 }
 
 export default function Edit({ brand, article, measurement }: Props) {
@@ -83,25 +83,25 @@ export default function Edit({ brand, article, measurement }: Props) {
             ? measurement.sizes.map((s) => ({
                   size: s.size,
                   value: s.value.toString(),
-                  unit: s.unit,
               }))
-            : [{ size: '', value: '', unit: 'cm' }],
+            : [{ size: '', value: '' }],
     );
+
+    // Derive global unit from the first size entry (all sizes share the same unit)
+    const initialUnit = measurement.sizes && measurement.sizes.length > 0 ? measurement.sizes[0].unit : 'cm';
 
     const { data, setData, put, processing, errors } = useForm({
         code: measurement.code,
         measurement: measurement.measurement,
+        unit: initialUnit,
+        side: measurement.side || 'front',
         tol_plus: measurement.tol_plus?.toString() || '',
         tol_minus: measurement.tol_minus?.toString() || '',
         sizes: sizes,
     });
 
-    useEffect(() => {
-        setData('sizes', sizes);
-    }, [sizes, setData]);
-
     const addSizeSection = () => {
-        setSizes([...sizes, { size: '', value: '', unit: 'cm' }]);
+        setSizes([...sizes, { size: '', value: '' }]);
     };
 
     const removeSizeSection = (index: number) => {
@@ -119,21 +119,44 @@ export default function Edit({ brand, article, measurement }: Props) {
         setData('sizes', newSizes);
     };
 
+    // Utility function to convert fraction string to decimal
+    const fractionToDecimal = (input: string): number | null => {
+        if (!input || input.trim() === '') return null;
+
+        // Check if input is a fraction (e.g., "1/2", "3/8")
+        const fractionMatch = input.trim().match(/^(\d+)\/(\d+)$/);
+        if (fractionMatch) {
+            const numerator = parseInt(fractionMatch[1]);
+            const denominator = parseInt(fractionMatch[2]);
+            if (denominator === 0) return null;
+            return numerator / denominator;
+        }
+
+        // Otherwise try to parse as decimal
+        const decimal = parseFloat(input);
+        return isNaN(decimal) ? null : decimal;
+    };
+
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Transform sizes to ensure numeric values
+        // Transform sizes to ensure numeric values (handle fractions for inches)
         const transformedSizes = sizes.map((size) => ({
             size: size.size,
-            value: parseFloat(size.value) || 0,
-            unit: size.unit,
+            value: data.unit === 'inches' ? (fractionToDecimal(size.value) ?? 0) : (parseFloat(size.value) || 0),
+            unit: data.unit,
         }));
+
+        // Convert tolerance values (handle fractions if inches selected)
+        const tolPlusValue = fractionToDecimal(data.tol_plus as string);
+        const tolMinusValue = fractionToDecimal(data.tol_minus as string);
 
         const formData = {
             code: data.code,
             measurement: data.measurement,
-            tol_plus: data.tol_plus ? parseFloat(data.tol_plus as string) : null,
-            tol_minus: data.tol_minus ? parseFloat(data.tol_minus as string) : null,
+            side: data.side,
+            tol_plus: tolPlusValue,
+            tol_minus: tolMinusValue,
             sizes: transformedSizes,
         };
 
@@ -158,8 +181,9 @@ export default function Edit({ brand, article, measurement }: Props) {
                         <CardHeader>
                             <CardTitle>Measurement Details</CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="grid gap-4 md:grid-cols-4">
+                        <CardContent className="space-y-6">
+                            {/* Code and Measurement */}
+                            <div className="grid gap-4 md:grid-cols-2">
                                 <div className="grid gap-2">
                                     <Label htmlFor="code">Code *</Label>
                                     <Input id="code" value={data.code} onChange={(e) => setData('code', e.target.value)} required />
@@ -176,27 +200,83 @@ export default function Edit({ brand, article, measurement }: Props) {
                                     />
                                     <InputError message={errors.measurement} />
                                 </div>
+                            </div>
+
+                            {/* Unit and Side Selectors */}
+                            <div className="grid gap-4 md:grid-cols-2">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="unit">Unit *</Label>
+                                    <Select value={data.unit} onValueChange={(value) => setData('unit', value)} required>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select unit" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="cm">cm (centimeters)</SelectItem>
+                                            <SelectItem value="inches">inches</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    {data.unit === 'inches' && (
+                                        <p className="text-xs text-muted-foreground">Fractions supported (e.g., 1/2, 3/8)</p>
+                                    )}
+                                    <InputError message={errors.unit} />
+                                </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="tol_plus">Tol (+)</Label>
+                                    <Label htmlFor="side">Measurement Side *</Label>
+                                    <Select value={data.side} onValueChange={(value) => setData('side', value)} required>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select side" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="front">
+                                                <span className="flex items-center gap-2">
+                                                    <span className="inline-block h-2 w-2 rounded-full bg-blue-500"></span>
+                                                    Front Side
+                                                </span>
+                                            </SelectItem>
+                                            <SelectItem value="back">
+                                                <span className="flex items-center gap-2">
+                                                    <span className="inline-block h-2 w-2 rounded-full bg-amber-500"></span>
+                                                    Back / Left Side
+                                                </span>
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <p className="text-xs text-muted-foreground">
+                                        {data.side === 'front'
+                                            ? 'Measurements taken from the front of the garment'
+                                            : 'Measurements taken from the back or left side of the garment'}
+                                    </p>
+                                    <InputError message={errors.side} />
+                                </div>
+                            </div>
+
+                            {/* Tolerance Fields */}
+                            <div className="grid gap-4 md:grid-cols-2">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="tol_plus">
+                                        Tol (+) {data.unit === 'inches' && <span className="text-xs text-muted-foreground">(e.g., 1/2 or 0.5)</span>}
+                                    </Label>
                                     <Input
                                         id="tol_plus"
-                                        type="number"
-                                        step="0.01"
+                                        type="text"
                                         value={data.tol_plus}
                                         onChange={(e) => setData('tol_plus', e.target.value)}
+                                        placeholder={data.unit === 'inches' ? 'e.g., 1/2 or 0.5' : 'e.g., 0.5'}
                                     />
                                     <InputError message={errors.tol_plus} />
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="tol_minus">Tol (-)</Label>
+                                    <Label htmlFor="tol_minus">
+                                        Tol (-) {data.unit === 'inches' && <span className="text-xs text-muted-foreground">(e.g., 1/4 or 0.25)</span>}
+                                    </Label>
                                     <Input
                                         id="tol_minus"
-                                        type="number"
-                                        step="0.01"
+                                        type="text"
                                         value={data.tol_minus}
                                         onChange={(e) => setData('tol_minus', e.target.value)}
+                                        placeholder={data.unit === 'inches' ? 'e.g., 1/4 or 0.25' : 'e.g., 0.25'}
                                     />
                                     <InputError message={errors.tol_minus} />
                                 </div>
@@ -218,7 +298,7 @@ export default function Edit({ brand, article, measurement }: Props) {
                             {sizes.map((size, index) => (
                                 <div
                                     key={index}
-                                    className="grid items-end gap-4 border-b border-neutral-200 pb-4 md:grid-cols-4 dark:border-neutral-700"
+                                    className="grid items-end gap-4 rounded-lg border p-4 md:grid-cols-3"
                                 >
                                     <div className="grid gap-2">
                                         <Label htmlFor={`size-${index}`}>Size *</Label>
@@ -232,30 +312,19 @@ export default function Edit({ brand, article, measurement }: Props) {
                                     </div>
 
                                     <div className="grid gap-2">
-                                        <Label htmlFor={`value-${index}`}>Value *</Label>
+                                        <Label htmlFor={`value-${index}`}>
+                                            Value * {data.unit === 'inches' && <span className="text-xs text-muted-foreground">(fraction ok)</span>}
+                                        </Label>
                                         <Input
                                             id={`value-${index}`}
-                                            type="number"
-                                            step="0.01"
+                                            type={data.unit === 'inches' ? 'text' : 'number'}
+                                            step={data.unit === 'inches' ? undefined : '0.01'}
                                             value={size.value}
                                             onChange={(e) => updateSizeSection(index, 'value', e.target.value)}
+                                            placeholder={data.unit === 'inches' ? 'e.g., 24 1/2 or 24.5' : 'e.g., 62.5'}
                                             required
                                         />
                                         <InputError message={errors[`sizes.${index}.value` as keyof typeof errors]} />
-                                    </div>
-
-                                    <div className="grid gap-2">
-                                        <Label htmlFor={`unit-${index}`}>Unit *</Label>
-                                        <Select value={size.unit} onValueChange={(value) => updateSizeSection(index, 'unit', value)} required>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select unit" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="cm">cm</SelectItem>
-                                                <SelectItem value="inches">inches</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <InputError message={errors[`sizes.${index}.unit` as keyof typeof errors]} />
                                     </div>
 
                                     <div className="flex items-end">

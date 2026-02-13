@@ -37,6 +37,7 @@ interface Measurement {
     measurement: string;
     tol_plus: number | null;
     tol_minus: number | null;
+    side: string;
     sizes: MeasurementSize[];
     created_at: string;
     updated_at: string;
@@ -109,7 +110,7 @@ export default function Show({ brand, article, measurement }: Props) {
                         <CardTitle>Measurement Information</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="grid gap-4 md:grid-cols-5">
+                        <div className="grid gap-4 md:grid-cols-6">
                             <div>
                                 <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
                                     Article
@@ -127,6 +128,19 @@ export default function Show({ brand, article, measurement }: Props) {
                                     Measurement
                                 </p>
                                 <p className="text-base">{measurement.measurement}</p>
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                                    Side
+                                </p>
+                                <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                                    measurement.side === 'front'
+                                        ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
+                                        : 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300'
+                                }`}>
+                                    <span className={`inline-block h-1.5 w-1.5 rounded-full ${measurement.side === 'front' ? 'bg-blue-500' : 'bg-amber-500'}`}></span>
+                                    {measurement.side === 'front' ? 'Front Side' : 'Back / Left Side'}
+                                </span>
                             </div>
                             <div>
                                 <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">

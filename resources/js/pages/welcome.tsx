@@ -1,4 +1,4 @@
-import { dashboard, login, register } from '@/routes';
+import { dashboard } from '@/routes';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import {
@@ -38,7 +38,7 @@ export default function Welcome() {
                             </div>
 
                             <div className="flex items-center gap-4">
-                                {auth.user ? (
+                                {auth.user && (
                                     <Link
                                         href={dashboard()}
                                         className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#264c59] to-[#3d6b7a] px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-[#264c59]/25 transition-all hover:shadow-xl hover:shadow-[#264c59]/30"
@@ -46,22 +46,6 @@ export default function Welcome() {
                                         Go to Dashboard
                                         <ArrowRight className="h-4 w-4" />
                                     </Link>
-                                ) : (
-                                    <>
-                                        <Link
-                                            href={login()}
-                                            className="text-sm font-medium text-slate-600 hover:text-[#264c59] transition-colors"
-                                        >
-                                            Log in
-                                        </Link>
-                                        <Link
-                                            href={register()}
-                                            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#264c59] to-[#3d6b7a] px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-[#264c59]/25 transition-all hover:shadow-xl hover:shadow-[#264c59]/30"
-                                        >
-                                            Get Started
-                                            <ArrowRight className="h-4 w-4" />
-                                        </Link>
-                                    </>
                                 )}
                             </div>
                         </nav>
@@ -98,25 +82,17 @@ export default function Welcome() {
                                 real-time measurements, and comprehensive quality analytics.
                             </p>
 
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                                {!auth.user && (
-                                    <>
-                                        <Link
-                                            href={register()}
-                                            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#264c59] to-[#3d6b7a] px-8 py-4 text-base font-semibold text-white shadow-xl shadow-[#264c59]/25 transition-all hover:scale-105 hover:shadow-2xl hover:shadow-[#264c59]/30"
-                                        >
-                                            Start Free Trial
-                                            <ArrowRight className="h-5 w-5" />
-                                        </Link>
-                                        <Link
-                                            href={login()}
-                                            className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-200 bg-white px-8 py-4 text-base font-semibold text-slate-700 transition-all hover:border-[#264c59] hover:text-[#264c59]"
-                                        >
-                                            Sign In
-                                        </Link>
-                                    </>
-                                )}
-                            </div>
+                            {!auth.user && (
+                                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                                    <Link
+                                        href="/system-login"
+                                        className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#264c59] to-[#3d6b7a] px-8 py-4 text-base font-semibold text-white shadow-xl shadow-[#264c59]/25 transition-all hover:scale-105 hover:shadow-2xl hover:shadow-[#264c59]/30"
+                                    >
+                                        Login
+                                        <ArrowRight className="h-5 w-5" />
+                                    </Link>
+                                </div>
+                            )}
                         </div>
 
                         {/* Hero Image/Stats */}
@@ -230,23 +206,7 @@ export default function Welcome() {
                             Join leading garment manufacturers who trust MagicQC for precision quality control.
                         </p>
 
-                        {!auth.user && (
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                                <Link
-                                    href={register()}
-                                    className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 text-base font-semibold text-[#264c59] shadow-xl transition-all hover:scale-105 hover:shadow-2xl"
-                                >
-                                    Get Started Free
-                                    <ArrowRight className="h-5 w-5" />
-                                </Link>
-                                <Link
-                                    href={login()}
-                                    className="inline-flex items-center gap-2 rounded-xl border-2 border-white/30 px-8 py-4 text-base font-semibold text-white transition-all hover:bg-white/10"
-                                >
-                                    Sign In
-                                </Link>
-                            </div>
-                        )}
+
                     </div>
                 </section>
 

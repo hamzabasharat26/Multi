@@ -17,6 +17,7 @@ class Measurement extends Model
         'measurement',
         'tol_plus',
         'tol_minus',
+        'side',
     ];
 
     protected $casts = [

@@ -16,7 +16,7 @@ class EnsureAuthenticatedOrDeveloper
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() || session('is_developer')) {
+        if (Auth::check() || session('is_developer') || session('auth_role') === 'manager_qc') {
             return $next($request);
         }
 

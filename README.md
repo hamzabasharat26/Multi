@@ -737,4 +737,3 @@ For issues and questions:
 ---
 
 **Built with ❤️ using Laravel and React**
-

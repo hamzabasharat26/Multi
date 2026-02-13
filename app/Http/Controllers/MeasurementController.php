@@ -59,6 +59,7 @@ class MeasurementController extends Controller
             'measurement' => ['required', 'string', 'max:255'],
             'tol_plus' => ['nullable', 'numeric'],
             'tol_minus' => ['nullable', 'numeric'],
+            'side' => ['required', 'string', 'in:front,back'],
             'sizes' => ['required', 'array', 'min:1'],
             'sizes.*.size' => ['required', 'string', 'max:255'],
             'sizes.*.value' => ['required', 'numeric'],
@@ -66,6 +67,8 @@ class MeasurementController extends Controller
         ], [
             'code.required' => 'Code is required.',
             'measurement.required' => 'Measurement is required.',
+            'side.required' => 'Side is required.',
+            'side.in' => 'Side must be either front or back.',
             'sizes.required' => 'At least one size section is required.',
             'sizes.min' => 'At least one size section is required.',
             'sizes.*.size.required' => 'Size is required for all size sections.',
@@ -80,6 +83,7 @@ class MeasurementController extends Controller
             'measurement' => $validated['measurement'],
             'tol_plus' => $validated['tol_plus'] ?? null,
             'tol_minus' => $validated['tol_minus'] ?? null,
+            'side' => $validated['side'],
         ]);
 
         foreach ($validated['sizes'] as $sizeData) {
@@ -132,6 +136,7 @@ class MeasurementController extends Controller
             'measurement' => ['required', 'string', 'max:255'],
             'tol_plus' => ['nullable', 'numeric'],
             'tol_minus' => ['nullable', 'numeric'],
+            'side' => ['required', 'string', 'in:front,back'],
             'sizes' => ['required', 'array', 'min:1'],
             'sizes.*.size' => ['required', 'string', 'max:255'],
             'sizes.*.value' => ['required', 'numeric'],
@@ -139,6 +144,8 @@ class MeasurementController extends Controller
         ], [
             'code.required' => 'Code is required.',
             'measurement.required' => 'Measurement is required.',
+            'side.required' => 'Side is required.',
+            'side.in' => 'Side must be either front or back.',
             'sizes.required' => 'At least one size section is required.',
             'sizes.min' => 'At least one size section is required.',
             'sizes.*.size.required' => 'Size is required for all size sections.',
@@ -153,6 +160,7 @@ class MeasurementController extends Controller
             'measurement' => $validated['measurement'],
             'tol_plus' => $validated['tol_plus'] ?? null,
             'tol_minus' => $validated['tol_minus'] ?? null,
+            'side' => $validated['side'],
         ]);
 
         // Delete existing sizes and create new ones

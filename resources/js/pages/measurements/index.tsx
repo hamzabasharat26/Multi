@@ -40,6 +40,7 @@ interface Measurement {
     measurement: string;
     tol_plus: number | null;
     tol_minus: number | null;
+    side: string;
     sizes: MeasurementSize[];
     created_at: string;
     updated_at: string;
@@ -163,6 +164,7 @@ export default function Index({ brand, article, measurements, filters }: Props) 
                             <TableRow>
                                 <TableHead>Code</TableHead>
                                 <TableHead>Measurement</TableHead>
+                                <TableHead>Side</TableHead>
                                 <TableHead>Tol (+)</TableHead>
                                 <TableHead>Tol (-)</TableHead>
                                 <TableHead>Sizes</TableHead>
@@ -174,7 +176,7 @@ export default function Index({ brand, article, measurements, filters }: Props) 
                         <TableBody>
                             {measurements.data.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={8} className="text-center text-neutral-500">
+                                    <TableCell colSpan={9} className="text-center text-neutral-500">
                                         No measurements found. Create your first one!
                                     </TableCell>
                                 </TableRow>
@@ -185,6 +187,16 @@ export default function Index({ brand, article, measurements, filters }: Props) 
                                             {measurement.code}
                                         </TableCell>
                                         <TableCell>{measurement.measurement}</TableCell>
+                                        <TableCell>
+                                            <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${
+                                                measurement.side === 'back'
+                                                    ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300'
+                                                    : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
+                                            }`}>
+                                                <span className={`inline-block h-1.5 w-1.5 rounded-full ${measurement.side === 'back' ? 'bg-amber-500' : 'bg-blue-500'}`}></span>
+                                                {measurement.side === 'back' ? 'Back' : 'Front'}
+                                            </span>
+                                        </TableCell>
                                         <TableCell>
                                             {measurement.tol_plus !== null ? measurement.tol_plus : (
                                                 <span className="text-neutral-400">N/A</span>

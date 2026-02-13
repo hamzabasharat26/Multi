@@ -66,6 +66,7 @@ export default function Create({ brand, article }: Props) {
         code: '',
         measurement: '',
         unit: 'cm',
+        side: 'front',
         tol_plus: '',
         tol_minus: '',
         sizes: sizes,
@@ -111,10 +112,10 @@ export default function Create({ brand, article }: Props) {
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Transform sizes to ensure numeric values
+        // Transform sizes to ensure numeric values (handle fractions for inches)
         const transformedSizes = sizes.map((size) => ({
             size: size.size,
-            value: parseFloat(size.value) || 0,
+            value: data.unit === 'inches' ? (fractionToDecimal(size.value) ?? 0) : (parseFloat(size.value) || 0),
             unit: data.unit,
         }));
 
@@ -125,6 +126,7 @@ export default function Create({ brand, article }: Props) {
         const formData = {
             code: data.code,
             measurement: data.measurement,
+            side: data.side,
             tol_plus: tolPlusValue,
             tol_minus: tolMinusValue,
             sizes: transformedSizes,
@@ -139,6 +141,7 @@ export default function Create({ brand, article }: Props) {
                     code: '',
                     measurement: '',
                     unit: 'cm',
+                    side: 'front',
                     tol_plus: '',
                     tol_minus: '',
                     sizes: [{ size: '', value: '' }],
@@ -187,19 +190,53 @@ export default function Create({ brand, article }: Props) {
                                 </div>
                             </div>
 
-                            {/* Unit Selector */}
-                            <div className="grid gap-2">
-                                <Label htmlFor="unit">Unit *</Label>
-                                <Select value={data.unit} onValueChange={(value) => setData('unit', value)} required>
-                                    <SelectTrigger className="md:w-1/2">
-                                        <SelectValue placeholder="Select unit" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="cm">cm</SelectItem>
-                                        <SelectItem value="inches">inches</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <InputError message={errors.unit} />
+                            {/* Unit and Side Selectors */}
+                            <div className="grid gap-4 md:grid-cols-2">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="unit">Unit *</Label>
+                                    <Select value={data.unit} onValueChange={(value) => setData('unit', value)} required>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select unit" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="cm">cm (centimeters)</SelectItem>
+                                            <SelectItem value="inches">inches</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    {data.unit === 'inches' && (
+                                        <p className="text-xs text-muted-foreground">Fractions supported (e.g., 1/2, 3/8)</p>
+                                    )}
+                                    <InputError message={errors.unit} />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label htmlFor="side">Measurement Side *</Label>
+                                    <Select value={data.side} onValueChange={(value) => setData('side', value)} required>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select side" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="front">
+                                                <span className="flex items-center gap-2">
+                                                    <span className="inline-block h-2 w-2 rounded-full bg-blue-500"></span>
+                                                    Front Side
+                                                </span>
+                                            </SelectItem>
+                                            <SelectItem value="back">
+                                                <span className="flex items-center gap-2">
+                                                    <span className="inline-block h-2 w-2 rounded-full bg-amber-500"></span>
+                                                    Back / Left Side
+                                                </span>
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <p className="text-xs text-muted-foreground">
+                                        {data.side === 'front'
+                                            ? 'Measurements taken from the front of the garment'
+                                            : 'Measurements taken from the back or left side of the garment'}
+                                    </p>
+                                    <InputError message={errors.side} />
+                                </div>
                             </div>
 
                             {/* Tolerance Fields */}
@@ -261,13 +298,16 @@ export default function Create({ brand, article }: Props) {
                                             </div>
 
                                             <div className="grid gap-2">
-                                                <Label htmlFor={`value-${index}`}>Value *</Label>
+                                                <Label htmlFor={`value-${index}`}>
+                                                    Value * {data.unit === 'inches' && <span className="text-xs text-muted-foreground">(fraction ok)</span>}
+                                                </Label>
                                                 <Input
                                                     id={`value-${index}`}
-                                                    type="number"
-                                                    step="0.01"
+                                                    type={data.unit === 'inches' ? 'text' : 'number'}
+                                                    step={data.unit === 'inches' ? undefined : '0.01'}
                                                     value={size.value}
                                                     onChange={(e) => updateSizeSection(index, 'value', e.target.value)}
+                                                    placeholder={data.unit === 'inches' ? 'e.g., 24 1/2 or 24.5' : 'e.g., 62.5'}
                                                     required
                                                 />
                                                 <InputError message={errors[`sizes.${index}.value` as keyof typeof errors]} />

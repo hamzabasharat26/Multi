@@ -62,6 +62,7 @@ export default function DeveloperLogin() {
                                             onChange={(e) => setData('password', e.target.value)}
                                             required
                                             autoFocus
+                                            autoComplete="new-password"
                                         />
                                         <button
                                             type="button"

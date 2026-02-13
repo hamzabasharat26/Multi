@@ -7,6 +7,14 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
+// System Login Routes (Fixed Credentials: ManagerQC / MEB)
+Route::get('system-login', [\App\Http\Controllers\Auth\FixedCredentialLoginController::class, 'showLoginForm'])
+    ->name('system.login');
+Route::post('system-login', [\App\Http\Controllers\Auth\FixedCredentialLoginController::class, 'login'])
+    ->name('system.login.submit');
+Route::post('system-logout', [\App\Http\Controllers\Auth\FixedCredentialLoginController::class, 'logout'])
+    ->name('system.logout');
+
 // Developer Login Routes
 Route::get('developer-login', [\App\Http\Controllers\Auth\DeveloperLoginController::class, 'showLoginForm'])
     ->name('developer.login');
@@ -144,6 +152,34 @@ Route::middleware([\App\Http\Middleware\EnsureAuthenticatedOrDeveloper::class])-
         Route::delete('/annotations/{id}', [\App\Http\Controllers\AnnotationUploadController::class, 'delete'])
             ->name('annotation-upload.delete');
     });
+});
+
+// Developer Settings (available to developer access only)
+Route::middleware([\App\Http\Middleware\EnsureDeveloper::class])->group(function () {
+    Route::get('developer-settings', [\App\Http\Controllers\DeveloperSettingsController::class, 'index'])
+        ->name('developer.settings');
+    Route::put('developer-settings/password', [\App\Http\Controllers\DeveloperSettingsController::class, 'updatePassword'])
+        ->name('developer.settings.password');
+});
+
+// Director Analytics Dashboard (MEB only)
+Route::middleware([\App\Http\Middleware\EnsureMEB::class])->group(function () {
+    Route::get('director-analytics-dashboard', [\App\Http\Controllers\DirectorAnalyticsController::class, 'index'])
+        ->name('director.analytics.dashboard');
+    Route::get('director-analytics-dashboard/export/excel', [\App\Http\Controllers\DirectorAnalyticsController::class, 'exportExcel'])
+        ->name('director.analytics.export.excel');
+    Route::get('director-analytics-dashboard/export/pdf', [\App\Http\Controllers\DirectorAnalyticsController::class, 'exportPdf'])
+        ->name('director.analytics.export.pdf');
+});
+
+// System Settings (available to both ManagerQC and MEB roles)
+Route::middleware([\App\Http\Middleware\EnsureSystemRole::class])->group(function () {
+    Route::get('system-settings', [\App\Http\Controllers\SystemSettingsController::class, 'index'])
+        ->name('system.settings');
+    Route::put('system-settings/username', [\App\Http\Controllers\SystemSettingsController::class, 'updateUsername'])
+        ->name('system.settings.username');
+    Route::put('system-settings/password', [\App\Http\Controllers\SystemSettingsController::class, 'updatePassword'])
+        ->name('system.settings.password');
 });
 
 require __DIR__.'/settings.php';

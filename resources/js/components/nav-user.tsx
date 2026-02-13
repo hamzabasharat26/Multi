@@ -8,19 +8,40 @@ import { usePage } from '@inertiajs/react';
 import { ChevronsUpDown } from 'lucide-react';
 
 export function NavUser() {
-    const { auth, isDeveloper } = usePage<SharedData>().props;
+    const { auth, isDeveloper, authRole, authUsername } = usePage<SharedData>().props;
     const { state } = useSidebar();
     const isMobile = useIsMobile();
 
-    // Create a fallback user object if in developer mode
-    const user = auth.user || (isDeveloper ? {
-        id: 0,
-        name: 'Developer Access',
-        email: 'developer',
-        email_verified_at: new Date().toISOString(),
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-    } : null);
+    // Create a fallback user object based on authentication type
+    let user = auth.user;
+    if (!user && isDeveloper) {
+        user = {
+            id: 0,
+            name: 'Developer Access',
+            email: 'developer',
+            email_verified_at: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+        };
+    } else if (!user && authRole === 'manager_qc') {
+        user = {
+            id: 0,
+            name: authUsername || 'Manager QC',
+            email: 'QC Manager',
+            email_verified_at: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+        };
+    } else if (!user && authRole === 'meb') {
+        user = {
+            id: 0,
+            name: authUsername || 'MEB',
+            email: 'Director',
+            email_verified_at: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+        };
+    }
 
     if (!user) return null;
 
