@@ -112,6 +112,10 @@ Route::middleware([\App\Http\Middleware\EnsureAuthenticatedOrDeveloper::class])-
 
         // Measurements nested under articles
         Route::prefix('articles/{article}')->group(function () {
+            // Camera Capture page
+            Route::get('camera-capture', [\App\Http\Controllers\CameraCaptureController::class, 'show'])
+                ->name('brands.articles.camera-capture');
+
             // Article Images routes
             Route::get('images', [\App\Http\Controllers\ArticleImageController::class, 'index'])
                 ->name('brands.articles.images.index');

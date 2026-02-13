@@ -150,8 +150,8 @@ export default function Show({ brand, article, annotations = [] }: Props) {
             alert('Please select a size first');
             return;
         }
-        setCameraError(null);
-        setImageDialogOpen(true);
+        // Navigate to the dedicated camera capture page
+        router.visit(`/brands/${brand.id}/articles/${article.id}/camera-capture?size=${selectedSize}`);
     };
 
     const startCamera = async () => {

@@ -111,6 +111,7 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
         try {
             const response = await fetch(`/annotation-upload/articles/${articleId}/sizes`, {
                 headers: {
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
                 },
             });
@@ -135,6 +136,7 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
                 },
                 body: JSON.stringify({ password: verifyPassword }),
@@ -161,6 +163,7 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
         try {
             const response = await fetch('/annotation-upload/annotations', {
                 headers: {
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
                 },
             });
@@ -238,11 +241,31 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                    'Accept': 'application/json',
                 },
                 body: formData,
             });
 
-            const data = await response.json();
+            // Handle auth/session errors before parsing JSON
+            if (response.status === 401) {
+                setUploadError('Session expired. Please refresh the page and log in again.');
+                return;
+            }
+
+            let data;
+            try {
+                data = await response.json();
+            } catch {
+                setUploadError(`Server error (${response.status}). Please refresh the page and try again.`);
+                return;
+            }
+
+            // Handle validation errors (422)
+            if (response.status === 422 && data.errors) {
+                const messages = Object.values(data.errors).flat().join(', ');
+                setUploadError(messages || data.message || 'Validation failed.');
+                return;
+            }
 
             if (data.success) {
                 setUploadSuccess(`Successfully uploaded ${selectedSide} annotation for ${selectedArticle?.article_style} - ${selectedSize}`);
@@ -264,8 +287,9 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
             } else {
                 setUploadError(data.message || 'Upload failed.');
             }
-        } catch {
-            setUploadError('An error occurred during upload. Please try again.');
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : 'An error occurred during upload. Please try again.';
+            setUploadError(message);
         } finally {
             setIsUploading(false);
         }
@@ -276,6 +300,7 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
             // Fetch the annotation data
             const response = await fetch(`/api/uploaded-annotations/${encodeURIComponent(articleStyle)}/${encodeURIComponent(size)}/${encodeURIComponent(side)}`, {
                 headers: {
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
                 },
             });
@@ -315,6 +340,7 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
             const response = await fetch(`/annotation-upload/annotations/${id}`, {
                 method: 'DELETE',
                 headers: {
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
                 },
             });

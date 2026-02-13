@@ -20,6 +20,11 @@ class EnsureAuthenticatedOrDeveloper
             return $next($request);
         }
 
-        return redirect()->route('login');
+        // Return JSON 401 for AJAX/fetch requests, redirect otherwise
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json(['success' => false, 'message' => 'Session expired. Please log in again.'], 401);
+        }
+
+        return redirect()->route('system.login');
     }
 }

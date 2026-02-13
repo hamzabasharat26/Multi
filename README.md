@@ -1,6 +1,6 @@
-# MagicQC - Laravel React Application
+# MagicQC - Quality Control Management System
 
-A modern, full-stack web application built with Laravel 12 and React, featuring Inertia.js for seamless server-side rendering and Laravel's built-in authentication.
+A full-stack quality control management application built with Laravel 12 and React 19, featuring MindVision industrial camera integration, annotation management, measurement tracking, and inspection workflows for garment manufacturing.
 
 ## 📋 Table of Contents
 
@@ -24,16 +24,18 @@ A modern, full-stack web application built with Laravel 12 and React, featuring 
 
 ## 🎯 Overview
 
-MagicQC is a Laravel 12 application built on the Laravel React Starter Kit. It provides a modern, single-page application experience with server-side rendering capabilities using Inertia.js. The application uses Laravel's built-in authentication and features a beautiful, responsive UI built with React, TypeScript, and Tailwind CSS.
+MagicQC is a quality control management system for garment manufacturing. It handles brand/article management, purchase orders, operator workflows, measurement inspections, camera image capture, and annotation management — all through a modern SPA built with Inertia.js.
 
 ### Key Characteristics
 
 - **Full-Stack Framework**: Laravel 12 backend with React 19 frontend
 - **SPA Experience**: Inertia.js provides seamless navigation without page reloads
-- **Type-Safe Routes**: Wayfinder generates type-safe route helpers
-- **Modern UI**: Built with Radix UI and Tailwind CSS 4
+- **Camera Integration**: MindVision industrial camera via Python Flask bridge server
+- **Annotation System**: Upload, manage, and visualize garment annotations with reference images
+- **Measurement Tracking**: Size-based measurements with tolerance validation (cm/inches/fractions)
+- **Role-Based Access**: System login (Manager QC, MEB), developer mode, and operator PIN auth
+- **Modern UI**: Built with Radix UI, shadcn/ui components, and Tailwind CSS 4
 - **SSR Support**: Server-side rendering configured and ready
-- **Authentication**: Laravel's built-in authentication system
 
 ## 🛠 Technology Stack
 
@@ -41,9 +43,16 @@ MagicQC is a Laravel 12 application built on the Laravel React Starter Kit. It p
 
 - **Laravel 12**: PHP framework
 - **PHP 8.2+**: Programming language
-- **SQLite**: Default database (easily switchable)
-- **Laravel Authentication**: Built-in session-based authentication
+- **MySQL**: Database (via XAMPP)
 - **Inertia.js**: Server-side adapter for Laravel
+
+### Camera / Python
+
+- **Python 3.x**: Camera server runtime
+- **Flask**: HTTP server for camera API
+- **MindVision SDK**: Industrial camera driver (MV-SUA2000C)
+- **OpenCV**: Image processing and JPEG encoding
+- **NumPy**: Frame buffer handling
 
 ### Frontend
 
@@ -65,16 +74,38 @@ MagicQC is a Laravel 12 application built on the Laravel React Starter Kit. It p
 
 ## ✨ Features
 
-### Authentication & User Management
+### Quality Control Core
 
-- ✅ Laravel's built-in authentication
-- ✅ Secure login/logout flow
-- ✅ User registration
-- ✅ Session-based authentication
-- ✅ User profile management
-- ✅ Password change functionality
-- ✅ Account deletion with password confirmation
-- ✅ Avatar support
+- ✅ Brand & article management (CRUD)
+- ✅ Purchase order tracking with client references
+- ✅ Measurement definitions with size grading and tolerances
+- ✅ Measurement sessions with pass/fail validation
+- ✅ Inspection records with operator tracking
+- ✅ Director analytics dashboard
+
+### Camera & Image System
+
+- ✅ MindVision industrial camera integration via Python Flask server
+- ✅ MJPEG live preview streaming
+- ✅ Black/Other garment mode with gain & exposure presets
+- ✅ High-resolution capture (5456×2812)
+- ✅ File upload fallback when camera offline
+
+### Annotation System
+
+- ✅ Upload annotation JSON + reference images per article/size/side
+- ✅ Front/back side support
+- ✅ Annotation data visualization
+- ✅ API for external annotation uploads
+- ✅ Base64 + file storage for reference images
+
+### Authentication & Access Control
+
+- ✅ System login (Manager QC, MEB roles)
+- ✅ Developer login with settings access
+- ✅ Operator PIN-based authentication
+- ✅ Role-based middleware (EnsureManagerQC, EnsureMEB, EnsureDeveloper)
+- ✅ Session-based auth with Inertia
 
 ### Theme System
 
@@ -101,67 +132,91 @@ magicQC/
 ├── app/
 │   ├── Http/
 │   │   ├── Controllers/
-│   │   │   ├── Controller.php
+│   │   │   ├── AnnotationUploadController.php
+│   │   │   ├── ArticleController.php
+│   │   │   ├── ArticleImageController.php
+│   │   │   ├── ArticleRegistrationController.php
+│   │   │   ├── BrandController.php
+│   │   │   ├── CameraCaptureController.php
+│   │   │   ├── DirectorAnalyticsController.php
+│   │   │   ├── MeasurementController.php
+│   │   │   ├── OperatorController.php
+│   │   │   ├── PurchaseOrderController.php
+│   │   │   ├── SystemSettingsController.php
+│   │   │   ├── DeveloperSettingsController.php
+│   │   │   ├── Api/
+│   │   │   │   └── CameraImageController.php
+│   │   │   ├── Auth/
+│   │   │   │   ├── DeveloperLoginController.php
+│   │   │   │   └── FixedCredentialLoginController.php
 │   │   │   └── Settings/
 │   │   │       └── ProfileController.php
 │   │   └── Middleware/
+│   │       ├── EnsureAuthenticatedOrDeveloper.php
+│   │       ├── EnsureDeveloper.php
+│   │       ├── EnsureManagerQC.php
+│   │       ├── EnsureMEB.php
+│   │       ├── EnsureSystemRole.php
 │   │       ├── HandleAppearance.php
 │   │       └── HandleInertiaRequests.php
 │   ├── Models/
+│   │   ├── Article.php
+│   │   ├── ArticleAnnotation.php
+│   │   ├── ArticleImage.php
+│   │   ├── ArticleType.php
+│   │   ├── Brand.php
+│   │   ├── CameraCalibration.php
+│   │   ├── InspectionRecord.php
+│   │   ├── Measurement.php
+│   │   ├── MeasurementSize.php
+│   │   ├── Operator.php
+│   │   ├── PurchaseOrder.php
+│   │   ├── PurchaseOrderArticle.php
+│   │   ├── PurchaseOrderClientReference.php
+│   │   ├── SystemCredential.php
+│   │   ├── UploadedAnnotation.php
 │   │   └── User.php
 │   └── Providers/
 │       └── AppServiceProvider.php
-├── bootstrap/
-│   └── app.php
-├── config/
-│   ├── app.php
-│   ├── auth.php
-│   ├── database.php
-│   ├── inertia.php
-│   └── ...
-├── database/
-│   ├── factories/
-│   │   └── UserFactory.php
-│   ├── migrations/
-│   │   ├── 0001_01_01_000000_create_users_table.php
-│   │   ├── 0001_01_01_000001_create_cache_table.php
-│   │   └── 0001_01_01_000002_create_jobs_table.php
-│   ├── seeders/
-│   │   └── DatabaseSeeder.php
-│   └── database.sqlite
-├── public/
-│   ├── index.php
-│   └── ...
+├── python/
+│   ├── camera_server.py         # Flask camera bridge (port 5555)
+│   └── image_annotator.py       # Annotation helper tools
 ├── resources/
 │   ├── css/
 │   │   └── app.css
-│   ├── js/
-│   │   ├── actions/          # Type-safe action helpers
-│   │   ├── components/       # React components
-│   │   │   ├── ui/           # Reusable UI components
-│   │   │   └── ...
-│   │   ├── hooks/            # Custom React hooks
-│   │   ├── layouts/          # Layout components
-│   │   ├── pages/            # Page components
-│   │   ├── routes/           # Type-safe route helpers
-│   │   ├── types/           # TypeScript definitions
-│   │   ├── wayfinder/       # Wayfinder configuration
-│   │   ├── app.tsx          # Inertia app entry point
-│   │   └── ssr.tsx          # SSR entry point
-│   └── views/
-│       └── app.blade.php    # Root Blade template
+│   └── js/
+│       ├── pages/
+│       │   ├── dashboard.tsx
+│       │   ├── annotation-upload/index.tsx
+│       │   ├── article-registration/index.tsx
+│       │   ├── articles/{index,show,create,edit,camera-capture}.tsx
+│       │   ├── brands/{index,show,create,edit}.tsx
+│       │   ├── measurements/{index,show,create,edit}.tsx
+│       │   ├── operators/{index,show,create,edit}.tsx
+│       │   ├── purchase-orders/{index,show,create,edit}.tsx
+│       │   ├── director-analytics/index.tsx
+│       │   ├── developer-settings/index.tsx
+│       │   ├── system-settings/index.tsx
+│       │   ├── auth/{system-login,developer-login}.tsx
+│       │   └── settings/{profile,appearance}.tsx
+│       ├── components/       # Reusable React/shadcn components
+│       ├── layouts/          # AppLayout, sidebar, header
+│       ├── hooks/            # Custom React hooks
+│       └── types/            # TypeScript definitions
 ├── routes/
-│   ├── auth.php             # Authentication routes
-│   ├── console.php          # Artisan commands
-│   ├── settings.php         # Settings routes
-│   └── web.php              # Main web routes
+│   ├── web.php               # Main web routes
+│   ├── api.php               # API routes
+│   ├── auth.php              # Auth routes
+│   ├── settings.php          # Settings routes
+│   └── console.php           # Artisan commands
+├── database/
+│   ├── migrations/
+│   └── seeders/
+├── config/
 ├── storage/
 ├── tests/
-├── vendor/
-├── .env.example
 ├── composer.json
 ├── package.json
-├── phpunit.xml
 ├── tsconfig.json
 └── vite.config.ts
 ```
@@ -173,7 +228,8 @@ magicQC/
 - PHP 8.2 or higher
 - Composer
 - Node.js 18+ and npm
-- SQLite (or MySQL/PostgreSQL)
+- MySQL (via XAMPP or standalone)
+- Python 3.x with pip (for camera server)
 
 ### Step 1: Clone and Install Dependencies
 
@@ -205,20 +261,20 @@ APP_ENV=local
 APP_DEBUG=true
 APP_URL=http://localhost:8000
 
-# Database
-DB_CONNECTION=sqlite
-# DB_DATABASE=database.sqlite (default)
-
-# Authentication
-# Laravel's built-in authentication is used
-# No additional configuration needed
+# Database (MySQL via XAMPP)
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=magic_qc
+DB_USERNAME=root
+DB_PASSWORD=
 ```
 
 ### Step 4: Database Setup
 
 ```bash
-# Create database file (if using SQLite)
-touch database/database.sqlite
+# Create MySQL database first (via XAMPP phpMyAdmin or CLI)
+# mysql -u root -e "CREATE DATABASE magic_qc;"
 
 # Run migrations
 php artisan migrate
@@ -227,7 +283,18 @@ php artisan migrate
 php artisan db:seed
 ```
 
-### Step 5: Build Assets
+### Step 5: Python Camera Server Setup
+
+```bash
+# Create virtual environment
+python -m venv .venv
+.venv\Scripts\activate      # Windows
+
+# Install Python dependencies
+pip install flask flask-cors opencv-python numpy
+```
+
+### Step 6: Build Assets
 
 ```bash
 # Development build
@@ -237,15 +304,19 @@ npm run dev
 npm run build
 ```
 
-### Step 6: Start Development Server
+### Step 7: Start Development Server
 
 ```bash
-# Using Composer script (recommended)
+# Laravel + Vite (recommended)
 composer dev
 
 # Or manually:
 php artisan serve
 npm run dev
+
+# Camera server (separate terminal)
+python python/camera_server.py
+# → runs on http://localhost:5555
 ```
 
 The application will be available at `http://localhost:8000`
@@ -469,36 +540,233 @@ All routes have type-safe helpers:
 
 ## 🗄 Database Schema
 
-### Users Table
+### Core Business Tables
 
-```sql
-users
-├── id (bigint, primary key)
-├── name (string)
-├── email (string, unique)
-├── email_verified_at (timestamp, nullable)
-├── password (string, hashed)
-├── avatar (text, nullable)
-├── remember_token (string, nullable)
-├── created_at (timestamp)
-└── updated_at (timestamp)
-```
+#### brands
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK, auto_increment |
+| name | varchar(255) | unique |
+| description | text | nullable |
+| created_at / updated_at | timestamp | |
 
-### Sessions Table
+#### articles
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK, auto_increment |
+| brand_id | bigint | FK → brands |
+| article_type_id | bigint | FK → article_types |
+| article_style | varchar(255) | |
+| description | text | nullable |
+| created_at / updated_at | timestamp | |
 
-```sql
-sessions
-├── id (string, primary key)
-├── user_id (bigint, nullable, indexed)
-├── ip_address (string, nullable)
-├── user_agent (text, nullable)
-├── payload (longtext)
-└── last_activity (integer, indexed)
-```
+#### article_types
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK |
+| name | varchar(255) | unique |
 
-### Cache & Jobs Tables
+#### measurements
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK |
+| article_id | bigint | FK → articles |
+| code | varchar(255) | |
+| measurement | varchar(255) | |
+| tol_plus / tol_minus | decimal(10,2) | nullable |
+| side | varchar(20) | default: front |
 
-Standard Laravel cache and queue tables for background processing.
+#### measurement_sizes
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK |
+| measurement_id | bigint | FK → measurements |
+| size | varchar(255) | |
+| value | decimal(10,2) | |
+| unit | varchar(10) | default: cm |
+
+### Purchase Orders
+
+#### purchase_orders
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK |
+| po_number | varchar(255) | unique |
+| date | date | |
+| brand_id | bigint | FK → brands |
+| country | varchar(255) | |
+| status | enum | Active, Pending, Completed |
+
+#### purchase_order_articles
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK |
+| purchase_order_id | bigint | FK → purchase_orders |
+| article_type_id | bigint | FK → article_types |
+| article_style | varchar(255) | |
+| article_description | text | nullable |
+| article_color | varchar(255) | nullable |
+| order_quantity | int | |
+
+#### purchase_order_client_references
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK |
+| purchase_order_id | bigint | FK → purchase_orders |
+| reference_name | varchar(255) | |
+| reference_number / email / subject | varchar(255) | nullable |
+| email_date | date | nullable |
+
+### Inspection & Measurement Results
+
+#### inspection_records
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK |
+| operator_id | bigint | FK → operators |
+| article_id | bigint | FK → articles |
+| brand_id | bigint | FK → brands |
+| purchase_order_id | bigint | FK, nullable |
+| article_style | varchar(255) | |
+| size | varchar(255) | nullable |
+| result | enum | pass, fail |
+| remarks | text | nullable |
+| measurement_data | longtext (JSON) | nullable |
+| inspected_at | datetime | |
+
+#### measurement_results
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK |
+| purchase_order_article_id | bigint | FK |
+| measurement_id | bigint | FK → measurements |
+| size | varchar(50) | |
+| measured_value | decimal(10,2) | nullable |
+| status | enum | PASS, FAIL, PENDING |
+| operator_id | bigint | FK, nullable |
+| tol_plus / tol_minus | decimal(10,2) | nullable |
+| expected_value | decimal(10,2) | nullable |
+
+#### measurement_sessions
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK |
+| operator_id | bigint | FK → operators |
+| purchase_order_id | bigint | FK, nullable |
+| article_id | bigint | FK → articles |
+| size | varchar(255) | |
+| status | enum | in_progress, completed, cancelled |
+| started_at / completed_at | timestamp | |
+
+### Images & Annotations
+
+#### article_images
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK |
+| article_id | bigint | FK → articles |
+| article_style | varchar(255) | |
+| size | varchar(255) | |
+| image_path | varchar(255) | |
+| image_name | varchar(255) | nullable |
+
+#### article_annotations
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK |
+| article_id | bigint | FK → articles |
+| article_image_id | bigint | FK → article_images |
+| article_style / size | varchar(255) | |
+| name | varchar(255) | nullable |
+| annotations | longtext (JSON) | |
+| target_distances / placement_box / keypoints_pixels | longtext (JSON) | nullable |
+| image_width / image_height | int | nullable |
+| native_width / native_height | int | defaults: 5488×3672 |
+| capture_source | varchar(50) | default: webcam |
+| reference_image_path | varchar(255) | nullable |
+| image_data | longtext (base64) | nullable |
+| json_file_path | varchar(255) | nullable |
+
+#### uploaded_annotations
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK |
+| article_id | bigint | FK, nullable |
+| article_style | varchar(255) | |
+| size | varchar(255) | |
+| side | varchar(10) | default: front |
+| name | varchar(255) | nullable |
+| annotation_data | longtext (JSON) | |
+| reference_image_path | varchar(255) | nullable |
+| reference_image_data | longtext (base64) | nullable |
+| reference_image_filename | varchar(255) | nullable |
+| reference_image_mime_type | varchar(255) | nullable |
+| reference_image_size | bigint | nullable |
+| image_width / image_height | int | nullable |
+| original_json_filename | varchar(255) | nullable |
+| api_image_url | varchar(255) | nullable |
+| upload_source | varchar(255) | default: manual |
+| annotation_date | timestamp | nullable |
+| **Unique constraint**: `(article_id, size, side)` |
+
+### Camera & Calibration
+
+#### camera_calibrations
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK |
+| name | varchar(255) | nullable |
+| pixels_per_cm | float | |
+| reference_length_cm | float | |
+| pixel_distance | int | nullable |
+| calibration_image | text | nullable |
+| calibration_points | longtext (JSON) | nullable |
+| is_active | tinyint(1) | default: 1 |
+
+### Users & Auth
+
+#### operators
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK |
+| full_name | varchar(255) | |
+| employee_id | varchar(255) | unique |
+| department | varchar(255) | nullable |
+| contact_number | varchar(255) | nullable |
+| login_pin | varchar(255) | hashed |
+
+#### system_credentials
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK |
+| role | varchar(255) | unique (manager_qc, meb) |
+| username | varchar(255) | |
+| password | varchar(255) | hashed |
+| display_name | varchar(255) | |
+
+#### users
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK |
+| login_id | varchar(255) | |
+| name | varchar(255) | |
+| email | varchar(255) | unique |
+| password | varchar(255) | hashed |
+| avatar | text | nullable |
+| is_admin | tinyint(1) | default: 0 |
+
+#### api_keys
+| Column | Type | Notes |
+|--------|------|-------|
+| id | bigint | PK |
+| name | varchar(255) | |
+| key | varchar(64) | unique |
+| is_active | tinyint(1) | default: 1 |
+| last_used_at | timestamp | nullable |
+
+### Infrastructure Tables
+
+Standard Laravel tables: `sessions`, `cache`, `cache_locks`, `jobs`, `job_batches`, `failed_jobs`, `migrations`.
 
 ## 🎨 Frontend Components
 
@@ -734,6 +1002,4 @@ For issues and questions:
 2. Search existing issues
 3. Create a new issue with detailed information
 
----
 
-**Built with ❤️ using Laravel and React**

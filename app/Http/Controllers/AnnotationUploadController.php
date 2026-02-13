@@ -147,12 +147,12 @@ class AnnotationUploadController extends Controller
                 Storage::disk('public')->delete($existing->reference_image_path);
             }
 
-            // Store the image file (for Laravel API access)
+            // Store the image file on disk (original quality, for serving)
             Storage::disk('public')->put($imagePath, file_get_contents($image->getRealPath()));
 
-            // Read image as base64 for direct MySQL storage (for Operator Panel)
-            $imageContent = file_get_contents($image->getRealPath());
-            $imageBase64 = base64_encode($imageContent);
+            // Create a compressed version for MySQL base64 storage
+            // This prevents max_allowed_packet issues with high-res images
+            $imageBase64 = $this->compressImageForDb($image->getRealPath(), $image->getMimeType());
 
             // Get image dimensions
             $imageInfo = getimagesize($image->getRealPath());
@@ -410,5 +410,68 @@ class AnnotationUploadController extends Controller
         }
 
         return $this->apiGetImageBase64($articleStyle, $size);
+    }
+
+    /**
+     * Compress an image for MySQL base64 storage.
+     * Resizes large images to max 1920px wide and compresses JPEG to 75% quality.
+     * Keeps the DB payload under ~2MB base64 even for 5000+ pixel originals.
+     * The original full-resolution file is always preserved on disk.
+     */
+    private function compressImageForDb(string $sourcePath, string $mimeType): string
+    {
+        $maxWidth = 1920;
+        $maxDbBytes = 16 * 1024 * 1024; // 16MB raw limit before base64
+
+        $imageContent = file_get_contents($sourcePath);
+
+        // If the file is already small enough, store as-is
+        if (strlen($imageContent) < $maxDbBytes / 2) {
+            return base64_encode($imageContent);
+        }
+
+        // Try to create a GD image for resizing/compressing
+        $srcImage = null;
+        switch (strtolower($mimeType)) {
+            case 'image/jpeg':
+            case 'image/jpg':
+                $srcImage = @imagecreatefromjpeg($sourcePath);
+                break;
+            case 'image/png':
+                $srcImage = @imagecreatefrompng($sourcePath);
+                break;
+            case 'image/webp':
+                $srcImage = @imagecreatefromwebp($sourcePath);
+                break;
+            case 'image/gif':
+                $srcImage = @imagecreatefromgif($sourcePath);
+                break;
+        }
+
+        if (!$srcImage) {
+            // GD failed — store raw but truncate if too large
+            return base64_encode($imageContent);
+        }
+
+        $origW = imagesx($srcImage);
+        $origH = imagesy($srcImage);
+
+        // Resize if wider than maxWidth
+        if ($origW > $maxWidth) {
+            $newW = $maxWidth;
+            $newH = (int) round($origH * ($maxWidth / $origW));
+            $resized = imagecreatetruecolor($newW, $newH);
+            imagecopyresampled($resized, $srcImage, 0, 0, 0, 0, $newW, $newH, $origW, $origH);
+            imagedestroy($srcImage);
+            $srcImage = $resized;
+        }
+
+        // Encode as JPEG at 75% quality into a buffer
+        ob_start();
+        imagejpeg($srcImage, null, 75);
+        $compressed = ob_get_clean();
+        imagedestroy($srcImage);
+
+        return base64_encode($compressed);
     }
 }
