@@ -16,9 +16,23 @@ import time
 import requests
 from pathlib import Path
 
-# API Configuration - Update this to match your Laravel server
-API_BASE_URL = "http://localhost:8000"
-API_KEY = "p7K2IY2aJYLGQ5rG8FjiqpogGtBTMvImUDGq25hKpUE8Gp3MtSxoG33DJ6mY0LOs"
+# Load environment variables from .env file if available
+_env_file = Path(__file__).parent.parent / ".env"
+if _env_file.exists():
+    with open(_env_file) as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#') and '=' in line:
+                key, _, value = line.partition('=')
+                os.environ.setdefault(key.strip(), value.strip())
+
+# API Configuration - reads from environment variables
+API_BASE_URL = os.environ.get("API_BASE_URL", "http://localhost:8000")
+API_KEY = os.environ.get("ANNOTATION_API_KEY", "")
+
+if not API_KEY:
+    print("[WARN] ANNOTATION_API_KEY not set. Database sync will not work.")
+    print("[WARN] Set it in your .env file or as an environment variable.")
 
 # Storage path - path to Laravel storage/app/public
 STORAGE_PATH = Path(__file__).parent.parent / "storage" / "app" / "public"
