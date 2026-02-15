@@ -161,6 +161,10 @@ class MindVisionCamera:
             CameraSetAnalogGain(self.hCamera, 150)
             CameraSetAeState(self.hCamera, 0)  # AE OFF
             print("[INFO] Mode: BLACK (gain=150, AE=OFF)")
+        elif mode == 'white':
+            CameraSetAnalogGain(self.hCamera, 20)
+            CameraSetAeState(self.hCamera, 1)  # AE ON
+            print("[INFO] Mode: WHITE (gain=20, AE=ON)")
         else:
             CameraSetAnalogGain(self.hCamera, 64)
             CameraSetAeState(self.hCamera, 1)  # AE ON
@@ -235,6 +239,9 @@ class WebcamCamera:
         if mode == 'black':
             self.cap.set(cv2.CAP_PROP_BRIGHTNESS, 200)
             self.cap.set(cv2.CAP_PROP_GAIN, 150)
+        elif mode == 'white':
+            self.cap.set(cv2.CAP_PROP_BRIGHTNESS, 80)
+            self.cap.set(cv2.CAP_PROP_GAIN, 20)
         else:
             self.cap.set(cv2.CAP_PROP_BRIGHTNESS, 128)
             self.cap.set(cv2.CAP_PROP_GAIN, 64)
@@ -330,21 +337,31 @@ def stop_streaming():
     print("[INFO] Streaming stopped")
 
 
+# Downscale factor for MJPEG streaming (full-res is 5456x2812 = too slow)
+# Capture always uses full resolution.
+STREAM_SCALE = 0.25   # 1364x703 — fast enough for smooth live preview
+
+
 def generate_mjpeg():
     """Generator that yields MJPEG frames for streaming."""
-    prev_frame = None
+    prev_id = None
     while streaming:
         with frame_lock:
             frame = latest_frame
-        if frame is not None and frame is not prev_frame:
-            _, jpeg = cv2.imencode('.jpg', frame,
-                                   [cv2.IMWRITE_JPEG_QUALITY, 80])
-            prev_frame = frame
+        fid = id(frame)
+        if frame is not None and fid != prev_id:
+            # Downsample for streaming speed
+            h, w = frame.shape[:2]
+            small = cv2.resize(frame, (int(w * STREAM_SCALE), int(h * STREAM_SCALE)),
+                               interpolation=cv2.INTER_NEAREST)
+            _, jpeg = cv2.imencode('.jpg', small,
+                                   [cv2.IMWRITE_JPEG_QUALITY, 70])
+            prev_id = fid
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' +
                    jpeg.tobytes() + b'\r\n')
         else:
-            time.sleep(0.01)  # Wait briefly if no new frame
+            time.sleep(0.016)  # ~60fps cap
 
 
 # ============================================================================
@@ -371,13 +388,13 @@ def ping():
 
 @app.route('/api/mode', methods=['POST'])
 def set_mode():
-    """Set garment color mode (black or other)."""
+    """Set garment color mode (black, white, or other)."""
     global current_mode, mode_changed_at, latest_frame
     data = request.get_json(silent=True) or {}
     mode = data.get('mode', 'other')
 
-    if mode not in ('black', 'other'):
-        return jsonify({'error': 'Invalid mode. Use "black" or "other".'}), 400
+    if mode not in ('black', 'white', 'other'):
+        return jsonify({'error': 'Invalid mode. Use "black", "white", or "other".'}), 400
 
     current_mode = mode
     mode_changed_at = time.time()
@@ -391,13 +408,16 @@ def set_mode():
 
     print(f"[INFO] Mode changed to '{mode}' — camera needs ~{MODE_SETTLE_TIME}s to stabilize")
 
+    mode_settings = {
+        'black': {'gain': 150, 'auto_exposure': 'OFF'},
+        'white': {'gain': 20, 'auto_exposure': 'ON'},
+        'other': {'gain': 64, 'auto_exposure': 'ON'},
+    }
+
     return jsonify({
         'success': True,
         'mode': current_mode,
-        'settings': {
-            'gain': 150 if mode == 'black' else 64,
-            'auto_exposure': 'OFF' if mode == 'black' else 'ON',
-        }
+        'settings': mode_settings.get(mode, mode_settings['other']),
     })
 
 
@@ -424,7 +444,7 @@ def capture():
     with capture_lock:
         data = request.get_json(silent=True) or {}
         req_mode = data.get('mode', current_mode)
-        if req_mode in ('black', 'other') and req_mode != current_mode:
+        if req_mode in ('black', 'white', 'other') and req_mode != current_mode:
             current_mode = req_mode
             camera.set_mode(current_mode)
             mode_changed_at = time.time()
@@ -436,9 +456,8 @@ def capture():
 
         # Pause streaming and do fresh grab
         streaming_paused = True
-        time.sleep(0.03)
+        time.sleep(0.02)
         try:
-            camera.grab()  # flush
             camera.grab()  # flush
             frame = camera.grab()
         finally:
@@ -483,7 +502,7 @@ def capture_jpeg():
         # Accept optional mode parameter — frontend sends its expected mode
         # so we can verify / re-apply if needed.
         req_mode = request.args.get('mode', current_mode)
-        if req_mode in ('black', 'other') and req_mode != current_mode:
+        if req_mode in ('black', 'white', 'other') and req_mode != current_mode:
             current_mode = req_mode
             camera.set_mode(current_mode)
             mode_changed_at = time.time()
@@ -498,14 +517,11 @@ def capture_jpeg():
 
         # Pause streaming to get exclusive camera access
         streaming_paused = True
-        time.sleep(0.03)  # Let current stream grab finish
+        time.sleep(0.02)  # Let current stream grab finish
 
         try:
-            # Flush stale frames from camera buffer (2 discards)
+            # Flush one stale frame then grab fresh
             camera.grab()
-            camera.grab()
-
-            # Capture the actual frame — fresh from sensor with correct settings
             frame = camera.grab()
         finally:
             # Always resume streaming

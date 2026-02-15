@@ -19,6 +19,7 @@ import {
     X,
     ImageIcon,
     Upload,
+    Snowflake,
 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -75,7 +76,7 @@ const DEFAULT_CAMERA_URL = 'http://127.0.0.1:5555';
 export default function CameraCapture({ brand, article, selectedSize }: Props) {
     // State
     const [step, setStep] = useState<Step>('mode_selection');
-    const [imageMode, setImageMode] = useState<'black' | 'other' | null>(null);
+    const [imageMode, setImageMode] = useState<'black' | 'white' | 'other' | null>(null);
     const [cameraStatus, setCameraStatus] = useState<CameraStatus | null>(null);
     const [cameraChecking, setCameraChecking] = useState(false);
     const [capturedImage, setCapturedImage] = useState<string | null>(null);
@@ -94,10 +95,10 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
     const [retryTrigger, setRetryTrigger] = useState(0);
     const [cameraUrl, setCameraUrl] = useState(DEFAULT_CAMERA_URL);
 
-    // Stream reconnection & load tracking
+    // Stream reconnection tracking
     const [streamKey, setStreamKey] = useState(0);
-    const [streamLoaded, setStreamLoaded] = useState(false);
-    const imageModeRef = useRef<'black' | 'other' | null>(null);
+    const [streamError, setStreamError] = useState(false);
+    const imageModeRef = useRef<'black' | 'white' | 'other' | null>(null);
     const prevOnlineRef = useRef(false);
 
     // File upload fallback
@@ -202,7 +203,7 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
         const online = cameraStatus?.status === 'ready';
         if (online && !prevOnlineRef.current) {
             setStreamKey((k) => k + 1);
-            setStreamLoaded(false);
+            setStreamError(false);
             // Re-apply the selected mode so camera uses correct gain/AE
             const mode = imageModeRef.current;
             if (mode) {
@@ -228,7 +229,7 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
 
     // Mode, stream, capture go DIRECTLY to camera server (no PHP proxy)
     // to avoid session locking and output buffering issues.
-    const setModeOnServer = async (mode: 'black' | 'other') => {
+    const setModeOnServer = async (mode: 'black' | 'white' | 'other') => {
         try {
             await fetch(`${cameraUrl}/api/mode`, {
                 method: 'POST',
@@ -252,11 +253,11 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
         }
     };
 
-    const handleModeSelect = async (mode: 'black' | 'other') => {
+    const handleModeSelect = async (mode: 'black' | 'white' | 'other') => {
         setImageMode(mode);
         imageModeRef.current = mode;
         setError(null);
-        setStreamLoaded(false);
+        setStreamError(false);
         setStreamKey((k) => k + 1);
 
         // Go to live preview instantly — no blocking delays.
@@ -339,7 +340,7 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
         capturedBlobRef.current = null;
         setCapturedImage(null);
         setCapturedMeta(null);
-        setStreamLoaded(false);
+        setStreamError(false);
         setStreamKey((k) => k + 1);
         setStep('live_preview');
     };
@@ -380,7 +381,7 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
         try {
             // Use the blob directly — no base64 encode/decode roundtrip
             const blob = capturedBlobRef.current;
-            const modeLabel = imageMode === 'black' ? 'black' : 'other';
+            const modeLabel = imageMode || 'other';
             const timestamp = capturedMeta?.timestamp || Date.now().toString();
             const fileName = `mv_${modeLabel}_${article.article_style}_${size}_${timestamp}.jpg`;
 
@@ -544,7 +545,7 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
                             </p>
                         </div>
 
-                        <div className="grid w-full max-w-2xl gap-6 md:grid-cols-2">
+                        <div className="grid w-full max-w-3xl gap-6 md:grid-cols-3">
                             {/* Black Image */}
                             <button
                                 onClick={() => handleModeSelect('black')}
@@ -557,6 +558,22 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
                                     <h3 className="text-lg font-semibold">Black Image</h3>
                                     <p className="mt-1 text-xs text-neutral-500">
                                         Dark colored garments
+                                    </p>
+                                </div>
+                            </button>
+
+                            {/* White Image */}
+                            <button
+                                onClick={() => handleModeSelect('white')}
+                                className="group relative flex flex-col items-center gap-4 rounded-2xl border-2 border-neutral-200 bg-white p-8 text-center transition-all hover:border-blue-300 hover:shadow-lg dark:border-neutral-700 dark:bg-neutral-900 dark:hover:border-blue-400"
+                            >
+                                <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-blue-100 text-blue-600 transition-transform group-hover:scale-110 dark:bg-blue-900/40 dark:text-blue-300">
+                                    <Snowflake className="h-10 w-10" />
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-semibold">White Image</h3>
+                                    <p className="mt-1 text-xs text-neutral-500">
+                                        White / very light garments
                                     </p>
                                 </div>
                             </button>
@@ -629,15 +646,19 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
                                     className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${
                                         imageMode === 'black'
                                             ? 'bg-neutral-900 text-white dark:bg-neutral-200 dark:text-neutral-900'
-                                            : 'bg-[#FFCD73] text-neutral-900'
+                                            : imageMode === 'white'
+                                              ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'
+                                              : 'bg-[#FFCD73] text-neutral-900'
                                     }`}
                                 >
                                     {imageMode === 'black' ? (
                                         <Moon className="h-3 w-3" />
+                                    ) : imageMode === 'white' ? (
+                                        <Snowflake className="h-3 w-3" />
                                     ) : (
                                         <Sun className="h-3 w-3" />
                                     )}
-                                    {imageMode === 'black' ? 'Black Mode' : 'Other Colors'}
+                                    {imageMode === 'black' ? 'Black Mode' : imageMode === 'white' ? 'White Mode' : 'Other Colors'}
                                 </span>
                                 <span className="text-xs text-neutral-500">
                                     Size: <strong>{size}</strong>
@@ -677,27 +698,30 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
 
                         {/* MJPEG Stream — auto-reconnects via streamKey */}
                         <div className="relative flex flex-1 items-center justify-center overflow-hidden rounded-xl border-2 border-neutral-200 bg-black dark:border-neutral-700">
-                            {/* Always render stream img (hidden until loaded) */}
+                            {/* MJPEG img — always visible. MJPEG streams never fire onLoad
+                                so we cannot gate visibility on it. The browser renders
+                                frames as they arrive; while connecting it shows nothing
+                                (bg-black is fine). */}
                             <img
                                 key={streamKey}
                                 src={`${cameraUrl}/api/stream?t=${streamKey}`}
                                 alt="Live Camera Feed"
-                                className={`h-full max-h-[calc(100vh-320px)] w-auto object-contain ${
-                                    streamLoaded ? '' : 'hidden'
-                                }`}
-                                onLoad={() => setStreamLoaded(true)}
+                                className="h-full max-h-[calc(100vh-320px)] w-auto object-contain"
                                 onError={() => {
-                                    setStreamLoaded(false);
-                                    // Auto-retry stream connection after 2 seconds
-                                    setTimeout(() => setStreamKey((k) => k + 1), 2000);
+                                    setStreamError(true);
+                                    // Auto-retry stream after 2s
+                                    setTimeout(() => {
+                                        setStreamError(false);
+                                        setStreamKey((k) => k + 1);
+                                    }, 2000);
                                 }}
                             />
-                            {/* Connecting overlay */}
-                            {!streamLoaded && (
-                                <div className="flex flex-col items-center gap-3 text-white">
+                            {/* Error overlay */}
+                            {streamError && (
+                                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white">
                                     <Loader2 className="h-8 w-8 animate-spin text-neutral-400" />
                                     <p className="text-sm text-neutral-400">
-                                        Connecting to camera...
+                                        Reconnecting to camera...
                                     </p>
                                 </div>
                             )}
@@ -720,7 +744,7 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
                             <Button
                                 size="lg"
                                 onClick={handleCapture}
-                                disabled={isCapturing || !streamLoaded}
+                                disabled={isCapturing}
                                 className="bg-[#6C88C4] px-8 text-white hover:bg-[#5a76b2]"
                             >
                                 {isCapturing ? (
