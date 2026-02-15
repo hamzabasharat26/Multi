@@ -7,6 +7,7 @@ services:
     restart: unless-stopped
     volumes:
       - app_storage:/var/www/html/storage
+      - app_env:/var/www/html/.env-data
     env_file:
       - .env.production
     depends_on:
@@ -49,6 +50,7 @@ services:
 
 volumes:
   app_storage:
+  app_env:
   db_data:
 
 networks:
