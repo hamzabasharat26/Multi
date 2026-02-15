@@ -8,8 +8,7 @@ services:
     volumes:
       - app_storage:/var/www/html/storage
       - app_env:/var/www/html/.env-data
-    # NO env_file here — the entrypoint script handles .env creation
-    # Using env_file would inject OS env vars that override Laravel's .env file
+      - app_public:/var/www/html/public
     depends_on:
       db:
         condition: service_healthy
@@ -42,6 +41,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./docker/nginx/magicqc.conf:/etc/nginx/conf.d/default.conf:ro
+      - app_public:/var/www/html/public:ro
     depends_on:
       - app
     networks:
@@ -51,6 +51,7 @@ services:
 volumes:
   app_storage:
   app_env:
+  app_public:
   db_data:
 
 networks:
