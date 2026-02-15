@@ -1,6 +1,6 @@
 # MagicQC - Quality Control Management System
 
-A full-stack quality control management application built with Laravel 12 and React 19, featuring industrial camera integration, annotation management, measurement tracking, and inspection workflows for garment manufacturing.
+A full-stack quality control management application built with Laravel 12 and React 19, featuring industrial camera integration, and inspection workflows for garment manufacturing.
 
 ## 📋 Table of Contents
 
