@@ -30,8 +30,8 @@ MagicQC is a quality control management system for garment manufacturing. It han
 
 - **Full-Stack Framework**: Laravel 12 backend with React 19 frontend
 - **SPA Experience**: Inertia.js provides seamless navigation without page reloads
-- **Camera Integration**: MindVision industrial camera via Python Flask bridge server
-- **Annotation System**: Upload, manage, and visualize garment annotations with reference images
+- **Camera Integration**:industrial camera via Python Flask bridge server
+- **Annotation System**: Upload, manage, and visualize garment annotations with images
 - **Measurement Tracking**: Size-based measurements with tolerance validation (cm/inches/fractions)
 - **Role-Based Access**: System login (Manager QC, MEB), developer mode, and operator PIN auth
 - **Modern UI**: Built with Radix UI, shadcn/ui components, and Tailwind CSS 4
@@ -43,7 +43,7 @@ MagicQC is a quality control management system for garment manufacturing. It han
 
 - **Laravel 12**: PHP framework
 - **PHP 8.2+**: Programming language
-- **MySQL**: Database (via XAMPP)
+- **MySQL**: Database 
 - **Inertia.js**: Server-side adapter for Laravel
 
 ### Python
@@ -87,7 +87,7 @@ MagicQC is a quality control management system for garment manufacturing. It han
 - ✅ MindVision industrial camera integration via Python Flask server
 - ✅ MJPEG live preview streaming
 - ✅ Black/Other garment mode with gain & exposure presets
-- ✅ High-resolution capture (5456×2812)
+- ✅ High-resolution capture 
 - ✅ File upload fallback when camera offline
 
 ### Annotation System
