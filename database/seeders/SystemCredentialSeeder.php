@@ -15,18 +15,18 @@ class SystemCredentialSeeder extends Seeder
     {
         // System Login Credentials
         SystemCredential::updateOrCreate(
-            ['username' => 'ManagerQC'],
+            ['role' => 'manager_qc'],
             [
-                'role' => 'manager_qc',
+                'username' => 'ManagerQC',
                 'password' => Hash::make('password'), // Default password
                 'display_name' => 'QC Manager',
             ]
         );
 
         SystemCredential::updateOrCreate(
-            ['username' => 'Director'],
+            ['role' => 'meb'],
             [
-                'role' => 'meb',
+                'username' => 'Director',
                 'password' => Hash::make('password'), // Default password
                 'display_name' => 'Director',
             ]
