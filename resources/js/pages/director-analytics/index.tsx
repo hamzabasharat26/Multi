@@ -196,6 +196,7 @@ export default function DirectorAnalyticsDashboard({
         date_from: appliedFilters.date_from || '',
         date_to: appliedFilters.date_to || '',
         result: appliedFilters.result || '',
+        side: (appliedFilters as any).side || '',
     });
 
     const [showFilters, setShowFilters] = useState(false);
@@ -230,6 +231,7 @@ export default function DirectorAnalyticsDashboard({
             date_from: '',
             date_to: '',
             result: '',
+            side: '',
         });
         router.get('/director-analytics-dashboard', {}, {
             preserveState: true,
@@ -320,6 +322,15 @@ export default function DirectorAnalyticsDashboard({
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => window.location.reload()}
+                                    className="text-xs border-sky-300 text-sky-700 hover:bg-sky-50 dark:border-sky-600 dark:text-sky-400 dark:hover:bg-sky-900/20"
+                                >
+                                    <RefreshCw className="mr-1 h-3 w-3" />
+                                    Refresh Data
+                                </Button>
                                 {hasActiveFilters && (
                                     <Button
                                         variant="outline"
@@ -344,7 +355,7 @@ export default function DirectorAnalyticsDashboard({
                     </CardHeader>
                     {showFilters && (
                         <CardContent className="pt-0">
-                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-7 gap-4">
                                 <div className="space-y-1.5">
                                     <Label className="text-xs font-medium text-slate-600">Brand</Label>
                                     <select
@@ -419,6 +430,19 @@ export default function DirectorAnalyticsDashboard({
                                         <option value="">All Results</option>
                                         <option value="pass">Pass Only</option>
                                         <option value="fail">Fail Only</option>
+                                    </select>
+                                </div>
+
+                                <div className="space-y-1.5">
+                                    <Label className="text-xs font-medium text-slate-600">Side</Label>
+                                    <select
+                                        value={filters.side}
+                                        onChange={(e) => setFilters({ ...filters, side: e.target.value })}
+                                        className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
+                                    >
+                                        <option value="">All Sides</option>
+                                        <option value="front">Front</option>
+                                        <option value="back">Back</option>
                                     </select>
                                 </div>
                             </div>

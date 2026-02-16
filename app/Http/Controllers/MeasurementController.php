@@ -8,6 +8,8 @@ use App\Models\Measurement;
 use App\Models\MeasurementSize;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -155,22 +157,40 @@ class MeasurementController extends Controller
             'sizes.*.unit.in' => 'Unit must be either cm or inches.',
         ]);
 
-        $measurement->update([
-            'code' => $validated['code'],
-            'measurement' => $validated['measurement'],
-            'tol_plus' => $validated['tol_plus'] ?? null,
-            'tol_minus' => $validated['tol_minus'] ?? null,
-            'side' => $validated['side'],
-        ]);
+        try {
+            DB::transaction(function () use ($measurement, $validated) {
+                // Update measurement record in-place (preserves id for measurement_results FK)
+                $measurement->update([
+                    'code' => $validated['code'],
+                    'measurement' => $validated['measurement'],
+                    'tol_plus' => $validated['tol_plus'] ?? null,
+                    'tol_minus' => $validated['tol_minus'] ?? null,
+                    'side' => $validated['side'],
+                ]);
 
-        // Delete existing sizes and create new ones
-        $measurement->sizes()->delete();
-        foreach ($validated['sizes'] as $sizeData) {
-            $measurement->sizes()->create([
-                'size' => $sizeData['size'],
-                'value' => $sizeData['value'],
-                'unit' => $sizeData['unit'],
+                // Sync sizes: upsert existing, add new, remove obsolete
+                $incomingSizeNames = collect($validated['sizes'])->pluck('size')->all();
+
+                // Remove sizes no longer in the submitted list
+                $measurement->sizes()->whereNotIn('size', $incomingSizeNames)->delete();
+
+                // Update existing or create new sizes
+                foreach ($validated['sizes'] as $sizeData) {
+                    $measurement->sizes()->updateOrCreate(
+                        ['size' => $sizeData['size']],
+                        ['value' => $sizeData['value'], 'unit' => $sizeData['unit']]
+                    );
+                }
+            });
+        } catch (\Exception $e) {
+            Log::error('Failed to update measurement', [
+                'measurement_id' => $measurement->id,
+                'error' => $e->getMessage(),
             ]);
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Failed to update measurement. Please try again.');
         }
 
         return redirect()->route('brands.articles.show', [$brand->id, $article->id])
@@ -182,9 +202,33 @@ class MeasurementController extends Controller
      */
     public function destroy(Brand $brand, Article $article, Measurement $measurement): RedirectResponse
     {
-        $measurement->delete();
+        try {
+            $resultsCount = $measurement->resultsCount();
 
-        return redirect()->route('brands.articles.show', [$brand->id, $article->id])
-            ->with('success', 'Measurement deleted successfully.');
+            if ($resultsCount > 0) {
+                // Measurement has QC results — soft-delete (archive) to preserve FK integrity
+                $measurement->delete();
+
+                return redirect()->route('brands.articles.show', [$brand->id, $article->id])
+                    ->with('success', "Measurement \"{$measurement->code}\" archived ({$resultsCount} QC result(s) preserved).");
+            }
+
+            // No dependent results — safe to permanently remove
+            DB::transaction(function () use ($measurement) {
+                $measurement->sizes()->delete();
+                $measurement->forceDelete();
+            });
+
+            return redirect()->route('brands.articles.show', [$brand->id, $article->id])
+                ->with('success', 'Measurement deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Failed to delete measurement', [
+                'measurement_id' => $measurement->id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return redirect()->route('brands.articles.show', [$brand->id, $article->id])
+                ->with('error', 'Failed to delete measurement. Please try again.');
+        }
     }
 }

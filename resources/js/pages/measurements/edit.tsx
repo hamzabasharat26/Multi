@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import AppLayout from '@/layouts/app-layout';
 import brandRoutes from '@/routes/brands';
 import { type BreadcrumbItem } from '@/types';
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -90,15 +90,26 @@ export default function Edit({ brand, article, measurement }: Props) {
     // Derive global unit from the first size entry (all sizes share the same unit)
     const initialUnit = measurement.sizes && measurement.sizes.length > 0 ? measurement.sizes[0].unit : 'cm';
 
-    const { data, setData, put, processing, errors } = useForm({
+    // Use page props for validation errors (works with router.put)
+    const { errors } = usePage<{ errors: Record<string, string> }>().props;
+    const [processing, setProcessing] = useState(false);
+
+    const [data, setDataState] = useState({
         code: measurement.code,
         measurement: measurement.measurement,
         unit: initialUnit,
         side: measurement.side || 'front',
         tol_plus: measurement.tol_plus?.toString() || '',
         tol_minus: measurement.tol_minus?.toString() || '',
-        sizes: sizes,
     });
+
+    const setData = (keyOrObj: string | Record<string, any>, value?: any) => {
+        if (typeof keyOrObj === 'string') {
+            setDataState((prev) => ({ ...prev, [keyOrObj]: value }));
+        } else {
+            setDataState((prev) => ({ ...prev, ...keyOrObj }));
+        }
+    };
 
     const addSizeSection = () => {
         setSizes([...sizes, { size: '', value: '' }]);
@@ -106,9 +117,7 @@ export default function Edit({ brand, article, measurement }: Props) {
 
     const removeSizeSection = (index: number) => {
         if (sizes.length > 1) {
-            const newSizes = sizes.filter((_, i) => i !== index);
-            setSizes(newSizes);
-            setData('sizes', newSizes);
+            setSizes(sizes.filter((_, i) => i !== index));
         }
     };
 
@@ -116,7 +125,6 @@ export default function Edit({ brand, article, measurement }: Props) {
         const newSizes = [...sizes];
         newSizes[index] = { ...newSizes[index], [field]: value };
         setSizes(newSizes);
-        setData('sizes', newSizes);
     };
 
     // Utility function to convert fraction string to decimal
@@ -160,9 +168,16 @@ export default function Edit({ brand, article, measurement }: Props) {
             sizes: transformedSizes,
         };
 
-        put(update({ brand: brand.id, article: article.id, measurement: measurement.id }).url, {
-            data: formData,
+        router.put(update({ brand: brand.id, article: article.id, measurement: measurement.id }).url, formData, {
             preserveScroll: true,
+            onBefore: () => setProcessing(true),
+            onFinish: () => setProcessing(false),
+            onSuccess: () => {
+                console.log('Measurement updated successfully');
+            },
+            onError: (validationErrors) => {
+                console.error('Validation errors:', validationErrors);
+            },
         });
     };
 
