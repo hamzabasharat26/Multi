@@ -96,6 +96,7 @@ class AnnotationUploadController extends Controller
             'article_id' => ['required', 'integer', 'exists:articles,id'],
             'size' => ['required', 'string', 'max:50'],
             'side' => ['required', 'string', 'in:front,back'],
+            'color' => ['required', 'string', 'in:black,white,other'],
             'json_file' => ['required', 'file', 'mimes:json,txt', 'max:10240'], // 10MB max
             'reference_image' => ['required', 'file', 'mimes:jpg,jpeg,png,gif,webp', 'max:51200'], // 50MB max
             'name' => ['nullable', 'string', 'max:255'],
@@ -128,21 +129,28 @@ class AnnotationUploadController extends Controller
             // Process reference image
             $image = $request->file('reference_image');
             $size = $request->size;
-            $side = $request->side; // Get the side parameter
+            $side = $request->side;
+            $color = $request->color;
+            
+            // Color suffix: black=-b, white=-w, other=-z
+            $colorSuffix = UploadedAnnotation::colorSuffix($color);
             
             // Create storage directory
             $storageDir = 'uploaded-annotations';
             Storage::disk('public')->makeDirectory($storageDir);
 
-            // Generate filename using UUID to allow same original filenames for front/back
-            // UUID ensures no filename conflicts regardless of original file name
+            // Generate standardized filename: STYLE_SIZE_SIDE-suffix.ext
+            // e.g., T-SHIRT_S_FRONT-w.jpg
             $extension = $image->getClientOriginalExtension();
-            $uuid = \Illuminate\Support\Str::uuid();
-            $filename = $uuid . '_' . $side . '.' . $extension;
+            $styleClean = strtoupper(preg_replace('/[^A-Za-z0-9_-]/', '_', $articleStyle));
+            $sizeClean = strtoupper(preg_replace('/[^A-Za-z0-9_-]/', '_', $size));
+            $sideClean = strtoupper($side);
+            $standardizedBase = "{$styleClean}_{$sizeClean}_{$sideClean}{$colorSuffix}";
+            $filename = $standardizedBase . '.' . $extension;
             $imagePath = $storageDir . '/' . $filename;
 
             // Check for existing annotation and delete old image
-            $existing = UploadedAnnotation::findByArticleIdAndSize($article->id, $size, $side);
+            $existing = UploadedAnnotation::findByArticleIdAndSize($article->id, $size, $side, $color);
             if ($existing && $existing->reference_image_path) {
                 Storage::disk('public')->delete($existing->reference_image_path);
             }
@@ -160,7 +168,7 @@ class AnnotationUploadController extends Controller
             $imageHeight = $imageInfo[1] ?? null;
 
             // Generate API URL for Electron app
-            $apiImageUrl = '/api/uploaded-annotations/' . $articleStyle . '/' . $size . '/' . $side . '/image';
+            $apiImageUrl = '/api/uploaded-annotations/' . $articleStyle . '/' . $size . '/' . $side . '/image?color=' . $color;
 
             // Extract annotation date if present in JSON
             $annotationDate = null;
@@ -172,16 +180,22 @@ class AnnotationUploadController extends Controller
                 }
             }
 
-            // Create or update annotation record
+            // Also save JSON file to disk with standardized name
+            $jsonFilename = $standardizedBase . '.json';
+            $jsonPath = $storageDir . '/' . $jsonFilename;
+            Storage::disk('public')->put($jsonPath, json_encode($annotationData, JSON_PRETTY_PRINT));
+
+            // Create or update annotation record — keyed by article_id + size + side + color
             $annotation = UploadedAnnotation::updateOrCreate(
                 [
                     'article_id' => $article->id,
                     'size' => $size,
                     'side' => $side,
+                    'color' => $color,
                 ],
                 [
                     'article_style' => $articleStyle,
-                    'name' => $request->name ?? 'Annotation for ' . $articleStyle . ' - ' . $size . ' (' . ucfirst($side) . ')',
+                    'name' => $request->name ?? 'Annotation for ' . $articleStyle . ' - ' . $size . ' (' . ucfirst($side) . ', ' . ucfirst($color) . ')',
                     'annotation_data' => $annotationData,
                     'reference_image_path' => $imagePath,
                     'reference_image_data' => $imageBase64,
@@ -199,7 +213,7 @@ class AnnotationUploadController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Annotation uploaded successfully.',
+                'message' => 'Annotation and reference image uploaded successfully.',
                 'annotation' => [
                     'id' => $annotation->id,
                     'article_id' => $annotation->article_id,
@@ -210,6 +224,7 @@ class AnnotationUploadController extends Controller
                     'target_distances_count' => count($annotationData['target_distances'] ?? []),
                     'image_url' => $annotation->api_image_url,
                     'image_dimensions' => $imageWidth . 'x' . $imageHeight,
+                    'has_image_data' => !empty($imageBase64),
                 ],
             ]);
 
@@ -245,6 +260,9 @@ class AnnotationUploadController extends Controller
                     'brand_name' => $a->article?->brand?->name,
                     'size' => $a->size,
                     'side' => $a->side,
+                    'color' => $a->color,
+                    'color_suffix' => $a->getColorSuffix(),
+                    'standardized_name' => $a->getStandardizedBaseName(),
                     'name' => $a->name,
                     'keypoints_count' => count($a->getKeypoints()),
                     'target_distances_count' => count($a->getTargetDistances()),
@@ -267,7 +285,7 @@ class AnnotationUploadController extends Controller
     {
         $annotation = UploadedAnnotation::findOrFail($id);
 
-        // Delete the reference image
+        // Delete the reference image from disk
         if ($annotation->reference_image_path) {
             Storage::disk('public')->delete($annotation->reference_image_path);
         }
@@ -298,7 +316,9 @@ class AnnotationUploadController extends Controller
      */
     public function apiGetAnnotation(string $articleStyle, string $size, string $side = 'front'): JsonResponse
     {
-        $annotation = UploadedAnnotation::findByStyleAndSize($articleStyle, $size, $side);
+        // Support color via query param for backward compat
+        $color = request()->query('color');
+        $annotation = UploadedAnnotation::findByStyleAndSize($articleStyle, $size, $side, $color);
 
         if (!$annotation) {
             return response()->json([
@@ -314,6 +334,9 @@ class AnnotationUploadController extends Controller
                 'article_style' => $annotation->article_style,
                 'size' => $annotation->size,
                 'side' => $annotation->side,
+                'color' => $annotation->color,
+                'color_suffix' => $annotation->getColorSuffix(),
+                'standardized_name' => $annotation->getStandardizedBaseName(),
                 'name' => $annotation->name,
                 'annotation_data' => $annotation->annotation_data,
                 'reference_image_url' => $annotation->api_image_url,
@@ -329,30 +352,42 @@ class AnnotationUploadController extends Controller
     /**
      * API: Get the reference image for an annotation.
      */
-    public function apiGetImage(string $articleStyle, string $size, string $side = 'front'): \Symfony\Component\HttpFoundation\BinaryFileResponse|JsonResponse
+    public function apiGetImage(string $articleStyle, string $size, string $side = 'front'): \Symfony\Component\HttpFoundation\BinaryFileResponse|JsonResponse|Response
     {
-        $annotation = UploadedAnnotation::findByStyleAndSize($articleStyle, $size, $side);
+        $color = request()->query('color');
+        $annotation = UploadedAnnotation::findByStyleAndSize($articleStyle, $size, $side, $color);
 
-        if (!$annotation || !$annotation->reference_image_path) {
+        if (!$annotation) {
             return response()->json([
                 'success' => false,
                 'message' => 'Image not found.',
             ], 404);
         }
 
+        // Try disk file first (full quality)
         $path = $annotation->getStoragePath();
-
-        if (!file_exists($path)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Image file not found on server.',
-            ], 404);
+        if ($path && file_exists($path)) {
+            return response()->file($path, [
+                'Content-Type' => $annotation->reference_image_mime_type ?? 'image/jpeg',
+                'Cache-Control' => 'public, max-age=31536000',
+            ]);
         }
 
-        return response()->file($path, [
-            'Content-Type' => $annotation->reference_image_mime_type ?? 'image/jpeg',
-            'Cache-Control' => 'public, max-age=31536000',
-        ]);
+        // Fallback: serve from DB base64 data (handles missing disk files)
+        if ($annotation->reference_image_data) {
+            $imageData = base64_decode($annotation->reference_image_data);
+            $mimeType = $annotation->reference_image_mime_type ?? 'image/jpeg';
+            return response($imageData, 200, [
+                'Content-Type' => $mimeType,
+                'Content-Length' => strlen($imageData),
+                'Cache-Control' => 'public, max-age=31536000',
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Image not found on disk or in database.',
+        ], 404);
     }
 
     /**
@@ -360,27 +395,36 @@ class AnnotationUploadController extends Controller
      */
     public function apiGetImageBase64(string $articleStyle, string $size, string $side = 'front'): JsonResponse
     {
-        $annotation = UploadedAnnotation::findByStyleAndSize($articleStyle, $size, $side);
+        $color = request()->query('color');
+        $annotation = UploadedAnnotation::findByStyleAndSize($articleStyle, $size, $side, $color);
 
-        if (!$annotation || !$annotation->reference_image_path) {
+        if (!$annotation) {
             return response()->json([
                 'success' => false,
                 'message' => 'Image not found.',
             ], 404);
         }
 
-        $path = $annotation->getStoragePath();
+        $base64 = null;
+        $mimeType = $annotation->reference_image_mime_type ?? 'image/jpeg';
 
-        if (!file_exists($path)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Image file not found on server.',
-            ], 404);
+        // Primary: DB column (always authoritative, linked to the annotation row)
+        if ($annotation->reference_image_data) {
+            $base64 = $annotation->reference_image_data;
+        } else {
+            // Fallback: disk file (backward compat for records without DB data)
+            $path = $annotation->getStoragePath();
+            if ($path && file_exists($path)) {
+                $base64 = base64_encode(file_get_contents($path));
+            }
         }
 
-        $imageContent = file_get_contents($path);
-        $base64 = base64_encode($imageContent);
-        $mimeType = $annotation->reference_image_mime_type ?? 'image/jpeg';
+        if (!$base64) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Reference image not found in database or on disk.',
+            ], 404);
+        }
 
         return response()->json([
             'success' => true,
@@ -401,6 +445,7 @@ class AnnotationUploadController extends Controller
     {
         $articleStyle = $request->query('article_style');
         $size = $request->query('size');
+        $side = $request->query('side', 'front');
 
         if (!$articleStyle || !$size) {
             return response()->json([
@@ -409,7 +454,132 @@ class AnnotationUploadController extends Controller
             ], 400);
         }
 
-        return $this->apiGetImageBase64($articleStyle, $size);
+        return $this->apiGetImageBase64($articleStyle, $size, $side);
+    }
+
+    /**
+     * API: Operator Panel - Get annotation + reference image for measurement.
+     * 
+     * FETCH PRIORITY:
+     *   1. uploaded_annotations (manually uploaded reference image + annotation)
+     *      — matched by article_style + size + side + color
+     *   2. article_annotations (camera-captured annotation) — fallback only
+     * 
+     * This ensures the operator panel always gets the correct, manually-curated
+     * reference image and annotation data for QC measurement, and never
+     * mistakenly pulls generic article images.
+     *
+     * Query params: article_style, size, side (default: front), color (optional)
+     */
+    public function apiOperatorFetch(Request $request): JsonResponse
+    {
+        $articleStyle = $request->query('article_style');
+        $size = $request->query('size');
+        $side = $request->query('side', 'front');
+        $color = $request->query('color');
+
+        if (!$articleStyle || !$size) {
+            return response()->json([
+                'success' => false,
+                'message' => 'article_style and size parameters are required.',
+            ], 400);
+        }
+
+        // Priority 1: Uploaded annotation with exact color match
+        $uploaded = null;
+        if ($color) {
+            $uploaded = UploadedAnnotation::findByStyleAndSize($articleStyle, $size, $side, $color);
+        }
+
+        // Priority 1b: If no color-specific match, try any-color fallback
+        if (!$uploaded) {
+            $uploaded = UploadedAnnotation::findByStyleAndSizeAnyColor($articleStyle, $size, $side);
+        }
+
+        if ($uploaded) {
+            $imageBase64 = null;
+            $imageMimeType = null;
+
+            // Primary source: MySQL database column (reference_image_data)
+            // Fallback: disk file (for backward compat with records missing DB data)
+            if ($uploaded->reference_image_data) {
+                $imageBase64 = $uploaded->reference_image_data;
+                $imageMimeType = $uploaded->reference_image_mime_type ?? 'image/jpeg';
+            } else {
+                // DB column empty — fall back to disk file
+                $diskPath = $uploaded->getStoragePath();
+                if ($diskPath && file_exists($diskPath)) {
+                    $imageBase64 = base64_encode(file_get_contents($diskPath));
+                    $imageMimeType = $uploaded->reference_image_mime_type ?? 'image/jpeg';
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'source' => 'uploaded_annotation',
+                'annotation' => [
+                    'id' => $uploaded->id,
+                    'article_style' => $uploaded->article_style,
+                    'size' => $uploaded->size,
+                    'side' => $uploaded->side,
+                    'color' => $uploaded->color,
+                    'color_suffix' => $uploaded->getColorSuffix(),
+                    'standardized_name' => $uploaded->getStandardizedBaseName(),
+                    'name' => $uploaded->name,
+                    'annotation_data' => $uploaded->annotation_data,
+                    'image_width' => $uploaded->image_width,
+                    'image_height' => $uploaded->image_height,
+                    'annotation_date' => $uploaded->annotation_date?->toIso8601String(),
+                ],
+                'reference_image' => $imageBase64 ? [
+                    'data' => $imageBase64,
+                    'mime_type' => $imageMimeType,
+                    'data_url' => "data:{$imageMimeType};base64,{$imageBase64}",
+                    'width' => $uploaded->image_width,
+                    'height' => $uploaded->image_height,
+                ] : null,
+            ]);
+        }
+
+        // Priority 2: Article annotation (from camera capture + in-browser annotation)
+        $articleAnnotation = \App\Models\ArticleAnnotation::where('article_style', $articleStyle)
+            ->where('size', $size)
+            ->first();
+
+        if ($articleAnnotation) {
+            return response()->json([
+                'success' => true,
+                'source' => 'article_annotation',
+                'annotation' => [
+                    'id' => $articleAnnotation->id,
+                    'article_style' => $articleAnnotation->article_style,
+                    'size' => $articleAnnotation->size,
+                    'side' => $side,
+                    'name' => $articleAnnotation->name,
+                    'annotation_data' => [
+                        'keypoints' => $articleAnnotation->keypoints_pixels ?? [],
+                        'target_distances' => $articleAnnotation->target_distances ?? [],
+                        'placement_box' => $articleAnnotation->placement_box ?? [],
+                    ],
+                    'image_width' => $articleAnnotation->image_width,
+                    'image_height' => $articleAnnotation->image_height,
+                    'annotation_date' => $articleAnnotation->updated_at?->toIso8601String(),
+                ],
+                'reference_image' => $articleAnnotation->image_data ? [
+                    'data' => $articleAnnotation->image_data,
+                    'mime_type' => $articleAnnotation->image_mime_type ?? 'image/jpeg',
+                    'data_url' => 'data:' . ($articleAnnotation->image_mime_type ?? 'image/jpeg') . ';base64,' . $articleAnnotation->image_data,
+                    'width' => $articleAnnotation->image_width,
+                    'height' => $articleAnnotation->image_height,
+                ] : null,
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => "No annotation found for {$articleStyle} / {$size} / {$side}.",
+            'source' => null,
+        ], 404);
     }
 
     /**

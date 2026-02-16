@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Brand;
+use App\Models\MeasurementSize;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http;
@@ -25,10 +26,30 @@ class CameraCaptureController extends Controller
     {
         $article->load('articleType');
 
+        // Get sizes from measurement configuration for this article
+        // These are the sizes defined in the measurement spec (e.g. S, M, L, 28, 30, 11-12 Years)
+        $measurementSizes = MeasurementSize::whereHas('measurement', function ($query) use ($article) {
+            $query->where('article_id', $article->id);
+        })
+        ->distinct()
+        ->pluck('size')
+        ->filter()
+        ->sort()
+        ->values()
+        ->toArray();
+
+        // Fallback to standard sizes if no measurement sizes configured yet
+        if (empty($measurementSizes)) {
+            $measurementSizes = ['S', 'M', 'L', 'XL', 'XXL'];
+        }
+
+        $defaultSize = $request->query('size') ?? $measurementSizes[0] ?? 'M';
+
         return Inertia::render('articles/camera-capture', [
             'brand' => $brand,
             'article' => $article,
-            'selectedSize' => $request->query('size', 'M'),
+            'selectedSize' => $defaultSize,
+            'measurementSizes' => $measurementSizes,
         ]);
     }
 

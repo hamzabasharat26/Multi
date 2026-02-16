@@ -48,6 +48,7 @@ interface Props {
     brand: Brand;
     article: Article;
     selectedSize: string;
+    measurementSizes?: string[];
 }
 
 type Step = 'mode_selection' | 'live_preview' | 'captured_preview' | 'saving';
@@ -73,7 +74,7 @@ const DEFAULT_CAMERA_URL = 'http://127.0.0.1:5555';
 // Component
 // ---------------------------------------------------------------------------
 
-export default function CameraCapture({ brand, article, selectedSize }: Props) {
+export default function CameraCapture({ brand, article, selectedSize, measurementSizes }: Props) {
     // State
     const [step, setStep] = useState<Step>('mode_selection');
     const [imageMode, setImageMode] = useState<'black' | 'white' | 'other' | null>(null);
@@ -106,7 +107,10 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
 
     // Current size (from query param or default)
     const [size, setSize] = useState(selectedSize || 'M');
-    const sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+    // Use measurement-configured sizes from backend; fallback to standard sizes
+    const sizes = (measurementSizes && measurementSizes.length > 0)
+        ? measurementSizes
+        : ['S', 'M', 'L', 'XL', 'XXL'];
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Brands', href: brandRoutes.index().url },

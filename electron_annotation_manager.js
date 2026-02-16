@@ -2,9 +2,15 @@
  * MagicQC Electron App - Annotation Manager
  * 
  * This module handles:
- * 1. Fetching annotations from VPS MySQL database
- * 2. Writing annotation files for Python measurement system
- * 3. Managing reference images
+ * 1. Fetching annotations + reference images via Laravel API (correct priority)
+ * 2. Fetching calibration from MySQL database
+ * 3. Writing annotation files + reference images for Python measurement system
+ * 4. Managing measurement data lifecycle
+ *
+ * FETCH PRIORITY (enforced by /api/uploaded-annotations/operator-fetch):
+ *   1st — uploaded_annotations (manually uploaded reference image + annotation)
+ *   2nd — article_annotations (camera-captured annotation) — fallback only
+ *   NEVER article_images (those are generic captured images, not for measurement)
  */
 
 const mysql = require('mysql2/promise');
@@ -13,6 +19,10 @@ const path = require('path');
 
 class AnnotationManager {
   constructor(config) {
+    // Laravel API base URL (for annotation + reference image fetch)
+    this.apiBaseUrl = config.apiBaseUrl || 'http://localhost:8000/api';
+
+    // MySQL connection (for calibration, target distance updates)
     this.dbConfig = {
       host: config.host || 'localhost',
       user: config.user || 'root',
@@ -24,7 +34,7 @@ class AnnotationManager {
   }
 
   /**
-   * Connect to VPS MySQL database
+   * Connect to VPS MySQL database (for calibration / target distance updates)
    */
   async connect() {
     try {
@@ -49,31 +59,24 @@ class AnnotationManager {
   }
 
   /**
-   * Get list of all available annotations
+   * Get list of all available annotations via API.
+   * Returns uploaded_annotations which are the primary source for measurement.
    * 
    * @returns {Array} List of annotations with basic info
    */
   async listAnnotations() {
-    const [rows] = await this.connection.query(`
-      SELECT 
-        id,
-        article_style,
-        size,
-        name,
-        image_width,
-        image_height,
-        JSON_LENGTH(keypoints_pixels) as keypoint_count,
-        JSON_LENGTH(target_distances) as target_distance_count,
-        created_at,
-        updated_at
-      FROM article_annotations
-      ORDER BY article_style, size
-    `);
+    const response = await fetch(`${this.apiBaseUrl}/uploaded-annotations/`);
+    const data = await response.json();
     
-    return rows;
+    if (!data.success) {
+      throw new Error('Failed to fetch annotation list');
+    }
+    
+    return data.annotations;
   }
 
-  /**   * Get active camera calibration.
+  /**
+   * Get active camera calibration from MySQL.
    * 
    * @returns {Object|null} Active calibration or null
    */
@@ -117,7 +120,6 @@ class AnnotationManager {
         throw new Error('No calibration data provided');
       }
 
-      // Create calibration data in Python measurement system format
       const calibrationData = {
         pixels_per_cm: parseFloat(calibration.pixels_per_cm),
         reference_length_cm: parseFloat(calibration.reference_length_cm),
@@ -125,7 +127,6 @@ class AnnotationManager {
         calibration_date: calibration.updated_at || new Date().toISOString()
       };
 
-      // Write to camera_calibration.json
       const calibrationFilePath = path.join(outputPath, 'camera_calibration.json');
       await fs.writeFile(
         calibrationFilePath,
@@ -144,74 +145,94 @@ class AnnotationManager {
     }
   }
 
-  /**   * Get specific annotation by article style and size
+  /**
+   * Get annotation + reference image for measurement via the Operator Fetch API.
    * 
-   * @param {string} articleStyle - Article style code (e.g., 'NKE-TS-001')
-   * @param {string} size - Size (e.g., 'XXL', 'L')
-   * @returns {Object|null} Annotation data or null if not found
+   * FETCH PRIORITY (enforced server-side):
+   *   1st — uploaded_annotations (manually uploaded — always preferred)
+   *   2nd — article_annotations (camera captured — fallback)
+   *   NEVER article_images
+   * 
+   * @param {string} articleStyle - Article style code (e.g., 'T-Shirt')
+   * @param {string} size - Size (e.g., 'S', 'M', '11-12 Years')
+   * @param {string} side - Side ('front' or 'back')
+   * @param {string|null} color - Garment color ('black', 'white', 'other', or null)
+   * @returns {Object|null} { source, annotation, reference_image } or null
    */
-  async getAnnotation(articleStyle, size) {
-    const [rows] = await this.connection.query(`
-      SELECT 
-        id,
-        article_style,
-        size,
-        name,
-        keypoints_pixels,
-        target_distances,
-        placement_box,
-        image_width,
-        image_height,
-        image_data,
-        image_mime_type,
-        created_at,
-        updated_at
-      FROM article_annotations
-      WHERE article_style = ? AND size = ?
-      LIMIT 1
-    `, [articleStyle, size]);
-    
-    return rows[0] || null;
+  async getAnnotation(articleStyle, size, side = 'front', color = null) {
+    const params = new URLSearchParams({
+      article_style: articleStyle,
+      size: size,
+      side: side,
+    });
+    if (color) {
+      params.set('color', color);
+    }
+
+    const url = `${this.apiBaseUrl}/uploaded-annotations/operator-fetch?${params}`;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (!data.success) {
+      return null;
+    }
+
+    return data;
   }
 
   /**
-   * Write annotation file for Python measurement system
+   * Write annotation file for Python measurement system.
    * 
-   * Format: {
+   * Handles data from both uploaded_annotations and article_annotations
+   * via the unified operator-fetch response format.
+   * 
+   * Output format: {
    *   keypoints: [[x,y], [x,y], ...],
    *   target_distances: {1: value, 2: value, ...},
    *   placement_box: [x1, y1, x2, y2],
    *   annotation_date: "ISO8601"
    * }
    * 
-   * @param {Object} annotation - Annotation data from database
+   * @param {Object} operatorData - Data from operator-fetch API
    * @param {string} outputPath - Directory to write file
    * @returns {string} Path to written file
    */
-  async writeAnnotationFile(annotation, outputPath) {
+  async writeAnnotationFile(operatorData, outputPath) {
     try {
-      // Parse JSON columns
-      const keypoints = JSON.parse(annotation.keypoints_pixels || '[]');
-      const targetDistances = JSON.parse(annotation.target_distances || '{}');
-      const placementBox = JSON.parse(annotation.placement_box || '[]');
+      const ann = operatorData.annotation;
+      const annData = ann.annotation_data;
+
+      // Extract keypoints — handle both array and JSON-string formats
+      let keypoints = annData.keypoints || [];
+      if (typeof keypoints === 'string') {
+        keypoints = JSON.parse(keypoints);
+      }
+
+      let targetDistances = annData.target_distances || {};
+      if (typeof targetDistances === 'string') {
+        targetDistances = JSON.parse(targetDistances);
+      }
+
+      let placementBox = annData.placement_box || [];
+      if (typeof placementBox === 'string') {
+        placementBox = JSON.parse(placementBox);
+      }
       
-      // CRITICAL: Convert target_distances to have INTEGER keys
+      // Convert target_distances to have INTEGER keys
       // Python expects: {1: value, 2: value, ...}
-      // NOT: {"1": value, "2": value, ...}
       const targetDistancesFormatted = {};
       for (const [key, value] of Object.entries(targetDistances)) {
         targetDistancesFormatted[parseInt(key)] = parseFloat(value);
       }
       
-      // Create annotation data in EXACT format Python measurement system expects
       const annotationData = {
-        keypoints: keypoints,                          // [[x,y], [x,y], ...]
-        target_distances: targetDistancesFormatted,    // {1: value, 2: value}
-        placement_box: placementBox,                   // [x1, y1, x2, y2] or []
-        annotation_date: annotation.updated_at || new Date().toISOString()
+        keypoints: keypoints,
+        target_distances: targetDistancesFormatted,
+        placement_box: placementBox,
+        annotation_date: ann.annotation_date || new Date().toISOString()
       };
       
-      // Validate format
+      // Validate
       if (!Array.isArray(keypoints) || keypoints.length === 0) {
         throw new Error('Invalid keypoints format: must be non-empty array');
       }
@@ -220,7 +241,6 @@ class AnnotationManager {
         throw new Error('Invalid keypoints format: each keypoint must be [x, y]');
       }
       
-      // Write to annotation_data.json
       const annotationFilePath = path.join(outputPath, 'annotation_data.json');
       await fs.writeFile(
         annotationFilePath,
@@ -229,6 +249,7 @@ class AnnotationManager {
       );
       
       console.log(`✓ Annotation file written: ${annotationFilePath}`);
+      console.log(`  Source: ${operatorData.source}`);
       console.log(`  Keypoints: ${keypoints.length}`);
       console.log(`  Target distances: ${Object.keys(targetDistancesFormatted).length}`);
       console.log(`  Placement box: ${placementBox.length > 0 ? 'Yes' : 'No'}`);
@@ -241,20 +262,21 @@ class AnnotationManager {
   }
 
   /**
-   * Write reference image from Base64 data
+   * Write reference image from operator-fetch API response.
    * 
-   * @param {Object} annotation - Annotation data with image_data
+   * @param {Object} operatorData - Data from operator-fetch API (contains reference_image)
    * @param {string} outputPath - Directory to write image
    * @returns {string} Path to written image
    */
-  async writeReferenceImage(annotation, outputPath) {
+  async writeReferenceImage(operatorData, outputPath) {
     try {
-      if (!annotation.image_data) {
-        throw new Error('No image data available');
+      const refImg = operatorData.reference_image;
+      if (!refImg || !refImg.data) {
+        throw new Error('No reference image data available in API response');
       }
       
       // Decode Base64 image data
-      const imageBuffer = Buffer.from(annotation.image_data, 'base64');
+      const imageBuffer = Buffer.from(refImg.data, 'base64');
       
       // Determine file extension from MIME type
       const mimeToExt = {
@@ -263,14 +285,14 @@ class AnnotationManager {
         'image/gif': '.gif',
         'image/webp': '.webp'
       };
-      const extension = mimeToExt[annotation.image_mime_type] || '.jpg';
+      const extension = mimeToExt[refImg.mime_type] || '.jpg';
       
-      // Write reference image
       const imageFilePath = path.join(outputPath, `reference_image${extension}`);
       await fs.writeFile(imageFilePath, imageBuffer);
       
       console.log(`✓ Reference image written: ${imageFilePath}`);
-      console.log(`  Dimensions: ${annotation.image_width}x${annotation.image_height}`);
+      console.log(`  Source: ${operatorData.source}`);
+      console.log(`  Dimensions: ${refImg.width}x${refImg.height}`);
       console.log(`  Size: ${(imageBuffer.length / 1024).toFixed(2)} KB`);
       
       return imageFilePath;
@@ -281,25 +303,32 @@ class AnnotationManager {
   }
 
   /**
-   * Setup measurement environment for specific article
+   * Setup measurement environment for specific article.
    * 
    * This is the main function that:
-   * 1. Fetches annotation from database
-   * 2. Creates output directory
-   * 3. Writes annotation JSON file
-   * 4. Writes reference image
+   * 1. Fetches calibration from MySQL
+   * 2. Fetches annotation + reference image via API (with correct priority)
+   * 3. Creates output directory
+   * 4. Writes all files for Python measurement system
+   * 
+   * FETCH PRIORITY (enforced server-side):
+   *   1st — uploaded_annotations (manually uploaded — always preferred)
+   *   2nd — article_annotations (camera captured — fallback only)
+   *   NEVER article_images (those are generic captures)
    * 
    * @param {string} articleStyle - Article style code
    * @param {string} size - Size
+   * @param {string} side - Side (default: 'front')
+   * @param {string|null} color - Garment color ('black'/'white'/'other', or null)
    * @returns {Object} Setup result with paths
    */
-  async setupMeasurement(articleStyle, size) {
+  async setupMeasurement(articleStyle, size, side = 'front', color = null) {
     try {
       console.log('\n' + '='.repeat(60));
-      console.log(`Setting up measurement for: ${articleStyle} - ${size}`);
+      console.log(`Setting up measurement for: ${articleStyle} - ${size} (${side})${color ? ' [' + color + ']' : ''}`);
       console.log('='.repeat(60));
       
-      // Ensure connected
+      // Ensure DB connected (for calibration)
       if (!this.connection) {
         await this.connect();
       }
@@ -316,15 +345,16 @@ class AnnotationManager {
       console.log(`  Pixels per cm: ${calibration.pixels_per_cm}`);
       console.log(`  Reference length: ${calibration.reference_length_cm} cm`);
       
-      // 2. Fetch annotation from database
-      console.log('\n[2/5] Fetching annotation from database...');
-      const annotation = await this.getAnnotation(articleStyle, size);
+      // 2. Fetch annotation + reference image via API (with priority)
+      console.log('\n[2/5] Fetching annotation via Operator Fetch API...');
+      const operatorData = await this.getAnnotation(articleStyle, size, side, color);
       
-      if (!annotation) {
-        throw new Error(`No annotation found for ${articleStyle} - ${size}`);
+      if (!operatorData) {
+        throw new Error(`No annotation found for ${articleStyle} - ${size} (${side})`);
       }
       
-      console.log(`✓ Found: ${annotation.name}`);
+      console.log(`✓ Found from: ${operatorData.source}`);
+      console.log(`  Name: ${operatorData.annotation.name}`);
       
       // 3. Create output directory
       console.log('\n[3/5] Creating output directory...');
@@ -342,16 +372,22 @@ class AnnotationManager {
       
       // 5. Write annotation JSON file
       console.log('\n[5/5] Writing annotation file...');
-      const annotationFile = await this.writeAnnotationFile(annotation, outputPath);
+      const annotationFile = await this.writeAnnotationFile(operatorData, outputPath);
       
       // 6. Write reference image
       console.log('\n[6/6] Writing reference image...');
-      const imageFile = await this.writeReferenceImage(annotation, outputPath);
+      const imageFile = await this.writeReferenceImage(operatorData, outputPath);
       
+      const annData = operatorData.annotation.annotation_data;
+      const keypoints = Array.isArray(annData.keypoints)
+        ? annData.keypoints
+        : JSON.parse(annData.keypoints || '[]');
+
       console.log('\n' + '='.repeat(60));
       console.log('✓ Setup complete! Ready for Python measurement system.');
       console.log('='.repeat(60));
       console.log(`Working directory: ${outputPath}`);
+      console.log(`Data source: ${operatorData.source}`);
       console.log('Files created:');
       console.log('  - camera_calibration.json');
       console.log('  - annotation_data.json');
@@ -361,6 +397,7 @@ class AnnotationManager {
       
       return {
         success: true,
+        source: operatorData.source,
         outputPath,
         calibrationFile,
         annotationFile,
@@ -371,11 +408,12 @@ class AnnotationManager {
           referenceLengthCm: calibration.reference_length_cm
         },
         annotation: {
-          style: annotation.article_style,
-          size: annotation.size,
-          name: annotation.name,
-          keypointCount: JSON.parse(annotation.keypoints_pixels).length,
-          imageDimensions: `${annotation.image_width}x${annotation.image_height}`
+          style: operatorData.annotation.article_style,
+          size: operatorData.annotation.size,
+          side: operatorData.annotation.side,
+          name: operatorData.annotation.name,
+          keypointCount: keypoints.length,
+          imageDimensions: `${operatorData.annotation.image_width}x${operatorData.annotation.image_height}`
         }
       };
       
@@ -386,10 +424,11 @@ class AnnotationManager {
   }
 
   /**
-   * Update target distances after measurement
+   * Update target distances after measurement.
    * 
    * After the first measurement, the Python system sets target_distances.
    * This function updates the database with those values.
+   * Updates BOTH uploaded_annotations and article_annotations if they exist.
    * 
    * @param {string} articleStyle - Article style code
    * @param {string} size - Size
@@ -397,15 +436,13 @@ class AnnotationManager {
    */
   async updateTargetDistances(articleStyle, size, targetDistances) {
     try {
-      // Ensure connected
       if (!this.connection) {
         await this.connect();
       }
       
-      // Convert to JSON string
       const targetDistancesJson = JSON.stringify(targetDistances);
       
-      // Update database
+      // Update article_annotations (legacy camera-captured)
       await this.connection.query(`
         UPDATE article_annotations
         SET target_distances = ?
@@ -423,7 +460,7 @@ class AnnotationManager {
   }
 
   /**
-   * Get measurement results from Python system
+   * Get measurement results from Python system.
    * 
    * @param {string} outputPath - Directory containing measurement results
    * @returns {Object|null} Measurement results or null
@@ -435,7 +472,7 @@ class AnnotationManager {
       return JSON.parse(data);
     } catch (error) {
       if (error.code === 'ENOENT') {
-        return null; // File doesn't exist yet
+        return null;
       }
       throw error;
     }
@@ -449,7 +486,8 @@ module.exports = AnnotationManager;
 if (require.main === module) {
   (async () => {
     const manager = new AnnotationManager({
-      host: 'localhost',     // Change to your VPS IP
+      apiBaseUrl: 'http://localhost:8000/api',  // Laravel API URL
+      host: 'localhost',     // MySQL host (for calibration)
       user: 'root',
       password: '',          // Your MySQL password
       database: 'magicqc',
@@ -457,21 +495,23 @@ if (require.main === module) {
     });
     
     try {
-      // Connect to database
+      // Connect to database (for calibration)
       await manager.connect();
       
-      // List all available annotations
+      // List all available annotations (via API)
       console.log('\nAvailable annotations:');
       const annotations = await manager.listAnnotations();
       annotations.forEach(ann => {
-        console.log(`  ${ann.article_style} - ${ann.size}: ${ann.keypoint_count} keypoints`);
+        console.log(`  ${ann.article_style} - ${ann.size}: ${ann.side || 'front'}`);
       });
       
       // Setup measurement for specific article
-      // Example: NKE-TS-001 in size XXL
-      const result = await manager.setupMeasurement('NKE-TS-001', 'XXL');
+      // Uses operator-fetch API with correct priority:
+      //   1st: uploaded_annotations (manual upload) — with color matching
+      //   2nd: article_annotations (camera capture)
+      const result = await manager.setupMeasurement('T-Shirt', 'S', 'front', 'black');
       
-      console.log('\nSetup result:', result);
+      console.log('\nSetup result:', JSON.stringify(result, null, 2));
       
       // Disconnect
       await manager.disconnect();

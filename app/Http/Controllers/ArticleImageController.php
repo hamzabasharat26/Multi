@@ -28,11 +28,11 @@ class ArticleImageController extends Controller
     public function store(Request $request, Brand $brand, Article $article): JsonResponse
     {
         $request->validate([
-            'size' => ['required', 'string', 'in:S,M,L,XL,XXL'],
+            'size' => ['required', 'string', 'max:50'],
             'image' => ['required', 'file', 'max:10240'], // 10MB max
         ], [
             'size.required' => 'Size is required.',
-            'size.in' => 'Size must be one of: S, M, L, XL, XXL.',
+            'size.max' => 'Size must not exceed 50 characters.',
             'image.required' => 'Image is required.',
             'image.file' => 'The file must be a valid file.',
             'image.max' => 'Image size must not exceed 10MB.',

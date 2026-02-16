@@ -48,12 +48,26 @@ class ArticleRegistrationController extends Controller
     {
         $article = Article::findOrFail($articleId);
         
-        // Get unique sizes from article images for this article
-        $sizes = ArticleImage::where('article_id', $articleId)
-            ->distinct()
-            ->pluck('size')
-            ->filter()
-            ->values();
+        // Get sizes from measurement configuration for this article
+        // This ensures sizes are available even before images are captured
+        $sizes = \App\Models\MeasurementSize::whereHas('measurement', function ($query) use ($articleId) {
+            $query->where('article_id', $articleId);
+        })
+        ->distinct()
+        ->pluck('size')
+        ->filter()
+        ->sort()
+        ->values();
+
+        // Fallback: also include sizes from existing article images
+        // (for backwards compatibility if measurements haven't been configured)
+        if ($sizes->isEmpty()) {
+            $sizes = ArticleImage::where('article_id', $articleId)
+                ->distinct()
+                ->pluck('size')
+                ->filter()
+                ->values();
+        }
 
         return response()->json([
             'success' => true,

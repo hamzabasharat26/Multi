@@ -40,6 +40,9 @@ interface UploadedAnnotation {
     brand_name: string | null;
     size: string;
     side: string;
+    color: string | null;
+    color_suffix: string;
+    standardized_name: string;
     name: string;
     keypoints_count: number;
     target_distances_count: number;
@@ -79,6 +82,7 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
     const [isLoadingSizes, setIsLoadingSizes] = useState(false);
     const [selectedSize, setSelectedSize] = useState<string>('');
     const [selectedSide, setSelectedSide] = useState<string>('front');
+    const [selectedColor, setSelectedColor] = useState<string>('');
     const [name, setName] = useState('');
     const [jsonFile, setJsonFile] = useState<File | null>(null);
     const [referenceImage, setReferenceImage] = useState<File | null>(null);
@@ -214,6 +218,11 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
             return;
         }
 
+        if (!selectedColor) {
+            setUploadError('Please select a Garment Color.');
+            return;
+        }
+
         if (!jsonFile) {
             setUploadError('JSON file is required.');
             return;
@@ -231,6 +240,7 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
             formData.append('article_id', selectedArticleId);
             formData.append('size', selectedSize);
             formData.append('side', selectedSide);
+            formData.append('color', selectedColor);
             formData.append('json_file', jsonFile);
             formData.append('reference_image', referenceImage);
             if (name.trim()) {
@@ -274,6 +284,7 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
                 setSelectedArticleId('');
                 setSelectedSize('');
                 setSelectedSide('front');
+                setSelectedColor('');
                 setAvailableSizes([]);
                 setName('');
                 setJsonFile(null);
@@ -612,6 +623,41 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
                                     </p>
                                 </div>
 
+                                {/* Garment Color */}
+                                <div className="space-y-2">
+                                    <Label htmlFor="color" className="font-medium">
+                                        Garment Color <span className="text-red-500">*</span>
+                                    </Label>
+                                    <Select value={selectedColor} onValueChange={setSelectedColor}>
+                                        <SelectTrigger id="color" className="w-full">
+                                            <SelectValue placeholder="Select garment color..." />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="black">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="inline-block h-3 w-3 rounded-full bg-gray-900 border border-gray-400" />
+                                                    <span>Black</span>
+                                                </div>
+                                            </SelectItem>
+                                            <SelectItem value="white">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="inline-block h-3 w-3 rounded-full bg-white border border-gray-400" />
+                                                    <span>White</span>
+                                                </div>
+                                            </SelectItem>
+                                            <SelectItem value="other">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="inline-block h-3 w-3 rounded-full bg-gradient-to-r from-red-400 via-yellow-400 to-blue-400 border border-gray-400" />
+                                                    <span>Other Colors</span>
+                                                </div>
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <p className="text-xs text-muted-foreground">
+                                        Select the garment color for this annotation. Files are saved with color suffix: Black (-b), White (-w), Other (-z).
+                                    </p>
+                                </div>
+
                                 {/* Name (optional) */}
                                 <div className="space-y-2">
                                     <Label htmlFor="name" className="font-medium">
@@ -713,7 +759,7 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
                                     type="submit"
                                     className="w-full"
                                     size="lg"
-                                    disabled={isUploading || !selectedArticleId || !selectedSize || !jsonFile || !referenceImage}
+                                    disabled={isUploading || !selectedArticleId || !selectedSize || !selectedColor || !jsonFile || !referenceImage}
                                 >
                                     {isUploading ? (
                                         <>
@@ -769,15 +815,25 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
                                     <p className="text-sm text-muted-foreground">Upload your first annotation using the form.</p>
                                 </div>
                             ) : (() => {
-                                // Group annotations by article_style and size
+                                // Color display labels
+                                const colorLabels: Record<string, string> = { black: 'Black', white: 'White', other: 'Other Colors' };
+                                const colorBadgeClasses: Record<string, string> = {
+                                    black: 'bg-gray-800 text-white dark:bg-gray-700',
+                                    white: 'bg-white text-gray-700 border border-gray-300 dark:bg-gray-100',
+                                    other: 'bg-gradient-to-r from-red-400 via-yellow-300 to-blue-400 text-white',
+                                };
+
+                                // Group annotations by article_style + size + color
                                 const grouped = annotations.reduce((acc, annotation) => {
-                                    const key = `${annotation.article_style}_${annotation.size}`;
+                                    const colorKey = annotation.color || 'none';
+                                    const key = `${annotation.article_style}_${annotation.size}_${colorKey}`;
                                     if (!acc[key]) {
                                         acc[key] = {
                                             article_style: annotation.article_style,
                                             size: annotation.size,
-                                            front: null,
-                                            back: null
+                                            color: annotation.color,
+                                            front: null as UploadedAnnotation | null,
+                                            back: null as UploadedAnnotation | null,
                                         };
                                     }
                                     if (annotation.side === 'front') {
@@ -786,7 +842,7 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
                                         acc[key].back = annotation;
                                     }
                                     return acc;
-                                }, {} as Record<string, { article_style: string; size: string; front: UploadedAnnotation | null; back: UploadedAnnotation | null }>);
+                                }, {} as Record<string, { article_style: string; size: string; color: string | null; front: UploadedAnnotation | null; back: UploadedAnnotation | null }>);
 
                                 return (
                                     <div className="max-h-[500px] space-y-3 overflow-y-auto pr-1">
@@ -795,7 +851,7 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
                                                 key={index}
                                                 className="group rounded-lg border-2 p-4 transition-all hover:border-primary/30 hover:bg-muted/50"
                                             >
-                                                {/* Header with article style and size */}
+                                                {/* Header with article style, size, and color */}
                                                 <div className="mb-3 flex flex-wrap items-center gap-2">
                                                     <span className="font-semibold text-foreground">
                                                         {group.article_style}
@@ -803,6 +859,11 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
                                                     <span className="rounded bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
                                                         {group.size}
                                                     </span>
+                                                    {group.color && (
+                                                        <span className={`rounded px-2 py-0.5 text-xs font-medium ${colorBadgeClasses[group.color] || 'bg-gray-100 text-gray-600'}`}>
+                                                            {colorLabels[group.color] || group.color}
+                                                        </span>
+                                                    )}
                                                 </div>
 
                                                 {/* Front and Back side by side */}
@@ -841,6 +902,11 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
                                                                 <p className="text-sm font-medium text-foreground">
                                                                     {group.front.name}
                                                                 </p>
+                                                                {group.front.standardized_name && (
+                                                                    <div className="text-xs font-mono text-primary/70">
+                                                                        {group.front.standardized_name}
+                                                                    </div>
+                                                                )}
                                                                 <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
                                                                     <span>{group.front.keypoints_count} keypoints</span>
                                                                     <span>•</span>
@@ -894,6 +960,11 @@ export default function AnnotationUploadIndex({ hasPassword, articleStyles }: Pr
                                                                 <p className="text-sm font-medium text-foreground">
                                                                     {group.back.name}
                                                                 </p>
+                                                                {group.back.standardized_name && (
+                                                                    <div className="text-xs font-mono text-primary/70">
+                                                                        {group.back.standardized_name}
+                                                                    </div>
+                                                                )}
                                                                 <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
                                                                     <span>{group.back.keypoints_count} keypoints</span>
                                                                     <span>•</span>

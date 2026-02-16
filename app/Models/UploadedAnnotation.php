@@ -10,11 +10,22 @@ class UploadedAnnotation extends Model
 {
     use HasFactory;
 
+    /**
+     * Color suffix mapping for standardized file naming.
+     * Black → -b, White → -w, Other Colors → -z
+     */
+    public const COLOR_SUFFIXES = [
+        'black' => '-b',
+        'white' => '-w',
+        'other' => '-z',
+    ];
+
     protected $fillable = [
         'article_id',
         'article_style',
         'size',
         'side',
+        'color',
         'name',
         'annotation_data',
         'reference_image_path',
@@ -93,25 +104,82 @@ class UploadedAnnotation extends Model
     }
 
     /**
-     * Find annotation by article style, size, and side.
+     * Get the color suffix for file naming.
+     * Returns '-b', '-w', '-z', or '' for null/legacy records.
      */
-    public static function findByStyleAndSize(string $articleStyle, string $size, string $side = 'front'): ?self
+    public function getColorSuffix(): string
+    {
+        return self::COLOR_SUFFIXES[$this->color] ?? '';
+    }
+
+    /**
+     * Get the standardized base name: STYLE_SIZE_SIDE-suffix
+     * Example: T-SHIRT_S_FRONT-w
+     */
+    public function getStandardizedBaseName(): string
+    {
+        $style = strtoupper(preg_replace('/[^A-Za-z0-9_-]/', '_', $this->article_style));
+        $size = strtoupper(preg_replace('/[^A-Za-z0-9_-]/', '_', $this->size));
+        $side = strtoupper($this->side ?? 'FRONT');
+        $suffix = $this->getColorSuffix();
+
+        return "{$style}_{$size}_{$side}{$suffix}";
+    }
+
+    /**
+     * Get the color suffix string for a given color value.
+     */
+    public static function colorSuffix(?string $color): string
+    {
+        return self::COLOR_SUFFIXES[$color] ?? '';
+    }
+
+    /**
+     * Find annotation by article style, size, side, and optional color.
+     */
+    public static function findByStyleAndSize(string $articleStyle, string $size, string $side = 'front', ?string $color = null): ?self
+    {
+        $query = self::where('article_style', $articleStyle)
+            ->where('size', $size)
+            ->where('side', $side);
+
+        if ($color !== null) {
+            $query->where('color', $color);
+        } else {
+            $query->whereNull('color');
+        }
+
+        return $query->first();
+    }
+
+    /**
+     * Find annotation by article style, size, side — any color (for backward compat listing).
+     */
+    public static function findByStyleAndSizeAnyColor(string $articleStyle, string $size, string $side = 'front'): ?self
     {
         return self::where('article_style', $articleStyle)
             ->where('size', $size)
             ->where('side', $side)
+            ->orderByRaw("CASE WHEN color IS NOT NULL THEN 0 ELSE 1 END") // prefer records with color
             ->first();
     }
 
     /**
-     * Find annotation by article ID, size, and side.
+     * Find annotation by article ID, size, side, and optional color.
      */
-    public static function findByArticleIdAndSize(int $articleId, string $size, string $side = 'front'): ?self
+    public static function findByArticleIdAndSize(int $articleId, string $size, string $side = 'front', ?string $color = null): ?self
     {
-        return self::where('article_id', $articleId)
+        $query = self::where('article_id', $articleId)
             ->where('size', $size)
-            ->where('side', $side)
-            ->first();
+            ->where('side', $side);
+
+        if ($color !== null) {
+            $query->where('color', $color);
+        } else {
+            $query->whereNull('color');
+        }
+
+        return $query->first();
     }
 
     /**
@@ -126,6 +194,10 @@ class UploadedAnnotation extends Model
                 'article_style' => $annotation->article_style,
                 'brand_name' => $annotation->article?->brand?->name,
                 'size' => $annotation->size,
+                'side' => $annotation->side,
+                'color' => $annotation->color,
+                'color_suffix' => $annotation->getColorSuffix(),
+                'standardized_name' => $annotation->getStandardizedBaseName(),
                 'name' => $annotation->name,
                 'annotation_data' => $annotation->annotation_data,
                 'reference_image_url' => $annotation->api_image_url,

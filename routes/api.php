@@ -59,4 +59,7 @@ Route::prefix('uploaded-annotations')->group(function () {
 
     // New safe route using query parameters
     Route::get('/fetch-image-base64', [\App\Http\Controllers\AnnotationUploadController::class, 'apiGetImageBase64Query']);
+    // Operator Panel: fetch annotation + reference image with correct priority
+    // Priority: uploaded_annotations > article_annotations (never article_images)
+    Route::get('/operator-fetch', [\App\Http\Controllers\AnnotationUploadController::class, 'apiOperatorFetch']);
 });
