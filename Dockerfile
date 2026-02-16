@@ -17,10 +17,8 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 COPY . .
 
-# Create minimal .env so artisan can bootstrap (no DB needed for wayfinder)
-RUN echo "APP_NAME=MagicQC" > .env \
-    && echo "APP_KEY=base64:$(head -c 32 /dev/urandom | base64)" >> .env \
-    && echo "APP_ENV=production" >> .env
+# Use .env.production as the .env (it already has the APP_KEY)
+RUN cp .env.production .env
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
@@ -60,6 +58,9 @@ COPY --chown=www-data:www-data . .
 # Copy built artifacts from builder stage
 COPY --from=builder --chown=www-data:www-data /app/vendor ./vendor
 COPY --from=builder --chown=www-data:www-data /app/public/build ./public/build
+
+# CRITICAL: Remove any stale cached config from source — entrypoint will re-cache
+RUN rm -rf bootstrap/cache/*.php
 
 # Set permissions
 RUN chmod -R 775 storage bootstrap/cache \
