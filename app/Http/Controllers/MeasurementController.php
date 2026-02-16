@@ -206,16 +206,20 @@ class MeasurementController extends Controller
             $resultsCount = $measurement->resultsCount();
 
             if ($resultsCount > 0) {
-                // Measurement has QC results — soft-delete (archive) to preserve FK integrity
+                // Measurement has QC results in measurement_results and/or measurement_results_detailed.
+                // Soft-delete to preserve FK integrity. The Measurement::booted() deleting event
+                // automatically cascades soft-delete to all child measurement_sizes.
                 $measurement->delete();
 
                 return redirect()->route('brands.articles.show', [$brand->id, $article->id])
                     ->with('success', "Measurement \"{$measurement->code}\" archived ({$resultsCount} QC result(s) preserved).");
             }
 
-            // No dependent results — safe to permanently remove
+            // No dependent results — safe to permanently remove.
+            // forceDelete triggers the DB-level ON DELETE CASCADE for measurement_sizes.
             DB::transaction(function () use ($measurement) {
-                $measurement->sizes()->delete();
+                // Explicitly force-delete child sizes (in case DB cascade is absent)
+                $measurement->sizes()->withTrashed()->forceDelete();
                 $measurement->forceDelete();
             });
 
