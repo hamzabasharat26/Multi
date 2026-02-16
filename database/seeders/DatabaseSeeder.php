@@ -31,6 +31,8 @@ class DatabaseSeeder extends Seeder
             ArticleSeeder::class,
             MeasurementSeeder::class,
             PurchaseOrderSeeder::class,
+            SystemCredentialSeeder::class,
+            SettingSeeder::class,
         ]);
 
         // Uncomment to create additional test users

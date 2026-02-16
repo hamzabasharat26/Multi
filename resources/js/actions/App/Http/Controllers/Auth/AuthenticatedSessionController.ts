@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\Auth\AuthenticatedSessionController::destroy
 * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:47
-* @route '/logout'
+* @route '//localhost/logout'
 */
 export const destroy = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: destroy.url(options),
@@ -11,13 +11,13 @@ export const destroy = (options?: RouteQueryOptions): RouteDefinition<'post'> =>
 
 destroy.definition = {
     methods: ["post"],
-    url: '/logout',
+    url: '//localhost/logout',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\Auth\AuthenticatedSessionController::destroy
 * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:47
-* @route '/logout'
+* @route '//localhost/logout'
 */
 destroy.url = (options?: RouteQueryOptions) => {
     return destroy.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ destroy.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Auth\AuthenticatedSessionController::destroy
 * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:47
-* @route '/logout'
+* @route '//localhost/logout'
 */
 destroy.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: destroy.url(options),
@@ -36,7 +36,7 @@ destroy.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 /**
 * @see \App\Http\Controllers\Auth\AuthenticatedSessionController::destroy
 * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:47
-* @route '/logout'
+* @route '//localhost/logout'
 */
 const destroyForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: destroy.url(options),
@@ -46,7 +46,7 @@ const destroyForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =
 /**
 * @see \App\Http\Controllers\Auth\AuthenticatedSessionController::destroy
 * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:47
-* @route '/logout'
+* @route '//localhost/logout'
 */
 destroyForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: destroy.url(options),

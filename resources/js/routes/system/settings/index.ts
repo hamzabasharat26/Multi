@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\SystemSettingsController::username
 * @see app/Http/Controllers/SystemSettingsController.php:33
-* @route '/system-settings/username'
+* @route '//localhost/system-settings/username'
 */
 export const username = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: username.url(options),
@@ -11,13 +11,13 @@ export const username = (options?: RouteQueryOptions): RouteDefinition<'put'> =>
 
 username.definition = {
     methods: ["put"],
-    url: '/system-settings/username',
+    url: '//localhost/system-settings/username',
 } satisfies RouteDefinition<["put"]>
 
 /**
 * @see \App\Http\Controllers\SystemSettingsController::username
 * @see app/Http/Controllers/SystemSettingsController.php:33
-* @route '/system-settings/username'
+* @route '//localhost/system-settings/username'
 */
 username.url = (options?: RouteQueryOptions) => {
     return username.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ username.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\SystemSettingsController::username
 * @see app/Http/Controllers/SystemSettingsController.php:33
-* @route '/system-settings/username'
+* @route '//localhost/system-settings/username'
 */
 username.put = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: username.url(options),
@@ -36,7 +36,7 @@ username.put = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
 /**
 * @see \App\Http\Controllers\SystemSettingsController::username
 * @see app/Http/Controllers/SystemSettingsController.php:33
-* @route '/system-settings/username'
+* @route '//localhost/system-settings/username'
 */
 const usernameForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: username.url({
@@ -51,7 +51,7 @@ const usernameForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> 
 /**
 * @see \App\Http\Controllers\SystemSettingsController::username
 * @see app/Http/Controllers/SystemSettingsController.php:33
-* @route '/system-settings/username'
+* @route '//localhost/system-settings/username'
 */
 usernameForm.put = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: username.url({
@@ -68,7 +68,7 @@ username.form = usernameForm
 /**
 * @see \App\Http\Controllers\SystemSettingsController::password
 * @see app/Http/Controllers/SystemSettingsController.php:74
-* @route '/system-settings/password'
+* @route '//localhost/system-settings/password'
 */
 export const password = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: password.url(options),
@@ -77,13 +77,13 @@ export const password = (options?: RouteQueryOptions): RouteDefinition<'put'> =>
 
 password.definition = {
     methods: ["put"],
-    url: '/system-settings/password',
+    url: '//localhost/system-settings/password',
 } satisfies RouteDefinition<["put"]>
 
 /**
 * @see \App\Http\Controllers\SystemSettingsController::password
 * @see app/Http/Controllers/SystemSettingsController.php:74
-* @route '/system-settings/password'
+* @route '//localhost/system-settings/password'
 */
 password.url = (options?: RouteQueryOptions) => {
     return password.definition.url + queryParams(options)
@@ -92,7 +92,7 @@ password.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\SystemSettingsController::password
 * @see app/Http/Controllers/SystemSettingsController.php:74
-* @route '/system-settings/password'
+* @route '//localhost/system-settings/password'
 */
 password.put = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: password.url(options),
@@ -102,7 +102,7 @@ password.put = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
 /**
 * @see \App\Http\Controllers\SystemSettingsController::password
 * @see app/Http/Controllers/SystemSettingsController.php:74
-* @route '/system-settings/password'
+* @route '//localhost/system-settings/password'
 */
 const passwordForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: password.url({
@@ -117,7 +117,7 @@ const passwordForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> 
 /**
 * @see \App\Http\Controllers\SystemSettingsController::password
 * @see app/Http/Controllers/SystemSettingsController.php:74
-* @route '/system-settings/password'
+* @route '//localhost/system-settings/password'
 */
 passwordForm.put = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: password.url({

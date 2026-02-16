@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::index
 * @see app/Http/Controllers/DeveloperSettingsController.php:18
-* @route '/developer-settings'
+* @route '//localhost/developer-settings'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -11,13 +11,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: '/developer-settings',
+    url: '//localhost/developer-settings',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::index
 * @see app/Http/Controllers/DeveloperSettingsController.php:18
-* @route '/developer-settings'
+* @route '//localhost/developer-settings'
 */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ index.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::index
 * @see app/Http/Controllers/DeveloperSettingsController.php:18
-* @route '/developer-settings'
+* @route '//localhost/developer-settings'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -36,7 +36,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::index
 * @see app/Http/Controllers/DeveloperSettingsController.php:18
-* @route '/developer-settings'
+* @route '//localhost/developer-settings'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
@@ -46,7 +46,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::index
 * @see app/Http/Controllers/DeveloperSettingsController.php:18
-* @route '/developer-settings'
+* @route '//localhost/developer-settings'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(options),
@@ -56,7 +56,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::index
 * @see app/Http/Controllers/DeveloperSettingsController.php:18
-* @route '/developer-settings'
+* @route '//localhost/developer-settings'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(options),
@@ -66,7 +66,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::index
 * @see app/Http/Controllers/DeveloperSettingsController.php:18
-* @route '/developer-settings'
+* @route '//localhost/developer-settings'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url({
@@ -83,7 +83,7 @@ index.form = indexForm
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::updatePassword
 * @see app/Http/Controllers/DeveloperSettingsController.php:26
-* @route '/developer-settings/password'
+* @route '//localhost/developer-settings/password'
 */
 export const updatePassword = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: updatePassword.url(options),
@@ -92,13 +92,13 @@ export const updatePassword = (options?: RouteQueryOptions): RouteDefinition<'pu
 
 updatePassword.definition = {
     methods: ["put"],
-    url: '/developer-settings/password',
+    url: '//localhost/developer-settings/password',
 } satisfies RouteDefinition<["put"]>
 
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::updatePassword
 * @see app/Http/Controllers/DeveloperSettingsController.php:26
-* @route '/developer-settings/password'
+* @route '//localhost/developer-settings/password'
 */
 updatePassword.url = (options?: RouteQueryOptions) => {
     return updatePassword.definition.url + queryParams(options)
@@ -107,7 +107,7 @@ updatePassword.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::updatePassword
 * @see app/Http/Controllers/DeveloperSettingsController.php:26
-* @route '/developer-settings/password'
+* @route '//localhost/developer-settings/password'
 */
 updatePassword.put = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: updatePassword.url(options),
@@ -117,7 +117,7 @@ updatePassword.put = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::updatePassword
 * @see app/Http/Controllers/DeveloperSettingsController.php:26
-* @route '/developer-settings/password'
+* @route '//localhost/developer-settings/password'
 */
 const updatePasswordForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: updatePassword.url({
@@ -132,7 +132,7 @@ const updatePasswordForm = (options?: RouteQueryOptions): RouteFormDefinition<'p
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::updatePassword
 * @see app/Http/Controllers/DeveloperSettingsController.php:26
-* @route '/developer-settings/password'
+* @route '//localhost/developer-settings/password'
 */
 updatePasswordForm.put = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: updatePassword.url({

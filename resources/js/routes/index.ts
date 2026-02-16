@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../wayfinder'
 /**
 * @see routes/web.php:6
-* @route '/'
+* @route '//localhost/'
 */
 export const home = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: home.url(options),
@@ -10,12 +10,12 @@ export const home = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 home.definition = {
     methods: ["get","head"],
-    url: '/',
+    url: '//localhost/',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see routes/web.php:6
-* @route '/'
+* @route '//localhost/'
 */
 home.url = (options?: RouteQueryOptions) => {
     return home.definition.url + queryParams(options)
@@ -23,7 +23,7 @@ home.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see routes/web.php:6
-* @route '/'
+* @route '//localhost/'
 */
 home.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: home.url(options),
@@ -32,7 +32,7 @@ home.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see routes/web.php:6
-* @route '/'
+* @route '//localhost/'
 */
 home.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: home.url(options),
@@ -41,7 +41,7 @@ home.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see routes/web.php:6
-* @route '/'
+* @route '//localhost/'
 */
 const homeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: home.url(options),
@@ -50,7 +50,7 @@ const homeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see routes/web.php:6
-* @route '/'
+* @route '//localhost/'
 */
 homeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: home.url(options),
@@ -59,7 +59,7 @@ homeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see routes/web.php:6
-* @route '/'
+* @route '//localhost/'
 */
 homeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: home.url({
@@ -75,7 +75,7 @@ home.form = homeForm
 
 /**
 * @see routes/web.php:36
-* @route '/dashboard'
+* @route '//localhost/dashboard'
 */
 export const dashboard = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: dashboard.url(options),
@@ -84,12 +84,12 @@ export const dashboard = (options?: RouteQueryOptions): RouteDefinition<'get'> =
 
 dashboard.definition = {
     methods: ["get","head"],
-    url: '/dashboard',
+    url: '//localhost/dashboard',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see routes/web.php:36
-* @route '/dashboard'
+* @route '//localhost/dashboard'
 */
 dashboard.url = (options?: RouteQueryOptions) => {
     return dashboard.definition.url + queryParams(options)
@@ -97,7 +97,7 @@ dashboard.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see routes/web.php:36
-* @route '/dashboard'
+* @route '//localhost/dashboard'
 */
 dashboard.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: dashboard.url(options),
@@ -106,7 +106,7 @@ dashboard.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see routes/web.php:36
-* @route '/dashboard'
+* @route '//localhost/dashboard'
 */
 dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: dashboard.url(options),
@@ -115,7 +115,7 @@ dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see routes/web.php:36
-* @route '/dashboard'
+* @route '//localhost/dashboard'
 */
 const dashboardForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: dashboard.url(options),
@@ -124,7 +124,7 @@ const dashboardForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> 
 
 /**
 * @see routes/web.php:36
-* @route '/dashboard'
+* @route '//localhost/dashboard'
 */
 dashboardForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: dashboard.url(options),
@@ -133,7 +133,7 @@ dashboardForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =>
 
 /**
 * @see routes/web.php:36
-* @route '/dashboard'
+* @route '//localhost/dashboard'
 */
 dashboardForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: dashboard.url({
@@ -149,7 +149,7 @@ dashboard.form = dashboardForm
 
 /**
 * @see routes/settings.php:15
-* @route '/settings/appearance'
+* @route '//localhost/settings/appearance'
 */
 export const appearance = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: appearance.url(options),
@@ -158,12 +158,12 @@ export const appearance = (options?: RouteQueryOptions): RouteDefinition<'get'> 
 
 appearance.definition = {
     methods: ["get","head"],
-    url: '/settings/appearance',
+    url: '//localhost/settings/appearance',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see routes/settings.php:15
-* @route '/settings/appearance'
+* @route '//localhost/settings/appearance'
 */
 appearance.url = (options?: RouteQueryOptions) => {
     return appearance.definition.url + queryParams(options)
@@ -171,7 +171,7 @@ appearance.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see routes/settings.php:15
-* @route '/settings/appearance'
+* @route '//localhost/settings/appearance'
 */
 appearance.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: appearance.url(options),
@@ -180,7 +180,7 @@ appearance.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see routes/settings.php:15
-* @route '/settings/appearance'
+* @route '//localhost/settings/appearance'
 */
 appearance.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: appearance.url(options),
@@ -189,7 +189,7 @@ appearance.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see routes/settings.php:15
-* @route '/settings/appearance'
+* @route '//localhost/settings/appearance'
 */
 const appearanceForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: appearance.url(options),
@@ -198,7 +198,7 @@ const appearanceForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'>
 
 /**
 * @see routes/settings.php:15
-* @route '/settings/appearance'
+* @route '//localhost/settings/appearance'
 */
 appearanceForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: appearance.url(options),
@@ -207,7 +207,7 @@ appearanceForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =
 
 /**
 * @see routes/settings.php:15
-* @route '/settings/appearance'
+* @route '//localhost/settings/appearance'
 */
 appearanceForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: appearance.url({
@@ -224,7 +224,7 @@ appearance.form = appearanceForm
 /**
 * @see \App\Http\Controllers\Auth\AuthenticatedSessionController::logout
 * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:47
-* @route '/logout'
+* @route '//localhost/logout'
 */
 export const logout = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: logout.url(options),
@@ -233,13 +233,13 @@ export const logout = (options?: RouteQueryOptions): RouteDefinition<'post'> => 
 
 logout.definition = {
     methods: ["post"],
-    url: '/logout',
+    url: '//localhost/logout',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\Auth\AuthenticatedSessionController::logout
 * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:47
-* @route '/logout'
+* @route '//localhost/logout'
 */
 logout.url = (options?: RouteQueryOptions) => {
     return logout.definition.url + queryParams(options)
@@ -248,7 +248,7 @@ logout.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Auth\AuthenticatedSessionController::logout
 * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:47
-* @route '/logout'
+* @route '//localhost/logout'
 */
 logout.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: logout.url(options),
@@ -258,7 +258,7 @@ logout.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 /**
 * @see \App\Http\Controllers\Auth\AuthenticatedSessionController::logout
 * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:47
-* @route '/logout'
+* @route '//localhost/logout'
 */
 const logoutForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: logout.url(options),
@@ -268,7 +268,7 @@ const logoutForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =>
 /**
 * @see \App\Http\Controllers\Auth\AuthenticatedSessionController::logout
 * @see app/Http/Controllers/Auth/AuthenticatedSessionController.php:47
-* @route '/logout'
+* @route '//localhost/logout'
 */
 logoutForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: logout.url(options),

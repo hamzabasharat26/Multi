@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\ArticleImageController::index
 * @see app/Http/Controllers/ArticleImageController.php:18
-* @route '/brands/{brand}/articles/{article}/images'
+* @route '//localhost/brands/{brand}/articles/{article}/images'
 */
 export const index = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(args, options),
@@ -11,13 +11,13 @@ export const index = (args: { brand: number | { id: number }, article: number | 
 
 index.definition = {
     methods: ["get","head"],
-    url: '/brands/{brand}/articles/{article}/images',
+    url: '//localhost/brands/{brand}/articles/{article}/images',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\ArticleImageController::index
 * @see app/Http/Controllers/ArticleImageController.php:18
-* @route '/brands/{brand}/articles/{article}/images'
+* @route '//localhost/brands/{brand}/articles/{article}/images'
 */
 index.url = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -47,7 +47,7 @@ index.url = (args: { brand: number | { id: number }, article: number | { id: num
 /**
 * @see \App\Http\Controllers\ArticleImageController::index
 * @see app/Http/Controllers/ArticleImageController.php:18
-* @route '/brands/{brand}/articles/{article}/images'
+* @route '//localhost/brands/{brand}/articles/{article}/images'
 */
 index.get = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(args, options),
@@ -57,7 +57,7 @@ index.get = (args: { brand: number | { id: number }, article: number | { id: num
 /**
 * @see \App\Http\Controllers\ArticleImageController::index
 * @see app/Http/Controllers/ArticleImageController.php:18
-* @route '/brands/{brand}/articles/{article}/images'
+* @route '//localhost/brands/{brand}/articles/{article}/images'
 */
 index.head = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(args, options),
@@ -67,7 +67,7 @@ index.head = (args: { brand: number | { id: number }, article: number | { id: nu
 /**
 * @see \App\Http\Controllers\ArticleImageController::index
 * @see app/Http/Controllers/ArticleImageController.php:18
-* @route '/brands/{brand}/articles/{article}/images'
+* @route '//localhost/brands/{brand}/articles/{article}/images'
 */
 const indexForm = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(args, options),
@@ -77,7 +77,7 @@ const indexForm = (args: { brand: number | { id: number }, article: number | { i
 /**
 * @see \App\Http\Controllers\ArticleImageController::index
 * @see app/Http/Controllers/ArticleImageController.php:18
-* @route '/brands/{brand}/articles/{article}/images'
+* @route '//localhost/brands/{brand}/articles/{article}/images'
 */
 indexForm.get = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(args, options),
@@ -87,7 +87,7 @@ indexForm.get = (args: { brand: number | { id: number }, article: number | { id:
 /**
 * @see \App\Http\Controllers\ArticleImageController::index
 * @see app/Http/Controllers/ArticleImageController.php:18
-* @route '/brands/{brand}/articles/{article}/images'
+* @route '//localhost/brands/{brand}/articles/{article}/images'
 */
 indexForm.head = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(args, {
@@ -104,7 +104,7 @@ index.form = indexForm
 /**
 * @see \App\Http\Controllers\ArticleImageController::store
 * @see app/Http/Controllers/ArticleImageController.php:28
-* @route '/brands/{brand}/articles/{article}/images'
+* @route '//localhost/brands/{brand}/articles/{article}/images'
 */
 export const store = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(args, options),
@@ -113,13 +113,13 @@ export const store = (args: { brand: number | { id: number }, article: number | 
 
 store.definition = {
     methods: ["post"],
-    url: '/brands/{brand}/articles/{article}/images',
+    url: '//localhost/brands/{brand}/articles/{article}/images',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\ArticleImageController::store
 * @see app/Http/Controllers/ArticleImageController.php:28
-* @route '/brands/{brand}/articles/{article}/images'
+* @route '//localhost/brands/{brand}/articles/{article}/images'
 */
 store.url = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -149,7 +149,7 @@ store.url = (args: { brand: number | { id: number }, article: number | { id: num
 /**
 * @see \App\Http\Controllers\ArticleImageController::store
 * @see app/Http/Controllers/ArticleImageController.php:28
-* @route '/brands/{brand}/articles/{article}/images'
+* @route '//localhost/brands/{brand}/articles/{article}/images'
 */
 store.post = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(args, options),
@@ -159,7 +159,7 @@ store.post = (args: { brand: number | { id: number }, article: number | { id: nu
 /**
 * @see \App\Http\Controllers\ArticleImageController::store
 * @see app/Http/Controllers/ArticleImageController.php:28
-* @route '/brands/{brand}/articles/{article}/images'
+* @route '//localhost/brands/{brand}/articles/{article}/images'
 */
 const storeForm = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: store.url(args, options),
@@ -169,7 +169,7 @@ const storeForm = (args: { brand: number | { id: number }, article: number | { i
 /**
 * @see \App\Http\Controllers\ArticleImageController::store
 * @see app/Http/Controllers/ArticleImageController.php:28
-* @route '/brands/{brand}/articles/{article}/images'
+* @route '//localhost/brands/{brand}/articles/{article}/images'
 */
 storeForm.post = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: store.url(args, options),
@@ -181,7 +181,7 @@ store.form = storeForm
 /**
 * @see \App\Http\Controllers\ArticleImageController::destroy
 * @see app/Http/Controllers/ArticleImageController.php:76
-* @route '/brands/{brand}/articles/{article}/images/{image}'
+* @route '//localhost/brands/{brand}/articles/{article}/images/{image}'
 */
 export const destroy = (args: { brand: number | { id: number }, article: number | { id: number }, image: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, image: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: destroy.url(args, options),
@@ -190,13 +190,13 @@ export const destroy = (args: { brand: number | { id: number }, article: number 
 
 destroy.definition = {
     methods: ["delete"],
-    url: '/brands/{brand}/articles/{article}/images/{image}',
+    url: '//localhost/brands/{brand}/articles/{article}/images/{image}',
 } satisfies RouteDefinition<["delete"]>
 
 /**
 * @see \App\Http\Controllers\ArticleImageController::destroy
 * @see app/Http/Controllers/ArticleImageController.php:76
-* @route '/brands/{brand}/articles/{article}/images/{image}'
+* @route '//localhost/brands/{brand}/articles/{article}/images/{image}'
 */
 destroy.url = (args: { brand: number | { id: number }, article: number | { id: number }, image: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, image: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -231,7 +231,7 @@ destroy.url = (args: { brand: number | { id: number }, article: number | { id: n
 /**
 * @see \App\Http\Controllers\ArticleImageController::destroy
 * @see app/Http/Controllers/ArticleImageController.php:76
-* @route '/brands/{brand}/articles/{article}/images/{image}'
+* @route '//localhost/brands/{brand}/articles/{article}/images/{image}'
 */
 destroy.delete = (args: { brand: number | { id: number }, article: number | { id: number }, image: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, image: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: destroy.url(args, options),
@@ -241,7 +241,7 @@ destroy.delete = (args: { brand: number | { id: number }, article: number | { id
 /**
 * @see \App\Http\Controllers\ArticleImageController::destroy
 * @see app/Http/Controllers/ArticleImageController.php:76
-* @route '/brands/{brand}/articles/{article}/images/{image}'
+* @route '//localhost/brands/{brand}/articles/{article}/images/{image}'
 */
 const destroyForm = (args: { brand: number | { id: number }, article: number | { id: number }, image: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, image: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: destroy.url(args, {
@@ -256,7 +256,7 @@ const destroyForm = (args: { brand: number | { id: number }, article: number | {
 /**
 * @see \App\Http\Controllers\ArticleImageController::destroy
 * @see app/Http/Controllers/ArticleImageController.php:76
-* @route '/brands/{brand}/articles/{article}/images/{image}'
+* @route '//localhost/brands/{brand}/articles/{article}/images/{image}'
 */
 destroyForm.delete = (args: { brand: number | { id: number }, article: number | { id: number }, image: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, image: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: destroy.url(args, {

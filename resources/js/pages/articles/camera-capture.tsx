@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import brandRoutes from '@/routes/brands';
 import { type BreadcrumbItem } from '@/types';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import {
     ArrowLeft,
     Camera,
@@ -73,6 +73,8 @@ const DEFAULT_CAMERA_URL = 'http://127.0.0.1:5555';
 // ---------------------------------------------------------------------------
 
 export default function CameraCapture({ brand, article, selectedSize }: Props) {
+    const { basePath } = usePage().props as any;
+    const safeBasePath = basePath || '';
     // State
     const [step, setStep] = useState<Step>('mode_selection');
     const [imageMode, setImageMode] = useState<'black' | 'other' | null>(null);
@@ -122,7 +124,7 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
     // Camera server communication
     // -------------------------------------------------------------------
 
-    const cameraBase = getCameraBase(brand.id, article.id);
+    const cameraBase = `${safeBasePath}${getCameraBase(brand.id, article.id)}`;
 
     // Auto-start & poll: the backend auto-launches the camera server if not
     // running and returns status 'starting'. We poll every second until ready.
@@ -210,7 +212,7 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ mode }),
-                }).catch(() => {});
+                }).catch(() => { });
             }
         }
         prevOnlineRef.current = !!online;
@@ -267,7 +269,7 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
         // Set mode on camera server in background (non-blocking).
         // If server isn't running yet, the reconnection effect will
         // re-send the mode once it comes online.
-        setModeOnServer(mode).catch(() => {});
+        setModeOnServer(mode).catch(() => { });
     };
 
     const handleCapture = async () => {
@@ -394,7 +396,7 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
                 document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
             const response = await fetch(
-                `/brands/${brand.id}/articles/${article.id}/images`,
+                `${safeBasePath}/brands/${brand.id}/articles/${article.id}/images`,
                 {
                     method: 'POST',
                     body: formData,
@@ -468,11 +470,10 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
                                 <button
                                     key={s}
                                     onClick={() => setSize(s)}
-                                    className={`rounded px-2 py-0.5 text-xs font-medium transition-colors ${
-                                        size === s
+                                    className={`rounded px-2 py-0.5 text-xs font-medium transition-colors ${size === s
                                             ? 'bg-[#6C88C4] text-white'
                                             : 'text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800'
-                                    }`}
+                                        }`}
                                 >
                                     {s}
                                 </button>
@@ -481,13 +482,12 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
 
                         {/* Camera status */}
                         <div
-                            className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${
-                                isServerOnline
+                            className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${isServerOnline
                                     ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
                                     : cameraStarting
-                                      ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
-                                      : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-                            }`}
+                                        ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                                        : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                                }`}
                         >
                             {isServerOnline ? (
                                 <Wifi className="h-3 w-3" />
@@ -499,8 +499,8 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
                             {isServerOnline
                                 ? 'Camera Ready'
                                 : cameraStarting
-                                  ? 'Starting Camera...'
-                                  : 'Camera Offline'}
+                                    ? 'Starting Camera...'
+                                    : 'Camera Offline'}
                         </div>
 
                         {!isServerOnline && !cameraStarting && (
@@ -626,11 +626,10 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
                         <div className="flex items-center justify-between rounded-lg border bg-neutral-50 px-4 py-2 dark:border-neutral-700 dark:bg-neutral-900">
                             <div className="flex items-center gap-3">
                                 <span
-                                    className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${
-                                        imageMode === 'black'
+                                    className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${imageMode === 'black'
                                             ? 'bg-neutral-900 text-white dark:bg-neutral-200 dark:text-neutral-900'
                                             : 'bg-[#FFCD73] text-neutral-900'
-                                    }`}
+                                        }`}
                                 >
                                     {imageMode === 'black' ? (
                                         <Moon className="h-3 w-3" />
@@ -682,9 +681,8 @@ export default function CameraCapture({ brand, article, selectedSize }: Props) {
                                 key={streamKey}
                                 src={`${cameraUrl}/api/stream?t=${streamKey}`}
                                 alt="Live Camera Feed"
-                                className={`h-full max-h-[calc(100vh-320px)] w-auto object-contain ${
-                                    streamLoaded ? '' : 'hidden'
-                                }`}
+                                className={`h-full max-h-[calc(100vh-320px)] w-auto object-contain ${streamLoaded ? '' : 'hidden'
+                                    }`}
                                 onLoad={() => setStreamLoaded(true)}
                                 onError={() => {
                                     setStreamLoaded(false);

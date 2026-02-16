@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\CameraCaptureController::show
 * @see app/Http/Controllers/CameraCaptureController.php:24
-* @route '/brands/{brand}/articles/{article}/camera-capture'
+* @route '//localhost/brands/{brand}/articles/{article}/camera-capture'
 */
 export const show = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
@@ -11,13 +11,13 @@ export const show = (args: { brand: number | { id: number }, article: number | {
 
 show.definition = {
     methods: ["get","head"],
-    url: '/brands/{brand}/articles/{article}/camera-capture',
+    url: '//localhost/brands/{brand}/articles/{article}/camera-capture',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\CameraCaptureController::show
 * @see app/Http/Controllers/CameraCaptureController.php:24
-* @route '/brands/{brand}/articles/{article}/camera-capture'
+* @route '//localhost/brands/{brand}/articles/{article}/camera-capture'
 */
 show.url = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -47,7 +47,7 @@ show.url = (args: { brand: number | { id: number }, article: number | { id: numb
 /**
 * @see \App\Http\Controllers\CameraCaptureController::show
 * @see app/Http/Controllers/CameraCaptureController.php:24
-* @route '/brands/{brand}/articles/{article}/camera-capture'
+* @route '//localhost/brands/{brand}/articles/{article}/camera-capture'
 */
 show.get = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
@@ -57,7 +57,7 @@ show.get = (args: { brand: number | { id: number }, article: number | { id: numb
 /**
 * @see \App\Http\Controllers\CameraCaptureController::show
 * @see app/Http/Controllers/CameraCaptureController.php:24
-* @route '/brands/{brand}/articles/{article}/camera-capture'
+* @route '//localhost/brands/{brand}/articles/{article}/camera-capture'
 */
 show.head = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: show.url(args, options),
@@ -67,7 +67,7 @@ show.head = (args: { brand: number | { id: number }, article: number | { id: num
 /**
 * @see \App\Http\Controllers\CameraCaptureController::show
 * @see app/Http/Controllers/CameraCaptureController.php:24
-* @route '/brands/{brand}/articles/{article}/camera-capture'
+* @route '//localhost/brands/{brand}/articles/{article}/camera-capture'
 */
 const showForm = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: show.url(args, options),
@@ -77,7 +77,7 @@ const showForm = (args: { brand: number | { id: number }, article: number | { id
 /**
 * @see \App\Http\Controllers\CameraCaptureController::show
 * @see app/Http/Controllers/CameraCaptureController.php:24
-* @route '/brands/{brand}/articles/{article}/camera-capture'
+* @route '//localhost/brands/{brand}/articles/{article}/camera-capture'
 */
 showForm.get = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: show.url(args, options),
@@ -87,7 +87,7 @@ showForm.get = (args: { brand: number | { id: number }, article: number | { id: 
 /**
 * @see \App\Http\Controllers\CameraCaptureController::show
 * @see app/Http/Controllers/CameraCaptureController.php:24
-* @route '/brands/{brand}/articles/{article}/camera-capture'
+* @route '//localhost/brands/{brand}/articles/{article}/camera-capture'
 */
 showForm.head = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: show.url(args, {
@@ -104,7 +104,7 @@ show.form = showForm
 /**
 * @see \App\Http\Controllers\CameraCaptureController::status
 * @see app/Http/Controllers/CameraCaptureController.php:40
-* @route '/brands/{brand}/articles/{article}/camera/status'
+* @route '//localhost/brands/{brand}/articles/{article}/camera/status'
 */
 export const status = (args: { brand: string | number, article: string | number } | [brand: string | number, article: string | number ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: status.url(args, options),
@@ -113,13 +113,13 @@ export const status = (args: { brand: string | number, article: string | number 
 
 status.definition = {
     methods: ["get","head"],
-    url: '/brands/{brand}/articles/{article}/camera/status',
+    url: '//localhost/brands/{brand}/articles/{article}/camera/status',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\CameraCaptureController::status
 * @see app/Http/Controllers/CameraCaptureController.php:40
-* @route '/brands/{brand}/articles/{article}/camera/status'
+* @route '//localhost/brands/{brand}/articles/{article}/camera/status'
 */
 status.url = (args: { brand: string | number, article: string | number } | [brand: string | number, article: string | number ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -145,7 +145,7 @@ status.url = (args: { brand: string | number, article: string | number } | [bran
 /**
 * @see \App\Http\Controllers\CameraCaptureController::status
 * @see app/Http/Controllers/CameraCaptureController.php:40
-* @route '/brands/{brand}/articles/{article}/camera/status'
+* @route '//localhost/brands/{brand}/articles/{article}/camera/status'
 */
 status.get = (args: { brand: string | number, article: string | number } | [brand: string | number, article: string | number ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: status.url(args, options),
@@ -155,7 +155,7 @@ status.get = (args: { brand: string | number, article: string | number } | [bran
 /**
 * @see \App\Http\Controllers\CameraCaptureController::status
 * @see app/Http/Controllers/CameraCaptureController.php:40
-* @route '/brands/{brand}/articles/{article}/camera/status'
+* @route '//localhost/brands/{brand}/articles/{article}/camera/status'
 */
 status.head = (args: { brand: string | number, article: string | number } | [brand: string | number, article: string | number ], options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: status.url(args, options),
@@ -165,7 +165,7 @@ status.head = (args: { brand: string | number, article: string | number } | [bra
 /**
 * @see \App\Http\Controllers\CameraCaptureController::status
 * @see app/Http/Controllers/CameraCaptureController.php:40
-* @route '/brands/{brand}/articles/{article}/camera/status'
+* @route '//localhost/brands/{brand}/articles/{article}/camera/status'
 */
 const statusForm = (args: { brand: string | number, article: string | number } | [brand: string | number, article: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: status.url(args, options),
@@ -175,7 +175,7 @@ const statusForm = (args: { brand: string | number, article: string | number } |
 /**
 * @see \App\Http\Controllers\CameraCaptureController::status
 * @see app/Http/Controllers/CameraCaptureController.php:40
-* @route '/brands/{brand}/articles/{article}/camera/status'
+* @route '//localhost/brands/{brand}/articles/{article}/camera/status'
 */
 statusForm.get = (args: { brand: string | number, article: string | number } | [brand: string | number, article: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: status.url(args, options),
@@ -185,7 +185,7 @@ statusForm.get = (args: { brand: string | number, article: string | number } | [
 /**
 * @see \App\Http\Controllers\CameraCaptureController::status
 * @see app/Http/Controllers/CameraCaptureController.php:40
-* @route '/brands/{brand}/articles/{article}/camera/status'
+* @route '//localhost/brands/{brand}/articles/{article}/camera/status'
 */
 statusForm.head = (args: { brand: string | number, article: string | number } | [brand: string | number, article: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: status.url(args, {
@@ -202,7 +202,7 @@ status.form = statusForm
 /**
 * @see \App\Http\Controllers\CameraCaptureController::setMode
 * @see app/Http/Controllers/CameraCaptureController.php:78
-* @route '/brands/{brand}/articles/{article}/camera/mode'
+* @route '//localhost/brands/{brand}/articles/{article}/camera/mode'
 */
 export const setMode = (args: { brand: string | number, article: string | number } | [brand: string | number, article: string | number ], options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: setMode.url(args, options),
@@ -211,13 +211,13 @@ export const setMode = (args: { brand: string | number, article: string | number
 
 setMode.definition = {
     methods: ["post"],
-    url: '/brands/{brand}/articles/{article}/camera/mode',
+    url: '//localhost/brands/{brand}/articles/{article}/camera/mode',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\CameraCaptureController::setMode
 * @see app/Http/Controllers/CameraCaptureController.php:78
-* @route '/brands/{brand}/articles/{article}/camera/mode'
+* @route '//localhost/brands/{brand}/articles/{article}/camera/mode'
 */
 setMode.url = (args: { brand: string | number, article: string | number } | [brand: string | number, article: string | number ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -243,7 +243,7 @@ setMode.url = (args: { brand: string | number, article: string | number } | [bra
 /**
 * @see \App\Http\Controllers\CameraCaptureController::setMode
 * @see app/Http/Controllers/CameraCaptureController.php:78
-* @route '/brands/{brand}/articles/{article}/camera/mode'
+* @route '//localhost/brands/{brand}/articles/{article}/camera/mode'
 */
 setMode.post = (args: { brand: string | number, article: string | number } | [brand: string | number, article: string | number ], options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: setMode.url(args, options),
@@ -253,7 +253,7 @@ setMode.post = (args: { brand: string | number, article: string | number } | [br
 /**
 * @see \App\Http\Controllers\CameraCaptureController::setMode
 * @see app/Http/Controllers/CameraCaptureController.php:78
-* @route '/brands/{brand}/articles/{article}/camera/mode'
+* @route '//localhost/brands/{brand}/articles/{article}/camera/mode'
 */
 const setModeForm = (args: { brand: string | number, article: string | number } | [brand: string | number, article: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: setMode.url(args, options),
@@ -263,7 +263,7 @@ const setModeForm = (args: { brand: string | number, article: string | number } 
 /**
 * @see \App\Http\Controllers\CameraCaptureController::setMode
 * @see app/Http/Controllers/CameraCaptureController.php:78
-* @route '/brands/{brand}/articles/{article}/camera/mode'
+* @route '//localhost/brands/{brand}/articles/{article}/camera/mode'
 */
 setModeForm.post = (args: { brand: string | number, article: string | number } | [brand: string | number, article: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: setMode.url(args, options),

@@ -125,7 +125,7 @@ export default function SystemLogin() {
 
                             <div className="mt-6 text-center">
                                 <Link
-                                    href="/"
+                                    href={`${basePath || ''}/`}
                                     className="text-sm text-slate-500 hover:text-[#264c59] transition-colors"
                                 >
                                     ← Back to Home

@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::showLoginForm
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:27
-* @route '/system-login'
+* @route '//localhost/system-login'
 */
 export const showLoginForm = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: showLoginForm.url(options),
@@ -11,13 +11,13 @@ export const showLoginForm = (options?: RouteQueryOptions): RouteDefinition<'get
 
 showLoginForm.definition = {
     methods: ["get","head"],
-    url: '/system-login',
+    url: '//localhost/system-login',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::showLoginForm
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:27
-* @route '/system-login'
+* @route '//localhost/system-login'
 */
 showLoginForm.url = (options?: RouteQueryOptions) => {
     return showLoginForm.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ showLoginForm.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::showLoginForm
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:27
-* @route '/system-login'
+* @route '//localhost/system-login'
 */
 showLoginForm.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: showLoginForm.url(options),
@@ -36,7 +36,7 @@ showLoginForm.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::showLoginForm
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:27
-* @route '/system-login'
+* @route '//localhost/system-login'
 */
 showLoginForm.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: showLoginForm.url(options),
@@ -46,7 +46,7 @@ showLoginForm.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => (
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::showLoginForm
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:27
-* @route '/system-login'
+* @route '//localhost/system-login'
 */
 const showLoginFormForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: showLoginForm.url(options),
@@ -56,7 +56,7 @@ const showLoginFormForm = (options?: RouteQueryOptions): RouteFormDefinition<'ge
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::showLoginForm
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:27
-* @route '/system-login'
+* @route '//localhost/system-login'
 */
 showLoginFormForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: showLoginForm.url(options),
@@ -66,7 +66,7 @@ showLoginFormForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::showLoginForm
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:27
-* @route '/system-login'
+* @route '//localhost/system-login'
 */
 showLoginFormForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: showLoginForm.url({
@@ -83,7 +83,7 @@ showLoginForm.form = showLoginFormForm
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::login
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:44
-* @route '/system-login'
+* @route '//localhost/system-login'
 */
 export const login = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: login.url(options),
@@ -92,13 +92,13 @@ export const login = (options?: RouteQueryOptions): RouteDefinition<'post'> => (
 
 login.definition = {
     methods: ["post"],
-    url: '/system-login',
+    url: '//localhost/system-login',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::login
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:44
-* @route '/system-login'
+* @route '//localhost/system-login'
 */
 login.url = (options?: RouteQueryOptions) => {
     return login.definition.url + queryParams(options)
@@ -107,7 +107,7 @@ login.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::login
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:44
-* @route '/system-login'
+* @route '//localhost/system-login'
 */
 login.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: login.url(options),
@@ -117,7 +117,7 @@ login.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::login
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:44
-* @route '/system-login'
+* @route '//localhost/system-login'
 */
 const loginForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: login.url(options),
@@ -127,7 +127,7 @@ const loginForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::login
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:44
-* @route '/system-login'
+* @route '//localhost/system-login'
 */
 loginForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: login.url(options),
@@ -139,7 +139,7 @@ login.form = loginForm
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::logout
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:78
-* @route '/system-logout'
+* @route '//localhost/system-logout'
 */
 export const logout = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: logout.url(options),
@@ -148,13 +148,13 @@ export const logout = (options?: RouteQueryOptions): RouteDefinition<'post'> => 
 
 logout.definition = {
     methods: ["post"],
-    url: '/system-logout',
+    url: '//localhost/system-logout',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::logout
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:78
-* @route '/system-logout'
+* @route '//localhost/system-logout'
 */
 logout.url = (options?: RouteQueryOptions) => {
     return logout.definition.url + queryParams(options)
@@ -163,7 +163,7 @@ logout.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::logout
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:78
-* @route '/system-logout'
+* @route '//localhost/system-logout'
 */
 logout.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: logout.url(options),
@@ -173,7 +173,7 @@ logout.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::logout
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:78
-* @route '/system-logout'
+* @route '//localhost/system-logout'
 */
 const logoutForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: logout.url(options),
@@ -183,7 +183,7 @@ const logoutForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =>
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::logout
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:78
-* @route '/system-logout'
+* @route '//localhost/system-logout'
 */
 logoutForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: logout.url(options),

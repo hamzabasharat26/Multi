@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\SystemSettingsController::index
 * @see app/Http/Controllers/SystemSettingsController.php:18
-* @route '/system-settings'
+* @route '//localhost/system-settings'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -11,13 +11,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: '/system-settings',
+    url: '//localhost/system-settings',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\SystemSettingsController::index
 * @see app/Http/Controllers/SystemSettingsController.php:18
-* @route '/system-settings'
+* @route '//localhost/system-settings'
 */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ index.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\SystemSettingsController::index
 * @see app/Http/Controllers/SystemSettingsController.php:18
-* @route '/system-settings'
+* @route '//localhost/system-settings'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -36,7 +36,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\SystemSettingsController::index
 * @see app/Http/Controllers/SystemSettingsController.php:18
-* @route '/system-settings'
+* @route '//localhost/system-settings'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
@@ -46,7 +46,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 /**
 * @see \App\Http\Controllers\SystemSettingsController::index
 * @see app/Http/Controllers/SystemSettingsController.php:18
-* @route '/system-settings'
+* @route '//localhost/system-settings'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(options),
@@ -56,7 +56,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 /**
 * @see \App\Http\Controllers\SystemSettingsController::index
 * @see app/Http/Controllers/SystemSettingsController.php:18
-* @route '/system-settings'
+* @route '//localhost/system-settings'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(options),
@@ -66,7 +66,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\SystemSettingsController::index
 * @see app/Http/Controllers/SystemSettingsController.php:18
-* @route '/system-settings'
+* @route '//localhost/system-settings'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url({
@@ -83,7 +83,7 @@ index.form = indexForm
 /**
 * @see \App\Http\Controllers\SystemSettingsController::updateUsername
 * @see app/Http/Controllers/SystemSettingsController.php:33
-* @route '/system-settings/username'
+* @route '//localhost/system-settings/username'
 */
 export const updateUsername = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: updateUsername.url(options),
@@ -92,13 +92,13 @@ export const updateUsername = (options?: RouteQueryOptions): RouteDefinition<'pu
 
 updateUsername.definition = {
     methods: ["put"],
-    url: '/system-settings/username',
+    url: '//localhost/system-settings/username',
 } satisfies RouteDefinition<["put"]>
 
 /**
 * @see \App\Http\Controllers\SystemSettingsController::updateUsername
 * @see app/Http/Controllers/SystemSettingsController.php:33
-* @route '/system-settings/username'
+* @route '//localhost/system-settings/username'
 */
 updateUsername.url = (options?: RouteQueryOptions) => {
     return updateUsername.definition.url + queryParams(options)
@@ -107,7 +107,7 @@ updateUsername.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\SystemSettingsController::updateUsername
 * @see app/Http/Controllers/SystemSettingsController.php:33
-* @route '/system-settings/username'
+* @route '//localhost/system-settings/username'
 */
 updateUsername.put = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: updateUsername.url(options),
@@ -117,7 +117,7 @@ updateUsername.put = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
 /**
 * @see \App\Http\Controllers\SystemSettingsController::updateUsername
 * @see app/Http/Controllers/SystemSettingsController.php:33
-* @route '/system-settings/username'
+* @route '//localhost/system-settings/username'
 */
 const updateUsernameForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: updateUsername.url({
@@ -132,7 +132,7 @@ const updateUsernameForm = (options?: RouteQueryOptions): RouteFormDefinition<'p
 /**
 * @see \App\Http\Controllers\SystemSettingsController::updateUsername
 * @see app/Http/Controllers/SystemSettingsController.php:33
-* @route '/system-settings/username'
+* @route '//localhost/system-settings/username'
 */
 updateUsernameForm.put = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: updateUsername.url({
@@ -149,7 +149,7 @@ updateUsername.form = updateUsernameForm
 /**
 * @see \App\Http\Controllers\SystemSettingsController::updatePassword
 * @see app/Http/Controllers/SystemSettingsController.php:74
-* @route '/system-settings/password'
+* @route '//localhost/system-settings/password'
 */
 export const updatePassword = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: updatePassword.url(options),
@@ -158,13 +158,13 @@ export const updatePassword = (options?: RouteQueryOptions): RouteDefinition<'pu
 
 updatePassword.definition = {
     methods: ["put"],
-    url: '/system-settings/password',
+    url: '//localhost/system-settings/password',
 } satisfies RouteDefinition<["put"]>
 
 /**
 * @see \App\Http\Controllers\SystemSettingsController::updatePassword
 * @see app/Http/Controllers/SystemSettingsController.php:74
-* @route '/system-settings/password'
+* @route '//localhost/system-settings/password'
 */
 updatePassword.url = (options?: RouteQueryOptions) => {
     return updatePassword.definition.url + queryParams(options)
@@ -173,7 +173,7 @@ updatePassword.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\SystemSettingsController::updatePassword
 * @see app/Http/Controllers/SystemSettingsController.php:74
-* @route '/system-settings/password'
+* @route '//localhost/system-settings/password'
 */
 updatePassword.put = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: updatePassword.url(options),
@@ -183,7 +183,7 @@ updatePassword.put = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
 /**
 * @see \App\Http\Controllers\SystemSettingsController::updatePassword
 * @see app/Http/Controllers/SystemSettingsController.php:74
-* @route '/system-settings/password'
+* @route '//localhost/system-settings/password'
 */
 const updatePasswordForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: updatePassword.url({
@@ -198,7 +198,7 @@ const updatePasswordForm = (options?: RouteQueryOptions): RouteFormDefinition<'p
 /**
 * @see \App\Http\Controllers\SystemSettingsController::updatePassword
 * @see app/Http/Controllers/SystemSettingsController.php:74
-* @route '/system-settings/password'
+* @route '//localhost/system-settings/password'
 */
 updatePasswordForm.put = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: updatePassword.url({

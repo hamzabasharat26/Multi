@@ -26,7 +26,7 @@ import { DeleteConfirmationDialog } from '@/components/delete-confirmation-dialo
 import AppLayout from '@/layouts/app-layout';
 import brandRoutes from '@/routes/brands';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Pencil, ArrowLeft, Package, Plus, Eye, Search, Trash2, Download, Camera, ChevronDown, X, ImageIcon, Maximize2, Minimize2, Loader2 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 
@@ -105,6 +105,8 @@ interface Props {
 }
 
 export default function Show({ brand, article, annotations = [] }: Props) {
+    const { basePath } = usePage().props as any;
+    const safeBasePath = basePath || '';
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [measurementToDelete, setMeasurementToDelete] = useState<{ id: number; code: string } | null>(null);
     const [selectedSize, setSelectedSize] = useState<string | null>(null);
@@ -309,7 +311,7 @@ export default function Show({ brand, article, annotations = [] }: Props) {
         formData.append('size', selectedSize);
 
         try {
-            const response = await fetch(`/brands/${brand.id}/articles/${article.id}/images`, {
+            const response = await fetch(`${safeBasePath}/brands/${brand.id}/articles/${article.id}/images`, {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -351,7 +353,7 @@ export default function Show({ brand, article, annotations = [] }: Props) {
         if (!imageToDelete) return;
 
         try {
-            const response = await fetch(`/brands/${brand.id}/articles/${article.id}/images/${imageToDelete.id}`, {
+            const response = await fetch(`${safeBasePath}/brands/${brand.id}/articles/${article.id}/images/${imageToDelete.id}`, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
@@ -546,14 +548,14 @@ export default function Show({ brand, article, annotations = [] }: Props) {
                                     <div key={image.id} className="relative group">
                                         <div className="aspect-square rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-700">
                                             <img
-                                                src={`/storage/${image.image_path}`}
+                                                src={`${safeBasePath}/storage/${image.image_path}`}
                                                 alt={`${image.article_style} - ${image.size}`}
                                                 className="w-full h-full object-cover"
                                             />
                                         </div>
                                         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-2">
                                             <a
-                                                href={`/storage/${image.image_path}`}
+                                                href={`${safeBasePath}/storage/${image.image_path}`}
                                                 download
                                                 onClick={(e) => e.stopPropagation()}
                                                 target="_blank"
@@ -601,7 +603,7 @@ export default function Show({ brand, article, annotations = [] }: Props) {
                                     >
                                         <div className="relative">
                                             <img
-                                                src={`/storage/${annotation.reference_image_path}`}
+                                                src={`${safeBasePath}/storage/${annotation.reference_image_path}`}
                                                 alt={`${annotation.article_style} - ${annotation.size}`}
                                                 className="w-full h-48 object-cover"
                                                 onError={(e) => {
@@ -655,7 +657,7 @@ export default function Show({ brand, article, annotations = [] }: Props) {
                                                     onClick={async () => {
                                                         if (confirm(`Delete annotation for size ${annotation.size}?`)) {
                                                             try {
-                                                                const response = await fetch(`/article-registration/annotations/${annotation.id}`, {
+                                                                const response = await fetch(`${safeBasePath}/article-registration/annotations/${annotation.id}`, {
                                                                     method: 'DELETE',
                                                                     headers: {
                                                                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
@@ -977,7 +979,7 @@ export default function Show({ brand, article, annotations = [] }: Props) {
                                         <h4 className="font-medium text-sm">Reference Image:</h4>
                                         <div className="relative rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-700 inline-block">
                                             <img
-                                                src={`/storage/${selectedAnnotation.reference_image_path}`}
+                                                src={`${safeBasePath}/storage/${selectedAnnotation.reference_image_path}`}
                                                 alt={selectedAnnotation.name}
                                                 className="max-h-96 w-auto block"
                                             />
@@ -1036,7 +1038,7 @@ export default function Show({ brand, article, annotations = [] }: Props) {
 
                                         {selectedAnnotation.json_file_path && (
                                             <a
-                                                href={`/storage/${selectedAnnotation.json_file_path}`}
+                                                href={`${safeBasePath}/storage/${selectedAnnotation.json_file_path}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="inline-flex items-center gap-2 text-sm text-blue-600 hover:underline"
@@ -1058,7 +1060,7 @@ export default function Show({ brand, article, annotations = [] }: Props) {
                                 onClick={async () => {
                                     if (selectedAnnotation && confirm('Delete this annotation?')) {
                                         try {
-                                            const response = await fetch(`/article-registration/annotations/${selectedAnnotation.id}`, {
+                                            const response = await fetch(`${safeBasePath}/article-registration/annotations/${selectedAnnotation.id}`, {
                                                 method: 'DELETE',
                                                 headers: {
                                                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',

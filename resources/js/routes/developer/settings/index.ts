@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::password
 * @see app/Http/Controllers/DeveloperSettingsController.php:26
-* @route '/developer-settings/password'
+* @route '//localhost/developer-settings/password'
 */
 export const password = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: password.url(options),
@@ -11,13 +11,13 @@ export const password = (options?: RouteQueryOptions): RouteDefinition<'put'> =>
 
 password.definition = {
     methods: ["put"],
-    url: '/developer-settings/password',
+    url: '//localhost/developer-settings/password',
 } satisfies RouteDefinition<["put"]>
 
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::password
 * @see app/Http/Controllers/DeveloperSettingsController.php:26
-* @route '/developer-settings/password'
+* @route '//localhost/developer-settings/password'
 */
 password.url = (options?: RouteQueryOptions) => {
     return password.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ password.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::password
 * @see app/Http/Controllers/DeveloperSettingsController.php:26
-* @route '/developer-settings/password'
+* @route '//localhost/developer-settings/password'
 */
 password.put = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: password.url(options),
@@ -36,7 +36,7 @@ password.put = (options?: RouteQueryOptions): RouteDefinition<'put'> => ({
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::password
 * @see app/Http/Controllers/DeveloperSettingsController.php:26
-* @route '/developer-settings/password'
+* @route '//localhost/developer-settings/password'
 */
 const passwordForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: password.url({
@@ -51,7 +51,7 @@ const passwordForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> 
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::password
 * @see app/Http/Controllers/DeveloperSettingsController.php:26
-* @route '/developer-settings/password'
+* @route '//localhost/developer-settings/password'
 */
 passwordForm.put = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: password.url({

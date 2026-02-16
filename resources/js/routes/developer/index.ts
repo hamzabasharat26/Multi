@@ -4,7 +4,7 @@ import settings69f00b from './settings'
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::login
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:16
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 export const login = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: login.url(options),
@@ -13,13 +13,13 @@ export const login = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 login.definition = {
     methods: ["get","head"],
-    url: '/developer-login',
+    url: '//localhost/developer-login',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::login
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:16
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 login.url = (options?: RouteQueryOptions) => {
     return login.definition.url + queryParams(options)
@@ -28,7 +28,7 @@ login.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::login
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:16
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 login.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: login.url(options),
@@ -38,7 +38,7 @@ login.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::login
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:16
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 login.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: login.url(options),
@@ -48,7 +48,7 @@ login.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::login
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:16
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 const loginForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: login.url(options),
@@ -58,7 +58,7 @@ const loginForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::login
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:16
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 loginForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: login.url(options),
@@ -68,7 +68,7 @@ loginForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::login
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:16
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 loginForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: login.url({
@@ -85,7 +85,7 @@ login.form = loginForm
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::logout
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:60
-* @route '/developer-logout'
+* @route '//localhost/developer-logout'
 */
 export const logout = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: logout.url(options),
@@ -94,13 +94,13 @@ export const logout = (options?: RouteQueryOptions): RouteDefinition<'post'> => 
 
 logout.definition = {
     methods: ["post"],
-    url: '/developer-logout',
+    url: '//localhost/developer-logout',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::logout
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:60
-* @route '/developer-logout'
+* @route '//localhost/developer-logout'
 */
 logout.url = (options?: RouteQueryOptions) => {
     return logout.definition.url + queryParams(options)
@@ -109,7 +109,7 @@ logout.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::logout
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:60
-* @route '/developer-logout'
+* @route '//localhost/developer-logout'
 */
 logout.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: logout.url(options),
@@ -119,7 +119,7 @@ logout.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::logout
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:60
-* @route '/developer-logout'
+* @route '//localhost/developer-logout'
 */
 const logoutForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: logout.url(options),
@@ -129,7 +129,7 @@ const logoutForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =>
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::logout
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:60
-* @route '/developer-logout'
+* @route '//localhost/developer-logout'
 */
 logoutForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: logout.url(options),
@@ -141,7 +141,7 @@ logout.form = logoutForm
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::settings
 * @see app/Http/Controllers/DeveloperSettingsController.php:18
-* @route '/developer-settings'
+* @route '//localhost/developer-settings'
 */
 export const settings = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: settings.url(options),
@@ -150,13 +150,13 @@ export const settings = (options?: RouteQueryOptions): RouteDefinition<'get'> =>
 
 settings.definition = {
     methods: ["get","head"],
-    url: '/developer-settings',
+    url: '//localhost/developer-settings',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::settings
 * @see app/Http/Controllers/DeveloperSettingsController.php:18
-* @route '/developer-settings'
+* @route '//localhost/developer-settings'
 */
 settings.url = (options?: RouteQueryOptions) => {
     return settings.definition.url + queryParams(options)
@@ -165,7 +165,7 @@ settings.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::settings
 * @see app/Http/Controllers/DeveloperSettingsController.php:18
-* @route '/developer-settings'
+* @route '//localhost/developer-settings'
 */
 settings.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: settings.url(options),
@@ -175,7 +175,7 @@ settings.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::settings
 * @see app/Http/Controllers/DeveloperSettingsController.php:18
-* @route '/developer-settings'
+* @route '//localhost/developer-settings'
 */
 settings.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: settings.url(options),
@@ -185,7 +185,7 @@ settings.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::settings
 * @see app/Http/Controllers/DeveloperSettingsController.php:18
-* @route '/developer-settings'
+* @route '//localhost/developer-settings'
 */
 const settingsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: settings.url(options),
@@ -195,7 +195,7 @@ const settingsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::settings
 * @see app/Http/Controllers/DeveloperSettingsController.php:18
-* @route '/developer-settings'
+* @route '//localhost/developer-settings'
 */
 settingsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: settings.url(options),
@@ -205,7 +205,7 @@ settingsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => 
 /**
 * @see \App\Http\Controllers\DeveloperSettingsController::settings
 * @see app/Http/Controllers/DeveloperSettingsController.php:18
-* @route '/developer-settings'
+* @route '//localhost/developer-settings'
 */
 settingsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: settings.url({

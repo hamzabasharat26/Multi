@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\MeasurementController::index
 * @see app/Http/Controllers/MeasurementController.php:19
-* @route '/brands/{brand}/articles/{article}/measurements'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements'
 */
 export const index = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(args, options),
@@ -11,13 +11,13 @@ export const index = (args: { brand: number | { id: number }, article: number | 
 
 index.definition = {
     methods: ["get","head"],
-    url: '/brands/{brand}/articles/{article}/measurements',
+    url: '//localhost/brands/{brand}/articles/{article}/measurements',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\MeasurementController::index
 * @see app/Http/Controllers/MeasurementController.php:19
-* @route '/brands/{brand}/articles/{article}/measurements'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements'
 */
 index.url = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -47,7 +47,7 @@ index.url = (args: { brand: number | { id: number }, article: number | { id: num
 /**
 * @see \App\Http\Controllers\MeasurementController::index
 * @see app/Http/Controllers/MeasurementController.php:19
-* @route '/brands/{brand}/articles/{article}/measurements'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements'
 */
 index.get = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(args, options),
@@ -57,7 +57,7 @@ index.get = (args: { brand: number | { id: number }, article: number | { id: num
 /**
 * @see \App\Http\Controllers\MeasurementController::index
 * @see app/Http/Controllers/MeasurementController.php:19
-* @route '/brands/{brand}/articles/{article}/measurements'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements'
 */
 index.head = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(args, options),
@@ -67,7 +67,7 @@ index.head = (args: { brand: number | { id: number }, article: number | { id: nu
 /**
 * @see \App\Http\Controllers\MeasurementController::index
 * @see app/Http/Controllers/MeasurementController.php:19
-* @route '/brands/{brand}/articles/{article}/measurements'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements'
 */
 const indexForm = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(args, options),
@@ -77,7 +77,7 @@ const indexForm = (args: { brand: number | { id: number }, article: number | { i
 /**
 * @see \App\Http\Controllers\MeasurementController::index
 * @see app/Http/Controllers/MeasurementController.php:19
-* @route '/brands/{brand}/articles/{article}/measurements'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements'
 */
 indexForm.get = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(args, options),
@@ -87,7 +87,7 @@ indexForm.get = (args: { brand: number | { id: number }, article: number | { id:
 /**
 * @see \App\Http\Controllers\MeasurementController::index
 * @see app/Http/Controllers/MeasurementController.php:19
-* @route '/brands/{brand}/articles/{article}/measurements'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements'
 */
 indexForm.head = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(args, {
@@ -104,7 +104,7 @@ index.form = indexForm
 /**
 * @see \App\Http\Controllers\MeasurementController::create
 * @see app/Http/Controllers/MeasurementController.php:44
-* @route '/brands/{brand}/articles/{article}/measurements/create'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/create'
 */
 export const create = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: create.url(args, options),
@@ -113,13 +113,13 @@ export const create = (args: { brand: number | { id: number }, article: number |
 
 create.definition = {
     methods: ["get","head"],
-    url: '/brands/{brand}/articles/{article}/measurements/create',
+    url: '//localhost/brands/{brand}/articles/{article}/measurements/create',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\MeasurementController::create
 * @see app/Http/Controllers/MeasurementController.php:44
-* @route '/brands/{brand}/articles/{article}/measurements/create'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/create'
 */
 create.url = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -149,7 +149,7 @@ create.url = (args: { brand: number | { id: number }, article: number | { id: nu
 /**
 * @see \App\Http\Controllers\MeasurementController::create
 * @see app/Http/Controllers/MeasurementController.php:44
-* @route '/brands/{brand}/articles/{article}/measurements/create'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/create'
 */
 create.get = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: create.url(args, options),
@@ -159,7 +159,7 @@ create.get = (args: { brand: number | { id: number }, article: number | { id: nu
 /**
 * @see \App\Http\Controllers\MeasurementController::create
 * @see app/Http/Controllers/MeasurementController.php:44
-* @route '/brands/{brand}/articles/{article}/measurements/create'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/create'
 */
 create.head = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: create.url(args, options),
@@ -169,7 +169,7 @@ create.head = (args: { brand: number | { id: number }, article: number | { id: n
 /**
 * @see \App\Http\Controllers\MeasurementController::create
 * @see app/Http/Controllers/MeasurementController.php:44
-* @route '/brands/{brand}/articles/{article}/measurements/create'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/create'
 */
 const createForm = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: create.url(args, options),
@@ -179,7 +179,7 @@ const createForm = (args: { brand: number | { id: number }, article: number | { 
 /**
 * @see \App\Http\Controllers\MeasurementController::create
 * @see app/Http/Controllers/MeasurementController.php:44
-* @route '/brands/{brand}/articles/{article}/measurements/create'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/create'
 */
 createForm.get = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: create.url(args, options),
@@ -189,7 +189,7 @@ createForm.get = (args: { brand: number | { id: number }, article: number | { id
 /**
 * @see \App\Http\Controllers\MeasurementController::create
 * @see app/Http/Controllers/MeasurementController.php:44
-* @route '/brands/{brand}/articles/{article}/measurements/create'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/create'
 */
 createForm.head = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: create.url(args, {
@@ -206,7 +206,7 @@ create.form = createForm
 /**
 * @see \App\Http\Controllers\MeasurementController::store
 * @see app/Http/Controllers/MeasurementController.php:55
-* @route '/brands/{brand}/articles/{article}/measurements'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements'
 */
 export const store = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(args, options),
@@ -215,13 +215,13 @@ export const store = (args: { brand: number | { id: number }, article: number | 
 
 store.definition = {
     methods: ["post"],
-    url: '/brands/{brand}/articles/{article}/measurements',
+    url: '//localhost/brands/{brand}/articles/{article}/measurements',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\MeasurementController::store
 * @see app/Http/Controllers/MeasurementController.php:55
-* @route '/brands/{brand}/articles/{article}/measurements'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements'
 */
 store.url = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -251,7 +251,7 @@ store.url = (args: { brand: number | { id: number }, article: number | { id: num
 /**
 * @see \App\Http\Controllers\MeasurementController::store
 * @see app/Http/Controllers/MeasurementController.php:55
-* @route '/brands/{brand}/articles/{article}/measurements'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements'
 */
 store.post = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(args, options),
@@ -261,7 +261,7 @@ store.post = (args: { brand: number | { id: number }, article: number | { id: nu
 /**
 * @see \App\Http\Controllers\MeasurementController::store
 * @see app/Http/Controllers/MeasurementController.php:55
-* @route '/brands/{brand}/articles/{article}/measurements'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements'
 */
 const storeForm = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: store.url(args, options),
@@ -271,7 +271,7 @@ const storeForm = (args: { brand: number | { id: number }, article: number | { i
 /**
 * @see \App\Http\Controllers\MeasurementController::store
 * @see app/Http/Controllers/MeasurementController.php:55
-* @route '/brands/{brand}/articles/{article}/measurements'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements'
 */
 storeForm.post = (args: { brand: number | { id: number }, article: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: store.url(args, options),
@@ -283,7 +283,7 @@ store.form = storeForm
 /**
 * @see \App\Http\Controllers\MeasurementController::show
 * @see app/Http/Controllers/MeasurementController.php:104
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}'
 */
 export const show = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
@@ -292,13 +292,13 @@ export const show = (args: { brand: number | { id: number }, article: number | {
 
 show.definition = {
     methods: ["get","head"],
-    url: '/brands/{brand}/articles/{article}/measurements/{measurement}',
+    url: '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\MeasurementController::show
 * @see app/Http/Controllers/MeasurementController.php:104
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}'
 */
 show.url = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -333,7 +333,7 @@ show.url = (args: { brand: number | { id: number }, article: number | { id: numb
 /**
 * @see \App\Http\Controllers\MeasurementController::show
 * @see app/Http/Controllers/MeasurementController.php:104
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}'
 */
 show.get = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
@@ -343,7 +343,7 @@ show.get = (args: { brand: number | { id: number }, article: number | { id: numb
 /**
 * @see \App\Http\Controllers\MeasurementController::show
 * @see app/Http/Controllers/MeasurementController.php:104
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}'
 */
 show.head = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: show.url(args, options),
@@ -353,7 +353,7 @@ show.head = (args: { brand: number | { id: number }, article: number | { id: num
 /**
 * @see \App\Http\Controllers\MeasurementController::show
 * @see app/Http/Controllers/MeasurementController.php:104
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}'
 */
 const showForm = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: show.url(args, options),
@@ -363,7 +363,7 @@ const showForm = (args: { brand: number | { id: number }, article: number | { id
 /**
 * @see \App\Http\Controllers\MeasurementController::show
 * @see app/Http/Controllers/MeasurementController.php:104
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}'
 */
 showForm.get = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: show.url(args, options),
@@ -373,7 +373,7 @@ showForm.get = (args: { brand: number | { id: number }, article: number | { id: 
 /**
 * @see \App\Http\Controllers\MeasurementController::show
 * @see app/Http/Controllers/MeasurementController.php:104
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}'
 */
 showForm.head = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: show.url(args, {
@@ -390,7 +390,7 @@ show.form = showForm
 /**
 * @see \App\Http\Controllers\MeasurementController::edit
 * @see app/Http/Controllers/MeasurementController.php:118
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}/edit'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}/edit'
 */
 export const edit = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: edit.url(args, options),
@@ -399,13 +399,13 @@ export const edit = (args: { brand: number | { id: number }, article: number | {
 
 edit.definition = {
     methods: ["get","head"],
-    url: '/brands/{brand}/articles/{article}/measurements/{measurement}/edit',
+    url: '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}/edit',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\MeasurementController::edit
 * @see app/Http/Controllers/MeasurementController.php:118
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}/edit'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}/edit'
 */
 edit.url = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -440,7 +440,7 @@ edit.url = (args: { brand: number | { id: number }, article: number | { id: numb
 /**
 * @see \App\Http\Controllers\MeasurementController::edit
 * @see app/Http/Controllers/MeasurementController.php:118
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}/edit'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}/edit'
 */
 edit.get = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: edit.url(args, options),
@@ -450,7 +450,7 @@ edit.get = (args: { brand: number | { id: number }, article: number | { id: numb
 /**
 * @see \App\Http\Controllers\MeasurementController::edit
 * @see app/Http/Controllers/MeasurementController.php:118
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}/edit'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}/edit'
 */
 edit.head = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: edit.url(args, options),
@@ -460,7 +460,7 @@ edit.head = (args: { brand: number | { id: number }, article: number | { id: num
 /**
 * @see \App\Http\Controllers\MeasurementController::edit
 * @see app/Http/Controllers/MeasurementController.php:118
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}/edit'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}/edit'
 */
 const editForm = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: edit.url(args, options),
@@ -470,7 +470,7 @@ const editForm = (args: { brand: number | { id: number }, article: number | { id
 /**
 * @see \App\Http\Controllers\MeasurementController::edit
 * @see app/Http/Controllers/MeasurementController.php:118
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}/edit'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}/edit'
 */
 editForm.get = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: edit.url(args, options),
@@ -480,7 +480,7 @@ editForm.get = (args: { brand: number | { id: number }, article: number | { id: 
 /**
 * @see \App\Http\Controllers\MeasurementController::edit
 * @see app/Http/Controllers/MeasurementController.php:118
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}/edit'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}/edit'
 */
 editForm.head = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: edit.url(args, {
@@ -497,7 +497,7 @@ edit.form = editForm
 /**
 * @see \App\Http\Controllers\MeasurementController::update
 * @see app/Http/Controllers/MeasurementController.php:132
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}'
 */
 export const update = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: update.url(args, options),
@@ -506,13 +506,13 @@ export const update = (args: { brand: number | { id: number }, article: number |
 
 update.definition = {
     methods: ["put"],
-    url: '/brands/{brand}/articles/{article}/measurements/{measurement}',
+    url: '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}',
 } satisfies RouteDefinition<["put"]>
 
 /**
 * @see \App\Http\Controllers\MeasurementController::update
 * @see app/Http/Controllers/MeasurementController.php:132
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}'
 */
 update.url = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -547,7 +547,7 @@ update.url = (args: { brand: number | { id: number }, article: number | { id: nu
 /**
 * @see \App\Http\Controllers\MeasurementController::update
 * @see app/Http/Controllers/MeasurementController.php:132
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}'
 */
 update.put = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: update.url(args, options),
@@ -557,7 +557,7 @@ update.put = (args: { brand: number | { id: number }, article: number | { id: nu
 /**
 * @see \App\Http\Controllers\MeasurementController::update
 * @see app/Http/Controllers/MeasurementController.php:132
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}'
 */
 const updateForm = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: update.url(args, {
@@ -572,7 +572,7 @@ const updateForm = (args: { brand: number | { id: number }, article: number | { 
 /**
 * @see \App\Http\Controllers\MeasurementController::update
 * @see app/Http/Controllers/MeasurementController.php:132
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}'
 */
 updateForm.put = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: update.url(args, {
@@ -589,7 +589,7 @@ update.form = updateForm
 /**
 * @see \App\Http\Controllers\MeasurementController::destroy
 * @see app/Http/Controllers/MeasurementController.php:183
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}'
 */
 export const destroy = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: destroy.url(args, options),
@@ -598,13 +598,13 @@ export const destroy = (args: { brand: number | { id: number }, article: number 
 
 destroy.definition = {
     methods: ["delete"],
-    url: '/brands/{brand}/articles/{article}/measurements/{measurement}',
+    url: '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}',
 } satisfies RouteDefinition<["delete"]>
 
 /**
 * @see \App\Http\Controllers\MeasurementController::destroy
 * @see app/Http/Controllers/MeasurementController.php:183
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}'
 */
 destroy.url = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -639,7 +639,7 @@ destroy.url = (args: { brand: number | { id: number }, article: number | { id: n
 /**
 * @see \App\Http\Controllers\MeasurementController::destroy
 * @see app/Http/Controllers/MeasurementController.php:183
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}'
 */
 destroy.delete = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: destroy.url(args, options),
@@ -649,7 +649,7 @@ destroy.delete = (args: { brand: number | { id: number }, article: number | { id
 /**
 * @see \App\Http\Controllers\MeasurementController::destroy
 * @see app/Http/Controllers/MeasurementController.php:183
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}'
 */
 const destroyForm = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: destroy.url(args, {
@@ -664,7 +664,7 @@ const destroyForm = (args: { brand: number | { id: number }, article: number | {
 /**
 * @see \App\Http\Controllers\MeasurementController::destroy
 * @see app/Http/Controllers/MeasurementController.php:183
-* @route '/brands/{brand}/articles/{article}/measurements/{measurement}'
+* @route '//localhost/brands/{brand}/articles/{article}/measurements/{measurement}'
 */
 destroyForm.delete = (args: { brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } } | [brand: number | { id: number }, article: number | { id: number }, measurement: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: destroy.url(args, {

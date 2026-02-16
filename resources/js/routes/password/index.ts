@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\Settings\ProfileController::update
 * @see app/Http/Controllers/Settings/ProfileController.php:47
-* @route '/settings/password'
+* @route '//localhost/settings/password'
 */
 export const update = (options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
     url: update.url(options),
@@ -11,13 +11,13 @@ export const update = (options?: RouteQueryOptions): RouteDefinition<'patch'> =>
 
 update.definition = {
     methods: ["patch"],
-    url: '/settings/password',
+    url: '//localhost/settings/password',
 } satisfies RouteDefinition<["patch"]>
 
 /**
 * @see \App\Http\Controllers\Settings\ProfileController::update
 * @see app/Http/Controllers/Settings/ProfileController.php:47
-* @route '/settings/password'
+* @route '//localhost/settings/password'
 */
 update.url = (options?: RouteQueryOptions) => {
     return update.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ update.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Settings\ProfileController::update
 * @see app/Http/Controllers/Settings/ProfileController.php:47
-* @route '/settings/password'
+* @route '//localhost/settings/password'
 */
 update.patch = (options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
     url: update.url(options),
@@ -36,7 +36,7 @@ update.patch = (options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
 /**
 * @see \App\Http\Controllers\Settings\ProfileController::update
 * @see app/Http/Controllers/Settings/ProfileController.php:47
-* @route '/settings/password'
+* @route '//localhost/settings/password'
 */
 const updateForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: update.url({
@@ -51,7 +51,7 @@ const updateForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =>
 /**
 * @see \App\Http\Controllers\Settings\ProfileController::update
 * @see app/Http/Controllers/Settings/ProfileController.php:47
-* @route '/settings/password'
+* @route '//localhost/settings/password'
 */
 updateForm.patch = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: update.url({

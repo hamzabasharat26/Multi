@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::showLoginForm
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:16
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 export const showLoginForm = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: showLoginForm.url(options),
@@ -11,13 +11,13 @@ export const showLoginForm = (options?: RouteQueryOptions): RouteDefinition<'get
 
 showLoginForm.definition = {
     methods: ["get","head"],
-    url: '/developer-login',
+    url: '//localhost/developer-login',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::showLoginForm
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:16
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 showLoginForm.url = (options?: RouteQueryOptions) => {
     return showLoginForm.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ showLoginForm.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::showLoginForm
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:16
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 showLoginForm.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: showLoginForm.url(options),
@@ -36,7 +36,7 @@ showLoginForm.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::showLoginForm
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:16
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 showLoginForm.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: showLoginForm.url(options),
@@ -46,7 +46,7 @@ showLoginForm.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => (
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::showLoginForm
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:16
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 const showLoginFormForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: showLoginForm.url(options),
@@ -56,7 +56,7 @@ const showLoginFormForm = (options?: RouteQueryOptions): RouteFormDefinition<'ge
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::showLoginForm
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:16
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 showLoginFormForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: showLoginForm.url(options),
@@ -66,7 +66,7 @@ showLoginFormForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::showLoginForm
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:16
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 showLoginFormForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: showLoginForm.url({
@@ -83,7 +83,7 @@ showLoginForm.form = showLoginFormForm
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::login
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:29
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 export const login = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: login.url(options),
@@ -92,13 +92,13 @@ export const login = (options?: RouteQueryOptions): RouteDefinition<'post'> => (
 
 login.definition = {
     methods: ["post"],
-    url: '/developer-login',
+    url: '//localhost/developer-login',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::login
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:29
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 login.url = (options?: RouteQueryOptions) => {
     return login.definition.url + queryParams(options)
@@ -107,7 +107,7 @@ login.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::login
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:29
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 login.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: login.url(options),
@@ -117,7 +117,7 @@ login.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::login
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:29
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 const loginForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: login.url(options),
@@ -127,7 +127,7 @@ const loginForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::login
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:29
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 loginForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: login.url(options),
@@ -139,7 +139,7 @@ login.form = loginForm
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::logout
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:60
-* @route '/developer-logout'
+* @route '//localhost/developer-logout'
 */
 export const logout = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: logout.url(options),
@@ -148,13 +148,13 @@ export const logout = (options?: RouteQueryOptions): RouteDefinition<'post'> => 
 
 logout.definition = {
     methods: ["post"],
-    url: '/developer-logout',
+    url: '//localhost/developer-logout',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::logout
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:60
-* @route '/developer-logout'
+* @route '//localhost/developer-logout'
 */
 logout.url = (options?: RouteQueryOptions) => {
     return logout.definition.url + queryParams(options)
@@ -163,7 +163,7 @@ logout.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::logout
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:60
-* @route '/developer-logout'
+* @route '//localhost/developer-logout'
 */
 logout.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: logout.url(options),
@@ -173,7 +173,7 @@ logout.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::logout
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:60
-* @route '/developer-logout'
+* @route '//localhost/developer-logout'
 */
 const logoutForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: logout.url(options),
@@ -183,7 +183,7 @@ const logoutForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =>
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::logout
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:60
-* @route '/developer-logout'
+* @route '//localhost/developer-logout'
 */
 logoutForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: logout.url(options),

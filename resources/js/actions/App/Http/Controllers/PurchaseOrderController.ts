@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::index
 * @see app/Http/Controllers/PurchaseOrderController.php:21
-* @route '/purchase-orders'
+* @route '//localhost/purchase-orders'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -11,13 +11,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: '/purchase-orders',
+    url: '//localhost/purchase-orders',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::index
 * @see app/Http/Controllers/PurchaseOrderController.php:21
-* @route '/purchase-orders'
+* @route '//localhost/purchase-orders'
 */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ index.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::index
 * @see app/Http/Controllers/PurchaseOrderController.php:21
-* @route '/purchase-orders'
+* @route '//localhost/purchase-orders'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -36,7 +36,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::index
 * @see app/Http/Controllers/PurchaseOrderController.php:21
-* @route '/purchase-orders'
+* @route '//localhost/purchase-orders'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
@@ -46,7 +46,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::index
 * @see app/Http/Controllers/PurchaseOrderController.php:21
-* @route '/purchase-orders'
+* @route '//localhost/purchase-orders'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(options),
@@ -56,7 +56,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::index
 * @see app/Http/Controllers/PurchaseOrderController.php:21
-* @route '/purchase-orders'
+* @route '//localhost/purchase-orders'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(options),
@@ -66,7 +66,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::index
 * @see app/Http/Controllers/PurchaseOrderController.php:21
-* @route '/purchase-orders'
+* @route '//localhost/purchase-orders'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url({
@@ -83,7 +83,7 @@ index.form = indexForm
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::create
 * @see app/Http/Controllers/PurchaseOrderController.php:47
-* @route '/purchase-orders/create'
+* @route '//localhost/purchase-orders/create'
 */
 export const create = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: create.url(options),
@@ -92,13 +92,13 @@ export const create = (options?: RouteQueryOptions): RouteDefinition<'get'> => (
 
 create.definition = {
     methods: ["get","head"],
-    url: '/purchase-orders/create',
+    url: '//localhost/purchase-orders/create',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::create
 * @see app/Http/Controllers/PurchaseOrderController.php:47
-* @route '/purchase-orders/create'
+* @route '//localhost/purchase-orders/create'
 */
 create.url = (options?: RouteQueryOptions) => {
     return create.definition.url + queryParams(options)
@@ -107,7 +107,7 @@ create.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::create
 * @see app/Http/Controllers/PurchaseOrderController.php:47
-* @route '/purchase-orders/create'
+* @route '//localhost/purchase-orders/create'
 */
 create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: create.url(options),
@@ -117,7 +117,7 @@ create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::create
 * @see app/Http/Controllers/PurchaseOrderController.php:47
-* @route '/purchase-orders/create'
+* @route '//localhost/purchase-orders/create'
 */
 create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: create.url(options),
@@ -127,7 +127,7 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::create
 * @see app/Http/Controllers/PurchaseOrderController.php:47
-* @route '/purchase-orders/create'
+* @route '//localhost/purchase-orders/create'
 */
 const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: create.url(options),
@@ -137,7 +137,7 @@ const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => 
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::create
 * @see app/Http/Controllers/PurchaseOrderController.php:47
-* @route '/purchase-orders/create'
+* @route '//localhost/purchase-orders/create'
 */
 createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: create.url(options),
@@ -147,7 +147,7 @@ createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::create
 * @see app/Http/Controllers/PurchaseOrderController.php:47
-* @route '/purchase-orders/create'
+* @route '//localhost/purchase-orders/create'
 */
 createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: create.url({
@@ -164,7 +164,7 @@ create.form = createForm
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::store
 * @see app/Http/Controllers/PurchaseOrderController.php:61
-* @route '/purchase-orders'
+* @route '//localhost/purchase-orders'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(options),
@@ -173,13 +173,13 @@ export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => (
 
 store.definition = {
     methods: ["post"],
-    url: '/purchase-orders',
+    url: '//localhost/purchase-orders',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::store
 * @see app/Http/Controllers/PurchaseOrderController.php:61
-* @route '/purchase-orders'
+* @route '//localhost/purchase-orders'
 */
 store.url = (options?: RouteQueryOptions) => {
     return store.definition.url + queryParams(options)
@@ -188,7 +188,7 @@ store.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::store
 * @see app/Http/Controllers/PurchaseOrderController.php:61
-* @route '/purchase-orders'
+* @route '//localhost/purchase-orders'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(options),
@@ -198,7 +198,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::store
 * @see app/Http/Controllers/PurchaseOrderController.php:61
-* @route '/purchase-orders'
+* @route '//localhost/purchase-orders'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: store.url(options),
@@ -208,7 +208,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::store
 * @see app/Http/Controllers/PurchaseOrderController.php:61
-* @route '/purchase-orders'
+* @route '//localhost/purchase-orders'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: store.url(options),
@@ -220,7 +220,7 @@ store.form = storeForm
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::show
 * @see app/Http/Controllers/PurchaseOrderController.php:140
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 export const show = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
@@ -229,13 +229,13 @@ export const show = (args: { purchase_order: string | number } | [purchase_order
 
 show.definition = {
     methods: ["get","head"],
-    url: '/purchase-orders/{purchase_order}',
+    url: '//localhost/purchase-orders/{purchase_order}',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::show
 * @see app/Http/Controllers/PurchaseOrderController.php:140
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 show.url = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -262,7 +262,7 @@ show.url = (args: { purchase_order: string | number } | [purchase_order: string 
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::show
 * @see app/Http/Controllers/PurchaseOrderController.php:140
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 show.get = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
@@ -272,7 +272,7 @@ show.get = (args: { purchase_order: string | number } | [purchase_order: string 
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::show
 * @see app/Http/Controllers/PurchaseOrderController.php:140
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 show.head = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: show.url(args, options),
@@ -282,7 +282,7 @@ show.head = (args: { purchase_order: string | number } | [purchase_order: string
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::show
 * @see app/Http/Controllers/PurchaseOrderController.php:140
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 const showForm = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: show.url(args, options),
@@ -292,7 +292,7 @@ const showForm = (args: { purchase_order: string | number } | [purchase_order: s
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::show
 * @see app/Http/Controllers/PurchaseOrderController.php:140
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 showForm.get = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: show.url(args, options),
@@ -302,7 +302,7 @@ showForm.get = (args: { purchase_order: string | number } | [purchase_order: str
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::show
 * @see app/Http/Controllers/PurchaseOrderController.php:140
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 showForm.head = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: show.url(args, {
@@ -319,7 +319,7 @@ show.form = showForm
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::edit
 * @see app/Http/Controllers/PurchaseOrderController.php:152
-* @route '/purchase-orders/{purchase_order}/edit'
+* @route '//localhost/purchase-orders/{purchase_order}/edit'
 */
 export const edit = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: edit.url(args, options),
@@ -328,13 +328,13 @@ export const edit = (args: { purchase_order: string | number } | [purchase_order
 
 edit.definition = {
     methods: ["get","head"],
-    url: '/purchase-orders/{purchase_order}/edit',
+    url: '//localhost/purchase-orders/{purchase_order}/edit',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::edit
 * @see app/Http/Controllers/PurchaseOrderController.php:152
-* @route '/purchase-orders/{purchase_order}/edit'
+* @route '//localhost/purchase-orders/{purchase_order}/edit'
 */
 edit.url = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -361,7 +361,7 @@ edit.url = (args: { purchase_order: string | number } | [purchase_order: string 
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::edit
 * @see app/Http/Controllers/PurchaseOrderController.php:152
-* @route '/purchase-orders/{purchase_order}/edit'
+* @route '//localhost/purchase-orders/{purchase_order}/edit'
 */
 edit.get = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: edit.url(args, options),
@@ -371,7 +371,7 @@ edit.get = (args: { purchase_order: string | number } | [purchase_order: string 
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::edit
 * @see app/Http/Controllers/PurchaseOrderController.php:152
-* @route '/purchase-orders/{purchase_order}/edit'
+* @route '//localhost/purchase-orders/{purchase_order}/edit'
 */
 edit.head = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: edit.url(args, options),
@@ -381,7 +381,7 @@ edit.head = (args: { purchase_order: string | number } | [purchase_order: string
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::edit
 * @see app/Http/Controllers/PurchaseOrderController.php:152
-* @route '/purchase-orders/{purchase_order}/edit'
+* @route '//localhost/purchase-orders/{purchase_order}/edit'
 */
 const editForm = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: edit.url(args, options),
@@ -391,7 +391,7 @@ const editForm = (args: { purchase_order: string | number } | [purchase_order: s
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::edit
 * @see app/Http/Controllers/PurchaseOrderController.php:152
-* @route '/purchase-orders/{purchase_order}/edit'
+* @route '//localhost/purchase-orders/{purchase_order}/edit'
 */
 editForm.get = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: edit.url(args, options),
@@ -401,7 +401,7 @@ editForm.get = (args: { purchase_order: string | number } | [purchase_order: str
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::edit
 * @see app/Http/Controllers/PurchaseOrderController.php:152
-* @route '/purchase-orders/{purchase_order}/edit'
+* @route '//localhost/purchase-orders/{purchase_order}/edit'
 */
 editForm.head = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: edit.url(args, {
@@ -418,7 +418,7 @@ edit.form = editForm
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::update
 * @see app/Http/Controllers/PurchaseOrderController.php:168
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 export const update = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: update.url(args, options),
@@ -427,13 +427,13 @@ export const update = (args: { purchase_order: string | number } | [purchase_ord
 
 update.definition = {
     methods: ["put","patch"],
-    url: '/purchase-orders/{purchase_order}',
+    url: '//localhost/purchase-orders/{purchase_order}',
 } satisfies RouteDefinition<["put","patch"]>
 
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::update
 * @see app/Http/Controllers/PurchaseOrderController.php:168
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 update.url = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -460,7 +460,7 @@ update.url = (args: { purchase_order: string | number } | [purchase_order: strin
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::update
 * @see app/Http/Controllers/PurchaseOrderController.php:168
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 update.put = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: update.url(args, options),
@@ -470,7 +470,7 @@ update.put = (args: { purchase_order: string | number } | [purchase_order: strin
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::update
 * @see app/Http/Controllers/PurchaseOrderController.php:168
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 update.patch = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
     url: update.url(args, options),
@@ -480,7 +480,7 @@ update.patch = (args: { purchase_order: string | number } | [purchase_order: str
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::update
 * @see app/Http/Controllers/PurchaseOrderController.php:168
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 const updateForm = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: update.url(args, {
@@ -495,7 +495,7 @@ const updateForm = (args: { purchase_order: string | number } | [purchase_order:
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::update
 * @see app/Http/Controllers/PurchaseOrderController.php:168
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 updateForm.put = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: update.url(args, {
@@ -510,7 +510,7 @@ updateForm.put = (args: { purchase_order: string | number } | [purchase_order: s
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::update
 * @see app/Http/Controllers/PurchaseOrderController.php:168
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 updateForm.patch = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: update.url(args, {
@@ -527,7 +527,7 @@ update.form = updateForm
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::destroy
 * @see app/Http/Controllers/PurchaseOrderController.php:249
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 export const destroy = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: destroy.url(args, options),
@@ -536,13 +536,13 @@ export const destroy = (args: { purchase_order: string | number } | [purchase_or
 
 destroy.definition = {
     methods: ["delete"],
-    url: '/purchase-orders/{purchase_order}',
+    url: '//localhost/purchase-orders/{purchase_order}',
 } satisfies RouteDefinition<["delete"]>
 
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::destroy
 * @see app/Http/Controllers/PurchaseOrderController.php:249
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 destroy.url = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -569,7 +569,7 @@ destroy.url = (args: { purchase_order: string | number } | [purchase_order: stri
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::destroy
 * @see app/Http/Controllers/PurchaseOrderController.php:249
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 destroy.delete = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: destroy.url(args, options),
@@ -579,7 +579,7 @@ destroy.delete = (args: { purchase_order: string | number } | [purchase_order: s
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::destroy
 * @see app/Http/Controllers/PurchaseOrderController.php:249
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 const destroyForm = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: destroy.url(args, {
@@ -594,7 +594,7 @@ const destroyForm = (args: { purchase_order: string | number } | [purchase_order
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::destroy
 * @see app/Http/Controllers/PurchaseOrderController.php:249
-* @route '/purchase-orders/{purchase_order}'
+* @route '//localhost/purchase-orders/{purchase_order}'
 */
 destroyForm.delete = (args: { purchase_order: string | number } | [purchase_order: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: destroy.url(args, {
@@ -611,7 +611,7 @@ destroy.form = destroyForm
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::getBrandArticles
 * @see app/Http/Controllers/PurchaseOrderController.php:260
-* @route '/brands/{brand}/articles-for-po'
+* @route '//localhost/brands/{brand}/articles-for-po'
 */
 export const getBrandArticles = (args: { brand: number | { id: number } } | [brand: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getBrandArticles.url(args, options),
@@ -620,13 +620,13 @@ export const getBrandArticles = (args: { brand: number | { id: number } } | [bra
 
 getBrandArticles.definition = {
     methods: ["get","head"],
-    url: '/brands/{brand}/articles-for-po',
+    url: '//localhost/brands/{brand}/articles-for-po',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::getBrandArticles
 * @see app/Http/Controllers/PurchaseOrderController.php:260
-* @route '/brands/{brand}/articles-for-po'
+* @route '//localhost/brands/{brand}/articles-for-po'
 */
 getBrandArticles.url = (args: { brand: number | { id: number } } | [brand: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -659,7 +659,7 @@ getBrandArticles.url = (args: { brand: number | { id: number } } | [brand: numbe
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::getBrandArticles
 * @see app/Http/Controllers/PurchaseOrderController.php:260
-* @route '/brands/{brand}/articles-for-po'
+* @route '//localhost/brands/{brand}/articles-for-po'
 */
 getBrandArticles.get = (args: { brand: number | { id: number } } | [brand: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getBrandArticles.url(args, options),
@@ -669,7 +669,7 @@ getBrandArticles.get = (args: { brand: number | { id: number } } | [brand: numbe
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::getBrandArticles
 * @see app/Http/Controllers/PurchaseOrderController.php:260
-* @route '/brands/{brand}/articles-for-po'
+* @route '//localhost/brands/{brand}/articles-for-po'
 */
 getBrandArticles.head = (args: { brand: number | { id: number } } | [brand: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: getBrandArticles.url(args, options),
@@ -679,7 +679,7 @@ getBrandArticles.head = (args: { brand: number | { id: number } } | [brand: numb
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::getBrandArticles
 * @see app/Http/Controllers/PurchaseOrderController.php:260
-* @route '/brands/{brand}/articles-for-po'
+* @route '//localhost/brands/{brand}/articles-for-po'
 */
 const getBrandArticlesForm = (args: { brand: number | { id: number } } | [brand: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getBrandArticles.url(args, options),
@@ -689,7 +689,7 @@ const getBrandArticlesForm = (args: { brand: number | { id: number } } | [brand:
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::getBrandArticles
 * @see app/Http/Controllers/PurchaseOrderController.php:260
-* @route '/brands/{brand}/articles-for-po'
+* @route '//localhost/brands/{brand}/articles-for-po'
 */
 getBrandArticlesForm.get = (args: { brand: number | { id: number } } | [brand: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getBrandArticles.url(args, options),
@@ -699,7 +699,7 @@ getBrandArticlesForm.get = (args: { brand: number | { id: number } } | [brand: n
 /**
 * @see \App\Http\Controllers\PurchaseOrderController::getBrandArticles
 * @see app/Http/Controllers/PurchaseOrderController.php:260
-* @route '/brands/{brand}/articles-for-po'
+* @route '//localhost/brands/{brand}/articles-for-po'
 */
 getBrandArticlesForm.head = (args: { brand: number | { id: number } } | [brand: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getBrandArticles.url(args, {

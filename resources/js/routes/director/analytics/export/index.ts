@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\DirectorAnalyticsController::excel
 * @see app/Http/Controllers/DirectorAnalyticsController.php:55
-* @route '/director-analytics-dashboard/export/excel'
+* @route '//localhost/director-analytics-dashboard/export/excel'
 */
 export const excel = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: excel.url(options),
@@ -11,13 +11,13 @@ export const excel = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 excel.definition = {
     methods: ["get","head"],
-    url: '/director-analytics-dashboard/export/excel',
+    url: '//localhost/director-analytics-dashboard/export/excel',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\DirectorAnalyticsController::excel
 * @see app/Http/Controllers/DirectorAnalyticsController.php:55
-* @route '/director-analytics-dashboard/export/excel'
+* @route '//localhost/director-analytics-dashboard/export/excel'
 */
 excel.url = (options?: RouteQueryOptions) => {
     return excel.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ excel.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\DirectorAnalyticsController::excel
 * @see app/Http/Controllers/DirectorAnalyticsController.php:55
-* @route '/director-analytics-dashboard/export/excel'
+* @route '//localhost/director-analytics-dashboard/export/excel'
 */
 excel.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: excel.url(options),
@@ -36,7 +36,7 @@ excel.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\DirectorAnalyticsController::excel
 * @see app/Http/Controllers/DirectorAnalyticsController.php:55
-* @route '/director-analytics-dashboard/export/excel'
+* @route '//localhost/director-analytics-dashboard/export/excel'
 */
 excel.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: excel.url(options),
@@ -46,7 +46,7 @@ excel.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 /**
 * @see \App\Http\Controllers\DirectorAnalyticsController::excel
 * @see app/Http/Controllers/DirectorAnalyticsController.php:55
-* @route '/director-analytics-dashboard/export/excel'
+* @route '//localhost/director-analytics-dashboard/export/excel'
 */
 const excelForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: excel.url(options),
@@ -56,7 +56,7 @@ const excelForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 /**
 * @see \App\Http\Controllers\DirectorAnalyticsController::excel
 * @see app/Http/Controllers/DirectorAnalyticsController.php:55
-* @route '/director-analytics-dashboard/export/excel'
+* @route '//localhost/director-analytics-dashboard/export/excel'
 */
 excelForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: excel.url(options),
@@ -66,7 +66,7 @@ excelForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\DirectorAnalyticsController::excel
 * @see app/Http/Controllers/DirectorAnalyticsController.php:55
-* @route '/director-analytics-dashboard/export/excel'
+* @route '//localhost/director-analytics-dashboard/export/excel'
 */
 excelForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: excel.url({
@@ -83,7 +83,7 @@ excel.form = excelForm
 /**
 * @see \App\Http\Controllers\DirectorAnalyticsController::pdf
 * @see app/Http/Controllers/DirectorAnalyticsController.php:185
-* @route '/director-analytics-dashboard/export/pdf'
+* @route '//localhost/director-analytics-dashboard/export/pdf'
 */
 export const pdf = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: pdf.url(options),
@@ -92,13 +92,13 @@ export const pdf = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 pdf.definition = {
     methods: ["get","head"],
-    url: '/director-analytics-dashboard/export/pdf',
+    url: '//localhost/director-analytics-dashboard/export/pdf',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\DirectorAnalyticsController::pdf
 * @see app/Http/Controllers/DirectorAnalyticsController.php:185
-* @route '/director-analytics-dashboard/export/pdf'
+* @route '//localhost/director-analytics-dashboard/export/pdf'
 */
 pdf.url = (options?: RouteQueryOptions) => {
     return pdf.definition.url + queryParams(options)
@@ -107,7 +107,7 @@ pdf.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\DirectorAnalyticsController::pdf
 * @see app/Http/Controllers/DirectorAnalyticsController.php:185
-* @route '/director-analytics-dashboard/export/pdf'
+* @route '//localhost/director-analytics-dashboard/export/pdf'
 */
 pdf.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: pdf.url(options),
@@ -117,7 +117,7 @@ pdf.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\DirectorAnalyticsController::pdf
 * @see app/Http/Controllers/DirectorAnalyticsController.php:185
-* @route '/director-analytics-dashboard/export/pdf'
+* @route '//localhost/director-analytics-dashboard/export/pdf'
 */
 pdf.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: pdf.url(options),
@@ -127,7 +127,7 @@ pdf.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 /**
 * @see \App\Http\Controllers\DirectorAnalyticsController::pdf
 * @see app/Http/Controllers/DirectorAnalyticsController.php:185
-* @route '/director-analytics-dashboard/export/pdf'
+* @route '//localhost/director-analytics-dashboard/export/pdf'
 */
 const pdfForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: pdf.url(options),
@@ -137,7 +137,7 @@ const pdfForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\DirectorAnalyticsController::pdf
 * @see app/Http/Controllers/DirectorAnalyticsController.php:185
-* @route '/director-analytics-dashboard/export/pdf'
+* @route '//localhost/director-analytics-dashboard/export/pdf'
 */
 pdfForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: pdf.url(options),
@@ -147,7 +147,7 @@ pdfForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\DirectorAnalyticsController::pdf
 * @see app/Http/Controllers/DirectorAnalyticsController.php:185
-* @route '/director-analytics-dashboard/export/pdf'
+* @route '//localhost/director-analytics-dashboard/export/pdf'
 */
 pdfForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: pdf.url({

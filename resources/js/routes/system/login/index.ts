@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::submit
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:44
-* @route '/system-login'
+* @route '//localhost/system-login'
 */
 export const submit = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: submit.url(options),
@@ -11,13 +11,13 @@ export const submit = (options?: RouteQueryOptions): RouteDefinition<'post'> => 
 
 submit.definition = {
     methods: ["post"],
-    url: '/system-login',
+    url: '//localhost/system-login',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::submit
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:44
-* @route '/system-login'
+* @route '//localhost/system-login'
 */
 submit.url = (options?: RouteQueryOptions) => {
     return submit.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ submit.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::submit
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:44
-* @route '/system-login'
+* @route '//localhost/system-login'
 */
 submit.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: submit.url(options),
@@ -36,7 +36,7 @@ submit.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::submit
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:44
-* @route '/system-login'
+* @route '//localhost/system-login'
 */
 const submitForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: submit.url(options),
@@ -46,7 +46,7 @@ const submitForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =>
 /**
 * @see \App\Http\Controllers\Auth\FixedCredentialLoginController::submit
 * @see app/Http/Controllers/Auth/FixedCredentialLoginController.php:44
-* @route '/system-login'
+* @route '//localhost/system-login'
 */
 submitForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: submit.url(options),

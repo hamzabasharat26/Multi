@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::index
 * @see app/Http/Controllers/AnnotationUploadController.php:21
-* @route '/annotation-upload'
+* @route '//localhost/annotation-upload'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -11,13 +11,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: '/annotation-upload',
+    url: '//localhost/annotation-upload',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::index
 * @see app/Http/Controllers/AnnotationUploadController.php:21
-* @route '/annotation-upload'
+* @route '//localhost/annotation-upload'
 */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ index.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::index
 * @see app/Http/Controllers/AnnotationUploadController.php:21
-* @route '/annotation-upload'
+* @route '//localhost/annotation-upload'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -36,7 +36,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::index
 * @see app/Http/Controllers/AnnotationUploadController.php:21
-* @route '/annotation-upload'
+* @route '//localhost/annotation-upload'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
@@ -46,7 +46,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::index
 * @see app/Http/Controllers/AnnotationUploadController.php:21
-* @route '/annotation-upload'
+* @route '//localhost/annotation-upload'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(options),
@@ -56,7 +56,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::index
 * @see app/Http/Controllers/AnnotationUploadController.php:21
-* @route '/annotation-upload'
+* @route '//localhost/annotation-upload'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(options),
@@ -66,7 +66,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::index
 * @see app/Http/Controllers/AnnotationUploadController.php:21
-* @route '/annotation-upload'
+* @route '//localhost/annotation-upload'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url({
@@ -83,7 +83,7 @@ index.form = indexForm
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::verifyPassword
 * @see app/Http/Controllers/AnnotationUploadController.php:44
-* @route '/annotation-upload/verify-password'
+* @route '//localhost/annotation-upload/verify-password'
 */
 export const verifyPassword = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: verifyPassword.url(options),
@@ -92,13 +92,13 @@ export const verifyPassword = (options?: RouteQueryOptions): RouteDefinition<'po
 
 verifyPassword.definition = {
     methods: ["post"],
-    url: '/annotation-upload/verify-password',
+    url: '//localhost/annotation-upload/verify-password',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::verifyPassword
 * @see app/Http/Controllers/AnnotationUploadController.php:44
-* @route '/annotation-upload/verify-password'
+* @route '//localhost/annotation-upload/verify-password'
 */
 verifyPassword.url = (options?: RouteQueryOptions) => {
     return verifyPassword.definition.url + queryParams(options)
@@ -107,7 +107,7 @@ verifyPassword.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::verifyPassword
 * @see app/Http/Controllers/AnnotationUploadController.php:44
-* @route '/annotation-upload/verify-password'
+* @route '//localhost/annotation-upload/verify-password'
 */
 verifyPassword.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: verifyPassword.url(options),
@@ -117,7 +117,7 @@ verifyPassword.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => 
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::verifyPassword
 * @see app/Http/Controllers/AnnotationUploadController.php:44
-* @route '/annotation-upload/verify-password'
+* @route '//localhost/annotation-upload/verify-password'
 */
 const verifyPasswordForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: verifyPassword.url(options),
@@ -127,7 +127,7 @@ const verifyPasswordForm = (options?: RouteQueryOptions): RouteFormDefinition<'p
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::verifyPassword
 * @see app/Http/Controllers/AnnotationUploadController.php:44
-* @route '/annotation-upload/verify-password'
+* @route '//localhost/annotation-upload/verify-password'
 */
 verifyPasswordForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: verifyPassword.url(options),
@@ -139,7 +139,7 @@ verifyPassword.form = verifyPasswordForm
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::getSizes
 * @see app/Http/Controllers/AnnotationUploadController.php:69
-* @route '/annotation-upload/articles/{articleId}/sizes'
+* @route '//localhost/annotation-upload/articles/{articleId}/sizes'
 */
 export const getSizes = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getSizes.url(args, options),
@@ -148,13 +148,13 @@ export const getSizes = (args: { articleId: string | number } | [articleId: stri
 
 getSizes.definition = {
     methods: ["get","head"],
-    url: '/annotation-upload/articles/{articleId}/sizes',
+    url: '//localhost/annotation-upload/articles/{articleId}/sizes',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::getSizes
 * @see app/Http/Controllers/AnnotationUploadController.php:69
-* @route '/annotation-upload/articles/{articleId}/sizes'
+* @route '//localhost/annotation-upload/articles/{articleId}/sizes'
 */
 getSizes.url = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -181,7 +181,7 @@ getSizes.url = (args: { articleId: string | number } | [articleId: string | numb
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::getSizes
 * @see app/Http/Controllers/AnnotationUploadController.php:69
-* @route '/annotation-upload/articles/{articleId}/sizes'
+* @route '//localhost/annotation-upload/articles/{articleId}/sizes'
 */
 getSizes.get = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getSizes.url(args, options),
@@ -191,7 +191,7 @@ getSizes.get = (args: { articleId: string | number } | [articleId: string | numb
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::getSizes
 * @see app/Http/Controllers/AnnotationUploadController.php:69
-* @route '/annotation-upload/articles/{articleId}/sizes'
+* @route '//localhost/annotation-upload/articles/{articleId}/sizes'
 */
 getSizes.head = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: getSizes.url(args, options),
@@ -201,7 +201,7 @@ getSizes.head = (args: { articleId: string | number } | [articleId: string | num
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::getSizes
 * @see app/Http/Controllers/AnnotationUploadController.php:69
-* @route '/annotation-upload/articles/{articleId}/sizes'
+* @route '//localhost/annotation-upload/articles/{articleId}/sizes'
 */
 const getSizesForm = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getSizes.url(args, options),
@@ -211,7 +211,7 @@ const getSizesForm = (args: { articleId: string | number } | [articleId: string 
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::getSizes
 * @see app/Http/Controllers/AnnotationUploadController.php:69
-* @route '/annotation-upload/articles/{articleId}/sizes'
+* @route '//localhost/annotation-upload/articles/{articleId}/sizes'
 */
 getSizesForm.get = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getSizes.url(args, options),
@@ -221,7 +221,7 @@ getSizesForm.get = (args: { articleId: string | number } | [articleId: string | 
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::getSizes
 * @see app/Http/Controllers/AnnotationUploadController.php:69
-* @route '/annotation-upload/articles/{articleId}/sizes'
+* @route '//localhost/annotation-upload/articles/{articleId}/sizes'
 */
 getSizesForm.head = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getSizes.url(args, {
@@ -238,7 +238,7 @@ getSizes.form = getSizesForm
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::upload
 * @see app/Http/Controllers/AnnotationUploadController.php:93
-* @route '/annotation-upload/upload'
+* @route '//localhost/annotation-upload/upload'
 */
 export const upload = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: upload.url(options),
@@ -247,13 +247,13 @@ export const upload = (options?: RouteQueryOptions): RouteDefinition<'post'> => 
 
 upload.definition = {
     methods: ["post"],
-    url: '/annotation-upload/upload',
+    url: '//localhost/annotation-upload/upload',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::upload
 * @see app/Http/Controllers/AnnotationUploadController.php:93
-* @route '/annotation-upload/upload'
+* @route '//localhost/annotation-upload/upload'
 */
 upload.url = (options?: RouteQueryOptions) => {
     return upload.definition.url + queryParams(options)
@@ -262,7 +262,7 @@ upload.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::upload
 * @see app/Http/Controllers/AnnotationUploadController.php:93
-* @route '/annotation-upload/upload'
+* @route '//localhost/annotation-upload/upload'
 */
 upload.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: upload.url(options),
@@ -272,7 +272,7 @@ upload.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::upload
 * @see app/Http/Controllers/AnnotationUploadController.php:93
-* @route '/annotation-upload/upload'
+* @route '//localhost/annotation-upload/upload'
 */
 const uploadForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: upload.url(options),
@@ -282,7 +282,7 @@ const uploadForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =>
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::upload
 * @see app/Http/Controllers/AnnotationUploadController.php:93
-* @route '/annotation-upload/upload'
+* @route '//localhost/annotation-upload/upload'
 */
 uploadForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: upload.url(options),
@@ -294,7 +294,7 @@ upload.form = uploadForm
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::getAnnotations
 * @see app/Http/Controllers/AnnotationUploadController.php:232
-* @route '/annotation-upload/annotations'
+* @route '//localhost/annotation-upload/annotations'
 */
 export const getAnnotations = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getAnnotations.url(options),
@@ -303,13 +303,13 @@ export const getAnnotations = (options?: RouteQueryOptions): RouteDefinition<'ge
 
 getAnnotations.definition = {
     methods: ["get","head"],
-    url: '/annotation-upload/annotations',
+    url: '//localhost/annotation-upload/annotations',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::getAnnotations
 * @see app/Http/Controllers/AnnotationUploadController.php:232
-* @route '/annotation-upload/annotations'
+* @route '//localhost/annotation-upload/annotations'
 */
 getAnnotations.url = (options?: RouteQueryOptions) => {
     return getAnnotations.definition.url + queryParams(options)
@@ -318,7 +318,7 @@ getAnnotations.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::getAnnotations
 * @see app/Http/Controllers/AnnotationUploadController.php:232
-* @route '/annotation-upload/annotations'
+* @route '//localhost/annotation-upload/annotations'
 */
 getAnnotations.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getAnnotations.url(options),
@@ -328,7 +328,7 @@ getAnnotations.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::getAnnotations
 * @see app/Http/Controllers/AnnotationUploadController.php:232
-* @route '/annotation-upload/annotations'
+* @route '//localhost/annotation-upload/annotations'
 */
 getAnnotations.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: getAnnotations.url(options),
@@ -338,7 +338,7 @@ getAnnotations.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => 
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::getAnnotations
 * @see app/Http/Controllers/AnnotationUploadController.php:232
-* @route '/annotation-upload/annotations'
+* @route '//localhost/annotation-upload/annotations'
 */
 const getAnnotationsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getAnnotations.url(options),
@@ -348,7 +348,7 @@ const getAnnotationsForm = (options?: RouteQueryOptions): RouteFormDefinition<'g
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::getAnnotations
 * @see app/Http/Controllers/AnnotationUploadController.php:232
-* @route '/annotation-upload/annotations'
+* @route '//localhost/annotation-upload/annotations'
 */
 getAnnotationsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getAnnotations.url(options),
@@ -358,7 +358,7 @@ getAnnotationsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::getAnnotations
 * @see app/Http/Controllers/AnnotationUploadController.php:232
-* @route '/annotation-upload/annotations'
+* @route '//localhost/annotation-upload/annotations'
 */
 getAnnotationsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getAnnotations.url({
@@ -375,7 +375,7 @@ getAnnotations.form = getAnnotationsForm
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::deleteMethod
 * @see app/Http/Controllers/AnnotationUploadController.php:266
-* @route '/annotation-upload/annotations/{id}'
+* @route '//localhost/annotation-upload/annotations/{id}'
 */
 export const deleteMethod = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: deleteMethod.url(args, options),
@@ -384,13 +384,13 @@ export const deleteMethod = (args: { id: string | number } | [id: string | numbe
 
 deleteMethod.definition = {
     methods: ["delete"],
-    url: '/annotation-upload/annotations/{id}',
+    url: '//localhost/annotation-upload/annotations/{id}',
 } satisfies RouteDefinition<["delete"]>
 
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::deleteMethod
 * @see app/Http/Controllers/AnnotationUploadController.php:266
-* @route '/annotation-upload/annotations/{id}'
+* @route '//localhost/annotation-upload/annotations/{id}'
 */
 deleteMethod.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -417,7 +417,7 @@ deleteMethod.url = (args: { id: string | number } | [id: string | number ] | str
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::deleteMethod
 * @see app/Http/Controllers/AnnotationUploadController.php:266
-* @route '/annotation-upload/annotations/{id}'
+* @route '//localhost/annotation-upload/annotations/{id}'
 */
 deleteMethod.delete = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: deleteMethod.url(args, options),
@@ -427,7 +427,7 @@ deleteMethod.delete = (args: { id: string | number } | [id: string | number ] | 
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::deleteMethod
 * @see app/Http/Controllers/AnnotationUploadController.php:266
-* @route '/annotation-upload/annotations/{id}'
+* @route '//localhost/annotation-upload/annotations/{id}'
 */
 const deleteMethodForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: deleteMethod.url(args, {
@@ -442,7 +442,7 @@ const deleteMethodForm = (args: { id: string | number } | [id: string | number ]
 /**
 * @see \App\Http\Controllers\AnnotationUploadController::deleteMethod
 * @see app/Http/Controllers/AnnotationUploadController.php:266
-* @route '/annotation-upload/annotations/{id}'
+* @route '//localhost/annotation-upload/annotations/{id}'
 */
 deleteMethodForm.delete = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: deleteMethod.url(args, {

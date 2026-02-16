@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::submit
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:29
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 export const submit = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: submit.url(options),
@@ -11,13 +11,13 @@ export const submit = (options?: RouteQueryOptions): RouteDefinition<'post'> => 
 
 submit.definition = {
     methods: ["post"],
-    url: '/developer-login',
+    url: '//localhost/developer-login',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::submit
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:29
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 submit.url = (options?: RouteQueryOptions) => {
     return submit.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ submit.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::submit
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:29
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 submit.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: submit.url(options),
@@ -36,7 +36,7 @@ submit.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::submit
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:29
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 const submitForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: submit.url(options),
@@ -46,7 +46,7 @@ const submitForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =>
 /**
 * @see \App\Http\Controllers\Auth\DeveloperLoginController::submit
 * @see app/Http/Controllers/Auth/DeveloperLoginController.php:29
-* @route '/developer-login'
+* @route '//localhost/developer-login'
 */
 submitForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: submit.url(options),

@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::index
 * @see app/Http/Controllers/ArticleRegistrationController.php:21
-* @route '/article-registration'
+* @route '//localhost/article-registration'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -11,13 +11,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: '/article-registration',
+    url: '//localhost/article-registration',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::index
 * @see app/Http/Controllers/ArticleRegistrationController.php:21
-* @route '/article-registration'
+* @route '//localhost/article-registration'
 */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ index.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::index
 * @see app/Http/Controllers/ArticleRegistrationController.php:21
-* @route '/article-registration'
+* @route '//localhost/article-registration'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -36,7 +36,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::index
 * @see app/Http/Controllers/ArticleRegistrationController.php:21
-* @route '/article-registration'
+* @route '//localhost/article-registration'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
@@ -46,7 +46,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::index
 * @see app/Http/Controllers/ArticleRegistrationController.php:21
-* @route '/article-registration'
+* @route '//localhost/article-registration'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(options),
@@ -56,7 +56,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::index
 * @see app/Http/Controllers/ArticleRegistrationController.php:21
-* @route '/article-registration'
+* @route '//localhost/article-registration'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(options),
@@ -66,7 +66,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::index
 * @see app/Http/Controllers/ArticleRegistrationController.php:21
-* @route '/article-registration'
+* @route '//localhost/article-registration'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url({
@@ -83,7 +83,7 @@ index.form = indexForm
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::setPassword
 * @see app/Http/Controllers/ArticleRegistrationController.php:119
-* @route '/article-registration/set-password'
+* @route '//localhost/article-registration/set-password'
 */
 export const setPassword = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: setPassword.url(options),
@@ -92,13 +92,13 @@ export const setPassword = (options?: RouteQueryOptions): RouteDefinition<'post'
 
 setPassword.definition = {
     methods: ["post"],
-    url: '/article-registration/set-password',
+    url: '//localhost/article-registration/set-password',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::setPassword
 * @see app/Http/Controllers/ArticleRegistrationController.php:119
-* @route '/article-registration/set-password'
+* @route '//localhost/article-registration/set-password'
 */
 setPassword.url = (options?: RouteQueryOptions) => {
     return setPassword.definition.url + queryParams(options)
@@ -107,7 +107,7 @@ setPassword.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::setPassword
 * @see app/Http/Controllers/ArticleRegistrationController.php:119
-* @route '/article-registration/set-password'
+* @route '//localhost/article-registration/set-password'
 */
 setPassword.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: setPassword.url(options),
@@ -117,7 +117,7 @@ setPassword.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::setPassword
 * @see app/Http/Controllers/ArticleRegistrationController.php:119
-* @route '/article-registration/set-password'
+* @route '//localhost/article-registration/set-password'
 */
 const setPasswordForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: setPassword.url(options),
@@ -127,7 +127,7 @@ const setPasswordForm = (options?: RouteQueryOptions): RouteFormDefinition<'post
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::setPassword
 * @see app/Http/Controllers/ArticleRegistrationController.php:119
-* @route '/article-registration/set-password'
+* @route '//localhost/article-registration/set-password'
 */
 setPasswordForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: setPassword.url(options),
@@ -139,7 +139,7 @@ setPassword.form = setPasswordForm
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::verifyPassword
 * @see app/Http/Controllers/ArticleRegistrationController.php:157
-* @route '/article-registration/verify-password'
+* @route '//localhost/article-registration/verify-password'
 */
 export const verifyPassword = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: verifyPassword.url(options),
@@ -148,13 +148,13 @@ export const verifyPassword = (options?: RouteQueryOptions): RouteDefinition<'po
 
 verifyPassword.definition = {
     methods: ["post"],
-    url: '/article-registration/verify-password',
+    url: '//localhost/article-registration/verify-password',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::verifyPassword
 * @see app/Http/Controllers/ArticleRegistrationController.php:157
-* @route '/article-registration/verify-password'
+* @route '//localhost/article-registration/verify-password'
 */
 verifyPassword.url = (options?: RouteQueryOptions) => {
     return verifyPassword.definition.url + queryParams(options)
@@ -163,7 +163,7 @@ verifyPassword.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::verifyPassword
 * @see app/Http/Controllers/ArticleRegistrationController.php:157
-* @route '/article-registration/verify-password'
+* @route '//localhost/article-registration/verify-password'
 */
 verifyPassword.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: verifyPassword.url(options),
@@ -173,7 +173,7 @@ verifyPassword.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::verifyPassword
 * @see app/Http/Controllers/ArticleRegistrationController.php:157
-* @route '/article-registration/verify-password'
+* @route '//localhost/article-registration/verify-password'
 */
 const verifyPasswordForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: verifyPassword.url(options),
@@ -183,7 +183,7 @@ const verifyPasswordForm = (options?: RouteQueryOptions): RouteFormDefinition<'p
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::verifyPassword
 * @see app/Http/Controllers/ArticleRegistrationController.php:157
-* @route '/article-registration/verify-password'
+* @route '//localhost/article-registration/verify-password'
 */
 verifyPasswordForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: verifyPassword.url(options),
@@ -195,7 +195,7 @@ verifyPassword.form = verifyPasswordForm
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getSizes
 * @see app/Http/Controllers/ArticleRegistrationController.php:47
-* @route '/article-registration/articles/{articleId}/sizes'
+* @route '//localhost/article-registration/articles/{articleId}/sizes'
 */
 export const getSizes = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getSizes.url(args, options),
@@ -204,13 +204,13 @@ export const getSizes = (args: { articleId: string | number } | [articleId: stri
 
 getSizes.definition = {
     methods: ["get","head"],
-    url: '/article-registration/articles/{articleId}/sizes',
+    url: '//localhost/article-registration/articles/{articleId}/sizes',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getSizes
 * @see app/Http/Controllers/ArticleRegistrationController.php:47
-* @route '/article-registration/articles/{articleId}/sizes'
+* @route '//localhost/article-registration/articles/{articleId}/sizes'
 */
 getSizes.url = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -237,7 +237,7 @@ getSizes.url = (args: { articleId: string | number } | [articleId: string | numb
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getSizes
 * @see app/Http/Controllers/ArticleRegistrationController.php:47
-* @route '/article-registration/articles/{articleId}/sizes'
+* @route '//localhost/article-registration/articles/{articleId}/sizes'
 */
 getSizes.get = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getSizes.url(args, options),
@@ -247,7 +247,7 @@ getSizes.get = (args: { articleId: string | number } | [articleId: string | numb
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getSizes
 * @see app/Http/Controllers/ArticleRegistrationController.php:47
-* @route '/article-registration/articles/{articleId}/sizes'
+* @route '//localhost/article-registration/articles/{articleId}/sizes'
 */
 getSizes.head = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: getSizes.url(args, options),
@@ -257,7 +257,7 @@ getSizes.head = (args: { articleId: string | number } | [articleId: string | num
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getSizes
 * @see app/Http/Controllers/ArticleRegistrationController.php:47
-* @route '/article-registration/articles/{articleId}/sizes'
+* @route '//localhost/article-registration/articles/{articleId}/sizes'
 */
 const getSizesForm = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getSizes.url(args, options),
@@ -267,7 +267,7 @@ const getSizesForm = (args: { articleId: string | number } | [articleId: string 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getSizes
 * @see app/Http/Controllers/ArticleRegistrationController.php:47
-* @route '/article-registration/articles/{articleId}/sizes'
+* @route '//localhost/article-registration/articles/{articleId}/sizes'
 */
 getSizesForm.get = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getSizes.url(args, options),
@@ -277,7 +277,7 @@ getSizesForm.get = (args: { articleId: string | number } | [articleId: string | 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getSizes
 * @see app/Http/Controllers/ArticleRegistrationController.php:47
-* @route '/article-registration/articles/{articleId}/sizes'
+* @route '//localhost/article-registration/articles/{articleId}/sizes'
 */
 getSizesForm.head = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getSizes.url(args, {
@@ -294,7 +294,7 @@ getSizes.form = getSizesForm
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getImages
 * @see app/Http/Controllers/ArticleRegistrationController.php:68
-* @route '/article-registration/articles/{articleId}/sizes/{size}/images'
+* @route '//localhost/article-registration/articles/{articleId}/sizes/{size}/images'
 */
 export const getImages = (args: { articleId: string | number, size: string | number } | [articleId: string | number, size: string | number ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getImages.url(args, options),
@@ -303,13 +303,13 @@ export const getImages = (args: { articleId: string | number, size: string | num
 
 getImages.definition = {
     methods: ["get","head"],
-    url: '/article-registration/articles/{articleId}/sizes/{size}/images',
+    url: '//localhost/article-registration/articles/{articleId}/sizes/{size}/images',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getImages
 * @see app/Http/Controllers/ArticleRegistrationController.php:68
-* @route '/article-registration/articles/{articleId}/sizes/{size}/images'
+* @route '//localhost/article-registration/articles/{articleId}/sizes/{size}/images'
 */
 getImages.url = (args: { articleId: string | number, size: string | number } | [articleId: string | number, size: string | number ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -335,7 +335,7 @@ getImages.url = (args: { articleId: string | number, size: string | number } | [
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getImages
 * @see app/Http/Controllers/ArticleRegistrationController.php:68
-* @route '/article-registration/articles/{articleId}/sizes/{size}/images'
+* @route '//localhost/article-registration/articles/{articleId}/sizes/{size}/images'
 */
 getImages.get = (args: { articleId: string | number, size: string | number } | [articleId: string | number, size: string | number ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getImages.url(args, options),
@@ -345,7 +345,7 @@ getImages.get = (args: { articleId: string | number, size: string | number } | [
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getImages
 * @see app/Http/Controllers/ArticleRegistrationController.php:68
-* @route '/article-registration/articles/{articleId}/sizes/{size}/images'
+* @route '//localhost/article-registration/articles/{articleId}/sizes/{size}/images'
 */
 getImages.head = (args: { articleId: string | number, size: string | number } | [articleId: string | number, size: string | number ], options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: getImages.url(args, options),
@@ -355,7 +355,7 @@ getImages.head = (args: { articleId: string | number, size: string | number } | 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getImages
 * @see app/Http/Controllers/ArticleRegistrationController.php:68
-* @route '/article-registration/articles/{articleId}/sizes/{size}/images'
+* @route '//localhost/article-registration/articles/{articleId}/sizes/{size}/images'
 */
 const getImagesForm = (args: { articleId: string | number, size: string | number } | [articleId: string | number, size: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getImages.url(args, options),
@@ -365,7 +365,7 @@ const getImagesForm = (args: { articleId: string | number, size: string | number
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getImages
 * @see app/Http/Controllers/ArticleRegistrationController.php:68
-* @route '/article-registration/articles/{articleId}/sizes/{size}/images'
+* @route '//localhost/article-registration/articles/{articleId}/sizes/{size}/images'
 */
 getImagesForm.get = (args: { articleId: string | number, size: string | number } | [articleId: string | number, size: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getImages.url(args, options),
@@ -375,7 +375,7 @@ getImagesForm.get = (args: { articleId: string | number, size: string | number }
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getImages
 * @see app/Http/Controllers/ArticleRegistrationController.php:68
-* @route '/article-registration/articles/{articleId}/sizes/{size}/images'
+* @route '//localhost/article-registration/articles/{articleId}/sizes/{size}/images'
 */
 getImagesForm.head = (args: { articleId: string | number, size: string | number } | [articleId: string | number, size: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getImages.url(args, {
@@ -392,7 +392,7 @@ getImages.form = getImagesForm
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:428
-* @route '/article-registration/calibration'
+* @route '//localhost/article-registration/calibration'
 */
 export const getCalibration = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getCalibration.url(options),
@@ -401,13 +401,13 @@ export const getCalibration = (options?: RouteQueryOptions): RouteDefinition<'ge
 
 getCalibration.definition = {
     methods: ["get","head"],
-    url: '/article-registration/calibration',
+    url: '//localhost/article-registration/calibration',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:428
-* @route '/article-registration/calibration'
+* @route '//localhost/article-registration/calibration'
 */
 getCalibration.url = (options?: RouteQueryOptions) => {
     return getCalibration.definition.url + queryParams(options)
@@ -416,7 +416,7 @@ getCalibration.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:428
-* @route '/article-registration/calibration'
+* @route '//localhost/article-registration/calibration'
 */
 getCalibration.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getCalibration.url(options),
@@ -426,7 +426,7 @@ getCalibration.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:428
-* @route '/article-registration/calibration'
+* @route '//localhost/article-registration/calibration'
 */
 getCalibration.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: getCalibration.url(options),
@@ -436,7 +436,7 @@ getCalibration.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:428
-* @route '/article-registration/calibration'
+* @route '//localhost/article-registration/calibration'
 */
 const getCalibrationForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getCalibration.url(options),
@@ -446,7 +446,7 @@ const getCalibrationForm = (options?: RouteQueryOptions): RouteFormDefinition<'g
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:428
-* @route '/article-registration/calibration'
+* @route '//localhost/article-registration/calibration'
 */
 getCalibrationForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getCalibration.url(options),
@@ -456,7 +456,7 @@ getCalibrationForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:428
-* @route '/article-registration/calibration'
+* @route '//localhost/article-registration/calibration'
 */
 getCalibrationForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getCalibration.url({
@@ -473,7 +473,7 @@ getCalibration.form = getCalibrationForm
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::saveCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:458
-* @route '/article-registration/calibration'
+* @route '//localhost/article-registration/calibration'
 */
 export const saveCalibration = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: saveCalibration.url(options),
@@ -482,13 +482,13 @@ export const saveCalibration = (options?: RouteQueryOptions): RouteDefinition<'p
 
 saveCalibration.definition = {
     methods: ["post"],
-    url: '/article-registration/calibration',
+    url: '//localhost/article-registration/calibration',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::saveCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:458
-* @route '/article-registration/calibration'
+* @route '//localhost/article-registration/calibration'
 */
 saveCalibration.url = (options?: RouteQueryOptions) => {
     return saveCalibration.definition.url + queryParams(options)
@@ -497,7 +497,7 @@ saveCalibration.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::saveCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:458
-* @route '/article-registration/calibration'
+* @route '//localhost/article-registration/calibration'
 */
 saveCalibration.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: saveCalibration.url(options),
@@ -507,7 +507,7 @@ saveCalibration.post = (options?: RouteQueryOptions): RouteDefinition<'post'> =>
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::saveCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:458
-* @route '/article-registration/calibration'
+* @route '//localhost/article-registration/calibration'
 */
 const saveCalibrationForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: saveCalibration.url(options),
@@ -517,7 +517,7 @@ const saveCalibrationForm = (options?: RouteQueryOptions): RouteFormDefinition<'
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::saveCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:458
-* @route '/article-registration/calibration'
+* @route '//localhost/article-registration/calibration'
 */
 saveCalibrationForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: saveCalibration.url(options),
@@ -529,7 +529,7 @@ saveCalibration.form = saveCalibrationForm
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getCalibrations
 * @see app/Http/Controllers/ArticleRegistrationController.php:545
-* @route '/article-registration/calibrations'
+* @route '//localhost/article-registration/calibrations'
 */
 export const getCalibrations = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getCalibrations.url(options),
@@ -538,13 +538,13 @@ export const getCalibrations = (options?: RouteQueryOptions): RouteDefinition<'g
 
 getCalibrations.definition = {
     methods: ["get","head"],
-    url: '/article-registration/calibrations',
+    url: '//localhost/article-registration/calibrations',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getCalibrations
 * @see app/Http/Controllers/ArticleRegistrationController.php:545
-* @route '/article-registration/calibrations'
+* @route '//localhost/article-registration/calibrations'
 */
 getCalibrations.url = (options?: RouteQueryOptions) => {
     return getCalibrations.definition.url + queryParams(options)
@@ -553,7 +553,7 @@ getCalibrations.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getCalibrations
 * @see app/Http/Controllers/ArticleRegistrationController.php:545
-* @route '/article-registration/calibrations'
+* @route '//localhost/article-registration/calibrations'
 */
 getCalibrations.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getCalibrations.url(options),
@@ -563,7 +563,7 @@ getCalibrations.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => (
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getCalibrations
 * @see app/Http/Controllers/ArticleRegistrationController.php:545
-* @route '/article-registration/calibrations'
+* @route '//localhost/article-registration/calibrations'
 */
 getCalibrations.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: getCalibrations.url(options),
@@ -573,7 +573,7 @@ getCalibrations.head = (options?: RouteQueryOptions): RouteDefinition<'head'> =>
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getCalibrations
 * @see app/Http/Controllers/ArticleRegistrationController.php:545
-* @route '/article-registration/calibrations'
+* @route '//localhost/article-registration/calibrations'
 */
 const getCalibrationsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getCalibrations.url(options),
@@ -583,7 +583,7 @@ const getCalibrationsForm = (options?: RouteQueryOptions): RouteFormDefinition<'
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getCalibrations
 * @see app/Http/Controllers/ArticleRegistrationController.php:545
-* @route '/article-registration/calibrations'
+* @route '//localhost/article-registration/calibrations'
 */
 getCalibrationsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getCalibrations.url(options),
@@ -593,7 +593,7 @@ getCalibrationsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'ge
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getCalibrations
 * @see app/Http/Controllers/ArticleRegistrationController.php:545
-* @route '/article-registration/calibrations'
+* @route '//localhost/article-registration/calibrations'
 */
 getCalibrationsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getCalibrations.url({
@@ -610,7 +610,7 @@ getCalibrations.form = getCalibrationsForm
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::setActiveCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:569
-* @route '/article-registration/calibrations/{calibrationId}/activate'
+* @route '//localhost/article-registration/calibrations/{calibrationId}/activate'
 */
 export const setActiveCalibration = (args: { calibrationId: string | number } | [calibrationId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: setActiveCalibration.url(args, options),
@@ -619,13 +619,13 @@ export const setActiveCalibration = (args: { calibrationId: string | number } | 
 
 setActiveCalibration.definition = {
     methods: ["post"],
-    url: '/article-registration/calibrations/{calibrationId}/activate',
+    url: '//localhost/article-registration/calibrations/{calibrationId}/activate',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::setActiveCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:569
-* @route '/article-registration/calibrations/{calibrationId}/activate'
+* @route '//localhost/article-registration/calibrations/{calibrationId}/activate'
 */
 setActiveCalibration.url = (args: { calibrationId: string | number } | [calibrationId: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -652,7 +652,7 @@ setActiveCalibration.url = (args: { calibrationId: string | number } | [calibrat
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::setActiveCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:569
-* @route '/article-registration/calibrations/{calibrationId}/activate'
+* @route '//localhost/article-registration/calibrations/{calibrationId}/activate'
 */
 setActiveCalibration.post = (args: { calibrationId: string | number } | [calibrationId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: setActiveCalibration.url(args, options),
@@ -662,7 +662,7 @@ setActiveCalibration.post = (args: { calibrationId: string | number } | [calibra
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::setActiveCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:569
-* @route '/article-registration/calibrations/{calibrationId}/activate'
+* @route '//localhost/article-registration/calibrations/{calibrationId}/activate'
 */
 const setActiveCalibrationForm = (args: { calibrationId: string | number } | [calibrationId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: setActiveCalibration.url(args, options),
@@ -672,7 +672,7 @@ const setActiveCalibrationForm = (args: { calibrationId: string | number } | [ca
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::setActiveCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:569
-* @route '/article-registration/calibrations/{calibrationId}/activate'
+* @route '//localhost/article-registration/calibrations/{calibrationId}/activate'
 */
 setActiveCalibrationForm.post = (args: { calibrationId: string | number } | [calibrationId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: setActiveCalibration.url(args, options),
@@ -684,7 +684,7 @@ setActiveCalibration.form = setActiveCalibrationForm
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::deleteCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:583
-* @route '/article-registration/calibrations/{calibrationId}'
+* @route '//localhost/article-registration/calibrations/{calibrationId}'
 */
 export const deleteCalibration = (args: { calibrationId: string | number } | [calibrationId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: deleteCalibration.url(args, options),
@@ -693,13 +693,13 @@ export const deleteCalibration = (args: { calibrationId: string | number } | [ca
 
 deleteCalibration.definition = {
     methods: ["delete"],
-    url: '/article-registration/calibrations/{calibrationId}',
+    url: '//localhost/article-registration/calibrations/{calibrationId}',
 } satisfies RouteDefinition<["delete"]>
 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::deleteCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:583
-* @route '/article-registration/calibrations/{calibrationId}'
+* @route '//localhost/article-registration/calibrations/{calibrationId}'
 */
 deleteCalibration.url = (args: { calibrationId: string | number } | [calibrationId: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -726,7 +726,7 @@ deleteCalibration.url = (args: { calibrationId: string | number } | [calibration
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::deleteCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:583
-* @route '/article-registration/calibrations/{calibrationId}'
+* @route '//localhost/article-registration/calibrations/{calibrationId}'
 */
 deleteCalibration.delete = (args: { calibrationId: string | number } | [calibrationId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: deleteCalibration.url(args, options),
@@ -736,7 +736,7 @@ deleteCalibration.delete = (args: { calibrationId: string | number } | [calibrat
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::deleteCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:583
-* @route '/article-registration/calibrations/{calibrationId}'
+* @route '//localhost/article-registration/calibrations/{calibrationId}'
 */
 const deleteCalibrationForm = (args: { calibrationId: string | number } | [calibrationId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: deleteCalibration.url(args, {
@@ -751,7 +751,7 @@ const deleteCalibrationForm = (args: { calibrationId: string | number } | [calib
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::deleteCalibration
 * @see app/Http/Controllers/ArticleRegistrationController.php:583
-* @route '/article-registration/calibrations/{calibrationId}'
+* @route '//localhost/article-registration/calibrations/{calibrationId}'
 */
 deleteCalibrationForm.delete = (args: { calibrationId: string | number } | [calibrationId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: deleteCalibration.url(args, {
@@ -768,7 +768,7 @@ deleteCalibration.form = deleteCalibrationForm
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::saveAnnotation
 * @see app/Http/Controllers/ArticleRegistrationController.php:181
-* @route '/article-registration/annotations'
+* @route '//localhost/article-registration/annotations'
 */
 export const saveAnnotation = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: saveAnnotation.url(options),
@@ -777,13 +777,13 @@ export const saveAnnotation = (options?: RouteQueryOptions): RouteDefinition<'po
 
 saveAnnotation.definition = {
     methods: ["post"],
-    url: '/article-registration/annotations',
+    url: '//localhost/article-registration/annotations',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::saveAnnotation
 * @see app/Http/Controllers/ArticleRegistrationController.php:181
-* @route '/article-registration/annotations'
+* @route '//localhost/article-registration/annotations'
 */
 saveAnnotation.url = (options?: RouteQueryOptions) => {
     return saveAnnotation.definition.url + queryParams(options)
@@ -792,7 +792,7 @@ saveAnnotation.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::saveAnnotation
 * @see app/Http/Controllers/ArticleRegistrationController.php:181
-* @route '/article-registration/annotations'
+* @route '//localhost/article-registration/annotations'
 */
 saveAnnotation.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: saveAnnotation.url(options),
@@ -802,7 +802,7 @@ saveAnnotation.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::saveAnnotation
 * @see app/Http/Controllers/ArticleRegistrationController.php:181
-* @route '/article-registration/annotations'
+* @route '//localhost/article-registration/annotations'
 */
 const saveAnnotationForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: saveAnnotation.url(options),
@@ -812,7 +812,7 @@ const saveAnnotationForm = (options?: RouteQueryOptions): RouteFormDefinition<'p
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::saveAnnotation
 * @see app/Http/Controllers/ArticleRegistrationController.php:181
-* @route '/article-registration/annotations'
+* @route '//localhost/article-registration/annotations'
 */
 saveAnnotationForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: saveAnnotation.url(options),
@@ -824,7 +824,7 @@ saveAnnotation.form = saveAnnotationForm
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getAnnotation
 * @see app/Http/Controllers/ArticleRegistrationController.php:373
-* @route '/article-registration/annotations/{articleImageId}'
+* @route '//localhost/article-registration/annotations/{articleImageId}'
 */
 export const getAnnotation = (args: { articleImageId: string | number } | [articleImageId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getAnnotation.url(args, options),
@@ -833,13 +833,13 @@ export const getAnnotation = (args: { articleImageId: string | number } | [artic
 
 getAnnotation.definition = {
     methods: ["get","head"],
-    url: '/article-registration/annotations/{articleImageId}',
+    url: '//localhost/article-registration/annotations/{articleImageId}',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getAnnotation
 * @see app/Http/Controllers/ArticleRegistrationController.php:373
-* @route '/article-registration/annotations/{articleImageId}'
+* @route '//localhost/article-registration/annotations/{articleImageId}'
 */
 getAnnotation.url = (args: { articleImageId: string | number } | [articleImageId: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -866,7 +866,7 @@ getAnnotation.url = (args: { articleImageId: string | number } | [articleImageId
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getAnnotation
 * @see app/Http/Controllers/ArticleRegistrationController.php:373
-* @route '/article-registration/annotations/{articleImageId}'
+* @route '//localhost/article-registration/annotations/{articleImageId}'
 */
 getAnnotation.get = (args: { articleImageId: string | number } | [articleImageId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getAnnotation.url(args, options),
@@ -876,7 +876,7 @@ getAnnotation.get = (args: { articleImageId: string | number } | [articleImageId
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getAnnotation
 * @see app/Http/Controllers/ArticleRegistrationController.php:373
-* @route '/article-registration/annotations/{articleImageId}'
+* @route '//localhost/article-registration/annotations/{articleImageId}'
 */
 getAnnotation.head = (args: { articleImageId: string | number } | [articleImageId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: getAnnotation.url(args, options),
@@ -886,7 +886,7 @@ getAnnotation.head = (args: { articleImageId: string | number } | [articleImageI
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getAnnotation
 * @see app/Http/Controllers/ArticleRegistrationController.php:373
-* @route '/article-registration/annotations/{articleImageId}'
+* @route '//localhost/article-registration/annotations/{articleImageId}'
 */
 const getAnnotationForm = (args: { articleImageId: string | number } | [articleImageId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getAnnotation.url(args, options),
@@ -896,7 +896,7 @@ const getAnnotationForm = (args: { articleImageId: string | number } | [articleI
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getAnnotation
 * @see app/Http/Controllers/ArticleRegistrationController.php:373
-* @route '/article-registration/annotations/{articleImageId}'
+* @route '//localhost/article-registration/annotations/{articleImageId}'
 */
 getAnnotationForm.get = (args: { articleImageId: string | number } | [articleImageId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getAnnotation.url(args, options),
@@ -906,7 +906,7 @@ getAnnotationForm.get = (args: { articleImageId: string | number } | [articleIma
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::getAnnotation
 * @see app/Http/Controllers/ArticleRegistrationController.php:373
-* @route '/article-registration/annotations/{articleImageId}'
+* @route '//localhost/article-registration/annotations/{articleImageId}'
 */
 getAnnotationForm.head = (args: { articleImageId: string | number } | [articleImageId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getAnnotation.url(args, {
@@ -923,7 +923,7 @@ getAnnotation.form = getAnnotationForm
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::deleteAnnotation
 * @see app/Http/Controllers/ArticleRegistrationController.php:405
-* @route '/article-registration/annotations/{annotationId}'
+* @route '//localhost/article-registration/annotations/{annotationId}'
 */
 export const deleteAnnotation = (args: { annotationId: string | number } | [annotationId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: deleteAnnotation.url(args, options),
@@ -932,13 +932,13 @@ export const deleteAnnotation = (args: { annotationId: string | number } | [anno
 
 deleteAnnotation.definition = {
     methods: ["delete"],
-    url: '/article-registration/annotations/{annotationId}',
+    url: '//localhost/article-registration/annotations/{annotationId}',
 } satisfies RouteDefinition<["delete"]>
 
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::deleteAnnotation
 * @see app/Http/Controllers/ArticleRegistrationController.php:405
-* @route '/article-registration/annotations/{annotationId}'
+* @route '//localhost/article-registration/annotations/{annotationId}'
 */
 deleteAnnotation.url = (args: { annotationId: string | number } | [annotationId: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -965,7 +965,7 @@ deleteAnnotation.url = (args: { annotationId: string | number } | [annotationId:
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::deleteAnnotation
 * @see app/Http/Controllers/ArticleRegistrationController.php:405
-* @route '/article-registration/annotations/{annotationId}'
+* @route '//localhost/article-registration/annotations/{annotationId}'
 */
 deleteAnnotation.delete = (args: { annotationId: string | number } | [annotationId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: deleteAnnotation.url(args, options),
@@ -975,7 +975,7 @@ deleteAnnotation.delete = (args: { annotationId: string | number } | [annotation
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::deleteAnnotation
 * @see app/Http/Controllers/ArticleRegistrationController.php:405
-* @route '/article-registration/annotations/{annotationId}'
+* @route '//localhost/article-registration/annotations/{annotationId}'
 */
 const deleteAnnotationForm = (args: { annotationId: string | number } | [annotationId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: deleteAnnotation.url(args, {
@@ -990,7 +990,7 @@ const deleteAnnotationForm = (args: { annotationId: string | number } | [annotat
 /**
 * @see \App\Http\Controllers\ArticleRegistrationController::deleteAnnotation
 * @see app/Http/Controllers/ArticleRegistrationController.php:405
-* @route '/article-registration/annotations/{annotationId}'
+* @route '//localhost/article-registration/annotations/{annotationId}'
 */
 deleteAnnotationForm.delete = (args: { annotationId: string | number } | [annotationId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: deleteAnnotation.url(args, {

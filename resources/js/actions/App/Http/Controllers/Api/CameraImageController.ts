@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::ping
 * @see app/Http/Controllers/Api/CameraImageController.php:177
-* @route '/api/camera/ping'
+* @route '//localhost/api/camera/ping'
 */
 export const ping = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: ping.url(options),
@@ -11,13 +11,13 @@ export const ping = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 ping.definition = {
     methods: ["get","head"],
-    url: '/api/camera/ping',
+    url: '//localhost/api/camera/ping',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::ping
 * @see app/Http/Controllers/Api/CameraImageController.php:177
-* @route '/api/camera/ping'
+* @route '//localhost/api/camera/ping'
 */
 ping.url = (options?: RouteQueryOptions) => {
     return ping.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ ping.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::ping
 * @see app/Http/Controllers/Api/CameraImageController.php:177
-* @route '/api/camera/ping'
+* @route '//localhost/api/camera/ping'
 */
 ping.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: ping.url(options),
@@ -36,7 +36,7 @@ ping.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::ping
 * @see app/Http/Controllers/Api/CameraImageController.php:177
-* @route '/api/camera/ping'
+* @route '//localhost/api/camera/ping'
 */
 ping.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: ping.url(options),
@@ -46,7 +46,7 @@ ping.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::ping
 * @see app/Http/Controllers/Api/CameraImageController.php:177
-* @route '/api/camera/ping'
+* @route '//localhost/api/camera/ping'
 */
 const pingForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: ping.url(options),
@@ -56,7 +56,7 @@ const pingForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::ping
 * @see app/Http/Controllers/Api/CameraImageController.php:177
-* @route '/api/camera/ping'
+* @route '//localhost/api/camera/ping'
 */
 pingForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: ping.url(options),
@@ -66,7 +66,7 @@ pingForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::ping
 * @see app/Http/Controllers/Api/CameraImageController.php:177
-* @route '/api/camera/ping'
+* @route '//localhost/api/camera/ping'
 */
 pingForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: ping.url({
@@ -83,7 +83,7 @@ ping.form = pingForm
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::upload
 * @see app/Http/Controllers/Api/CameraImageController.php:40
-* @route '/api/camera/upload'
+* @route '//localhost/api/camera/upload'
 */
 export const upload = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: upload.url(options),
@@ -92,13 +92,13 @@ export const upload = (options?: RouteQueryOptions): RouteDefinition<'post'> => 
 
 upload.definition = {
     methods: ["post"],
-    url: '/api/camera/upload',
+    url: '//localhost/api/camera/upload',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::upload
 * @see app/Http/Controllers/Api/CameraImageController.php:40
-* @route '/api/camera/upload'
+* @route '//localhost/api/camera/upload'
 */
 upload.url = (options?: RouteQueryOptions) => {
     return upload.definition.url + queryParams(options)
@@ -107,7 +107,7 @@ upload.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::upload
 * @see app/Http/Controllers/Api/CameraImageController.php:40
-* @route '/api/camera/upload'
+* @route '//localhost/api/camera/upload'
 */
 upload.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: upload.url(options),
@@ -117,7 +117,7 @@ upload.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::upload
 * @see app/Http/Controllers/Api/CameraImageController.php:40
-* @route '/api/camera/upload'
+* @route '//localhost/api/camera/upload'
 */
 const uploadForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: upload.url(options),
@@ -127,7 +127,7 @@ const uploadForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =>
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::upload
 * @see app/Http/Controllers/Api/CameraImageController.php:40
-* @route '/api/camera/upload'
+* @route '//localhost/api/camera/upload'
 */
 uploadForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: upload.url(options),
@@ -139,7 +139,7 @@ upload.form = uploadForm
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getArticles
 * @see app/Http/Controllers/Api/CameraImageController.php:105
-* @route '/api/camera/articles'
+* @route '//localhost/api/camera/articles'
 */
 export const getArticles = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getArticles.url(options),
@@ -148,13 +148,13 @@ export const getArticles = (options?: RouteQueryOptions): RouteDefinition<'get'>
 
 getArticles.definition = {
     methods: ["get","head"],
-    url: '/api/camera/articles',
+    url: '//localhost/api/camera/articles',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getArticles
 * @see app/Http/Controllers/Api/CameraImageController.php:105
-* @route '/api/camera/articles'
+* @route '//localhost/api/camera/articles'
 */
 getArticles.url = (options?: RouteQueryOptions) => {
     return getArticles.definition.url + queryParams(options)
@@ -163,7 +163,7 @@ getArticles.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getArticles
 * @see app/Http/Controllers/Api/CameraImageController.php:105
-* @route '/api/camera/articles'
+* @route '//localhost/api/camera/articles'
 */
 getArticles.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getArticles.url(options),
@@ -173,7 +173,7 @@ getArticles.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getArticles
 * @see app/Http/Controllers/Api/CameraImageController.php:105
-* @route '/api/camera/articles'
+* @route '//localhost/api/camera/articles'
 */
 getArticles.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: getArticles.url(options),
@@ -183,7 +183,7 @@ getArticles.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getArticles
 * @see app/Http/Controllers/Api/CameraImageController.php:105
-* @route '/api/camera/articles'
+* @route '//localhost/api/camera/articles'
 */
 const getArticlesForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getArticles.url(options),
@@ -193,7 +193,7 @@ const getArticlesForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getArticles
 * @see app/Http/Controllers/Api/CameraImageController.php:105
-* @route '/api/camera/articles'
+* @route '//localhost/api/camera/articles'
 */
 getArticlesForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getArticles.url(options),
@@ -203,7 +203,7 @@ getArticlesForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> 
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getArticles
 * @see app/Http/Controllers/Api/CameraImageController.php:105
-* @route '/api/camera/articles'
+* @route '//localhost/api/camera/articles'
 */
 getArticlesForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getArticles.url({
@@ -220,7 +220,7 @@ getArticles.form = getArticlesForm
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getArticleImages
 * @see app/Http/Controllers/Api/CameraImageController.php:138
-* @route '/api/camera/articles/{articleId}/images'
+* @route '//localhost/api/camera/articles/{articleId}/images'
 */
 export const getArticleImages = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getArticleImages.url(args, options),
@@ -229,13 +229,13 @@ export const getArticleImages = (args: { articleId: string | number } | [article
 
 getArticleImages.definition = {
     methods: ["get","head"],
-    url: '/api/camera/articles/{articleId}/images',
+    url: '//localhost/api/camera/articles/{articleId}/images',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getArticleImages
 * @see app/Http/Controllers/Api/CameraImageController.php:138
-* @route '/api/camera/articles/{articleId}/images'
+* @route '//localhost/api/camera/articles/{articleId}/images'
 */
 getArticleImages.url = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -262,7 +262,7 @@ getArticleImages.url = (args: { articleId: string | number } | [articleId: strin
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getArticleImages
 * @see app/Http/Controllers/Api/CameraImageController.php:138
-* @route '/api/camera/articles/{articleId}/images'
+* @route '//localhost/api/camera/articles/{articleId}/images'
 */
 getArticleImages.get = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getArticleImages.url(args, options),
@@ -272,7 +272,7 @@ getArticleImages.get = (args: { articleId: string | number } | [articleId: strin
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getArticleImages
 * @see app/Http/Controllers/Api/CameraImageController.php:138
-* @route '/api/camera/articles/{articleId}/images'
+* @route '//localhost/api/camera/articles/{articleId}/images'
 */
 getArticleImages.head = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: getArticleImages.url(args, options),
@@ -282,7 +282,7 @@ getArticleImages.head = (args: { articleId: string | number } | [articleId: stri
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getArticleImages
 * @see app/Http/Controllers/Api/CameraImageController.php:138
-* @route '/api/camera/articles/{articleId}/images'
+* @route '//localhost/api/camera/articles/{articleId}/images'
 */
 const getArticleImagesForm = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getArticleImages.url(args, options),
@@ -292,7 +292,7 @@ const getArticleImagesForm = (args: { articleId: string | number } | [articleId:
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getArticleImages
 * @see app/Http/Controllers/Api/CameraImageController.php:138
-* @route '/api/camera/articles/{articleId}/images'
+* @route '//localhost/api/camera/articles/{articleId}/images'
 */
 getArticleImagesForm.get = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getArticleImages.url(args, options),
@@ -302,7 +302,7 @@ getArticleImagesForm.get = (args: { articleId: string | number } | [articleId: s
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getArticleImages
 * @see app/Http/Controllers/Api/CameraImageController.php:138
-* @route '/api/camera/articles/{articleId}/images'
+* @route '//localhost/api/camera/articles/{articleId}/images'
 */
 getArticleImagesForm.head = (args: { articleId: string | number } | [articleId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getArticleImages.url(args, {
@@ -319,7 +319,7 @@ getArticleImages.form = getArticleImagesForm
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::deleteImage
 * @see app/Http/Controllers/Api/CameraImageController.php:192
-* @route '/api/camera/images/{imageId}'
+* @route '//localhost/api/camera/images/{imageId}'
 */
 export const deleteImage = (args: { imageId: string | number } | [imageId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: deleteImage.url(args, options),
@@ -328,13 +328,13 @@ export const deleteImage = (args: { imageId: string | number } | [imageId: strin
 
 deleteImage.definition = {
     methods: ["delete"],
-    url: '/api/camera/images/{imageId}',
+    url: '//localhost/api/camera/images/{imageId}',
 } satisfies RouteDefinition<["delete"]>
 
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::deleteImage
 * @see app/Http/Controllers/Api/CameraImageController.php:192
-* @route '/api/camera/images/{imageId}'
+* @route '//localhost/api/camera/images/{imageId}'
 */
 deleteImage.url = (args: { imageId: string | number } | [imageId: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -361,7 +361,7 @@ deleteImage.url = (args: { imageId: string | number } | [imageId: string | numbe
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::deleteImage
 * @see app/Http/Controllers/Api/CameraImageController.php:192
-* @route '/api/camera/images/{imageId}'
+* @route '//localhost/api/camera/images/{imageId}'
 */
 deleteImage.delete = (args: { imageId: string | number } | [imageId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: deleteImage.url(args, options),
@@ -371,7 +371,7 @@ deleteImage.delete = (args: { imageId: string | number } | [imageId: string | nu
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::deleteImage
 * @see app/Http/Controllers/Api/CameraImageController.php:192
-* @route '/api/camera/images/{imageId}'
+* @route '//localhost/api/camera/images/{imageId}'
 */
 const deleteImageForm = (args: { imageId: string | number } | [imageId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: deleteImage.url(args, {
@@ -386,7 +386,7 @@ const deleteImageForm = (args: { imageId: string | number } | [imageId: string |
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::deleteImage
 * @see app/Http/Controllers/Api/CameraImageController.php:192
-* @route '/api/camera/images/{imageId}'
+* @route '//localhost/api/camera/images/{imageId}'
 */
 deleteImageForm.delete = (args: { imageId: string | number } | [imageId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: deleteImage.url(args, {
@@ -403,7 +403,7 @@ deleteImage.form = deleteImageForm
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getAnnotation
 * @see app/Http/Controllers/Api/CameraImageController.php:231
-* @route '/api/annotations/{articleStyle}/{size}'
+* @route '//localhost/api/annotations/{articleStyle}/{size}'
 */
 export const getAnnotation = (args: { articleStyle: string | number, size: string | number } | [articleStyle: string | number, size: string | number ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getAnnotation.url(args, options),
@@ -412,13 +412,13 @@ export const getAnnotation = (args: { articleStyle: string | number, size: strin
 
 getAnnotation.definition = {
     methods: ["get","head"],
-    url: '/api/annotations/{articleStyle}/{size}',
+    url: '//localhost/api/annotations/{articleStyle}/{size}',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getAnnotation
 * @see app/Http/Controllers/Api/CameraImageController.php:231
-* @route '/api/annotations/{articleStyle}/{size}'
+* @route '//localhost/api/annotations/{articleStyle}/{size}'
 */
 getAnnotation.url = (args: { articleStyle: string | number, size: string | number } | [articleStyle: string | number, size: string | number ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
@@ -444,7 +444,7 @@ getAnnotation.url = (args: { articleStyle: string | number, size: string | numbe
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getAnnotation
 * @see app/Http/Controllers/Api/CameraImageController.php:231
-* @route '/api/annotations/{articleStyle}/{size}'
+* @route '//localhost/api/annotations/{articleStyle}/{size}'
 */
 getAnnotation.get = (args: { articleStyle: string | number, size: string | number } | [articleStyle: string | number, size: string | number ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getAnnotation.url(args, options),
@@ -454,7 +454,7 @@ getAnnotation.get = (args: { articleStyle: string | number, size: string | numbe
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getAnnotation
 * @see app/Http/Controllers/Api/CameraImageController.php:231
-* @route '/api/annotations/{articleStyle}/{size}'
+* @route '//localhost/api/annotations/{articleStyle}/{size}'
 */
 getAnnotation.head = (args: { articleStyle: string | number, size: string | number } | [articleStyle: string | number, size: string | number ], options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: getAnnotation.url(args, options),
@@ -464,7 +464,7 @@ getAnnotation.head = (args: { articleStyle: string | number, size: string | numb
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getAnnotation
 * @see app/Http/Controllers/Api/CameraImageController.php:231
-* @route '/api/annotations/{articleStyle}/{size}'
+* @route '//localhost/api/annotations/{articleStyle}/{size}'
 */
 const getAnnotationForm = (args: { articleStyle: string | number, size: string | number } | [articleStyle: string | number, size: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getAnnotation.url(args, options),
@@ -474,7 +474,7 @@ const getAnnotationForm = (args: { articleStyle: string | number, size: string |
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getAnnotation
 * @see app/Http/Controllers/Api/CameraImageController.php:231
-* @route '/api/annotations/{articleStyle}/{size}'
+* @route '//localhost/api/annotations/{articleStyle}/{size}'
 */
 getAnnotationForm.get = (args: { articleStyle: string | number, size: string | number } | [articleStyle: string | number, size: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getAnnotation.url(args, options),
@@ -484,7 +484,7 @@ getAnnotationForm.get = (args: { articleStyle: string | number, size: string | n
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::getAnnotation
 * @see app/Http/Controllers/Api/CameraImageController.php:231
-* @route '/api/annotations/{articleStyle}/{size}'
+* @route '//localhost/api/annotations/{articleStyle}/{size}'
 */
 getAnnotationForm.head = (args: { articleStyle: string | number, size: string | number } | [articleStyle: string | number, size: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: getAnnotation.url(args, {
@@ -501,7 +501,7 @@ getAnnotation.form = getAnnotationForm
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::syncAnnotation
 * @see app/Http/Controllers/Api/CameraImageController.php:274
-* @route '/api/annotations/sync'
+* @route '//localhost/api/annotations/sync'
 */
 export const syncAnnotation = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: syncAnnotation.url(options),
@@ -510,13 +510,13 @@ export const syncAnnotation = (options?: RouteQueryOptions): RouteDefinition<'po
 
 syncAnnotation.definition = {
     methods: ["post"],
-    url: '/api/annotations/sync',
+    url: '//localhost/api/annotations/sync',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::syncAnnotation
 * @see app/Http/Controllers/Api/CameraImageController.php:274
-* @route '/api/annotations/sync'
+* @route '//localhost/api/annotations/sync'
 */
 syncAnnotation.url = (options?: RouteQueryOptions) => {
     return syncAnnotation.definition.url + queryParams(options)
@@ -525,7 +525,7 @@ syncAnnotation.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::syncAnnotation
 * @see app/Http/Controllers/Api/CameraImageController.php:274
-* @route '/api/annotations/sync'
+* @route '//localhost/api/annotations/sync'
 */
 syncAnnotation.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: syncAnnotation.url(options),
@@ -535,7 +535,7 @@ syncAnnotation.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => 
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::syncAnnotation
 * @see app/Http/Controllers/Api/CameraImageController.php:274
-* @route '/api/annotations/sync'
+* @route '//localhost/api/annotations/sync'
 */
 const syncAnnotationForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: syncAnnotation.url(options),
@@ -545,7 +545,7 @@ const syncAnnotationForm = (options?: RouteQueryOptions): RouteFormDefinition<'p
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::syncAnnotation
 * @see app/Http/Controllers/Api/CameraImageController.php:274
-* @route '/api/annotations/sync'
+* @route '//localhost/api/annotations/sync'
 */
 syncAnnotationForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: syncAnnotation.url(options),
@@ -557,7 +557,7 @@ syncAnnotation.form = syncAnnotationForm
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::listAnnotations
 * @see app/Http/Controllers/Api/CameraImageController.php:342
-* @route '/api/annotations'
+* @route '//localhost/api/annotations'
 */
 export const listAnnotations = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: listAnnotations.url(options),
@@ -566,13 +566,13 @@ export const listAnnotations = (options?: RouteQueryOptions): RouteDefinition<'g
 
 listAnnotations.definition = {
     methods: ["get","head"],
-    url: '/api/annotations',
+    url: '//localhost/api/annotations',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::listAnnotations
 * @see app/Http/Controllers/Api/CameraImageController.php:342
-* @route '/api/annotations'
+* @route '//localhost/api/annotations'
 */
 listAnnotations.url = (options?: RouteQueryOptions) => {
     return listAnnotations.definition.url + queryParams(options)
@@ -581,7 +581,7 @@ listAnnotations.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::listAnnotations
 * @see app/Http/Controllers/Api/CameraImageController.php:342
-* @route '/api/annotations'
+* @route '//localhost/api/annotations'
 */
 listAnnotations.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: listAnnotations.url(options),
@@ -591,7 +591,7 @@ listAnnotations.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => (
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::listAnnotations
 * @see app/Http/Controllers/Api/CameraImageController.php:342
-* @route '/api/annotations'
+* @route '//localhost/api/annotations'
 */
 listAnnotations.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: listAnnotations.url(options),
@@ -601,7 +601,7 @@ listAnnotations.head = (options?: RouteQueryOptions): RouteDefinition<'head'> =>
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::listAnnotations
 * @see app/Http/Controllers/Api/CameraImageController.php:342
-* @route '/api/annotations'
+* @route '//localhost/api/annotations'
 */
 const listAnnotationsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: listAnnotations.url(options),
@@ -611,7 +611,7 @@ const listAnnotationsForm = (options?: RouteQueryOptions): RouteFormDefinition<'
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::listAnnotations
 * @see app/Http/Controllers/Api/CameraImageController.php:342
-* @route '/api/annotations'
+* @route '//localhost/api/annotations'
 */
 listAnnotationsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: listAnnotations.url(options),
@@ -621,7 +621,7 @@ listAnnotationsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'ge
 /**
 * @see \App\Http\Controllers\Api\CameraImageController::listAnnotations
 * @see app/Http/Controllers/Api/CameraImageController.php:342
-* @route '/api/annotations'
+* @route '//localhost/api/annotations'
 */
 listAnnotationsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: listAnnotations.url({
