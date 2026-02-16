@@ -7,6 +7,29 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
+Route::get('/debug-auth', function () {
+    $creds = \App\Models\SystemCredential::all();
+    $setting = \App\Models\ArticleRegistrationSetting::where('key', 'password')->first();
+    
+    $results = [];
+    foreach ($creds as $cred) {
+        $results[] = [
+            'username' => $cred->username,
+            'role' => $cred->role,
+            'password_verify' => \Illuminate\Support\Facades\Hash::check('password', $cred->password),
+        ];
+    }
+    
+    $devPassVerify = $setting ? \Illuminate\Support\Facades\Hash::check('password', $setting->value) : false;
+
+    return response()->json([
+        'system_credentials' => $results,
+        'developer_password_set' => $setting ? true : false,
+        'developer_password_verify' => $devPassVerify,
+        'app_key' => substr(config('app.key'), 0, 10) . '...', // Safe peek
+    ]);
+});
+
 // System Login Routes (Fixed Credentials: ManagerQC / MEB)
 Route::get('system-login', [\App\Http\Controllers\Auth\FixedCredentialLoginController::class, 'showLoginForm'])
     ->name('system.login');
