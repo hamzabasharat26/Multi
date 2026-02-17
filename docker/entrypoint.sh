@@ -1,23 +1,17 @@
-#!/bin/sh
-
-# Exit on error
+#!/bin/bash
 set -e
 
-# Wait for database availability (simple check)
-# In production, a proper wait-for-it script is better, but this often suffices
-echo "Waiting for database..."
-sleep 5
+# Copy built assets from image backup to the bind-mounted volume
+# This ensures both app and nginx containers see the Vite build output
+if [ -d "/tmp/build-output" ]; then
+    echo "Copying Vite build assets to public/build..."
+    cp -r /tmp/build-output/* /var/www/public/build/ 2>/dev/null || true
+fi
 
-# Run migrations
-echo "Running migrations..."
-php artisan migrate --force
+if [ -d "/tmp/vendor-output" ]; then
+    echo "Copying vendor dependencies..."
+    cp -rn /tmp/vendor-output/* /var/www/vendor/ 2>/dev/null || true
+fi
 
-# Clear and cache config
-echo "Caching configuration..."
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-
-# Start PHP-FPM
-echo "Starting PHP-FPM..."
-exec php-fpm
+# Execute the original command
+exec "$@"

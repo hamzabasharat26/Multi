@@ -28,8 +28,12 @@ WORKDIR /var/www
 # Copy existing application directory permissions
 COPY --chown=www-data:www-data . /var/www
 
-# Ensure the main directory is writable by www-data (needed for creating vendor/node_modules)
+# Ensure the main directory is writable by www-data
 RUN chown -R www-data:www-data /var/www
+
+# Copy entrypoint script and make executable
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Change current user to www
 USER www-data
@@ -40,6 +44,12 @@ RUN composer install --no-interaction --optimize-autoloader --no-dev
 # Install JS dependencies and build
 RUN npm install && npm run build
 
+# Save build output and vendor to backup locations
+# These get copied back to the bind mount on container start
+RUN cp -r /var/www/public/build /tmp/build-output
+RUN cp -r /var/www/vendor /tmp/vendor-output
+
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
+ENTRYPOINT ["entrypoint.sh"]
 CMD ["php-fpm"]
