@@ -13,4 +13,10 @@ php artisan view:cache
 php artisan event:cache
 
 echo "Starting deployment..."
+
+# Default to php-fpm if no command is provided
+if [ -z "$1" ]; then
+    set -- php-fpm "$@"
+fi
+
 exec "$@"
