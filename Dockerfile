@@ -27,6 +27,9 @@ WORKDIR /var/www
 # Copy existing application directory permissions
 COPY --chown=www-data:www-data . /var/www
 
+# Ensure the main directory is writable by www-data (needed for creating vendor/node_modules)
+RUN chown -R www-data:www-data /var/www
+
 # Change current user to www
 USER www-data
 
