@@ -1,0 +1,74 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: magicqc-app
+        container_name: magicqc_app
+        restart: unless-stopped
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        networks:
+            - magicqc_network
+            - robionix_default # Shared network with existing project
+
+    nginx:
+        image: nginx:alpine
+        container_name: magicqc_nginx
+        restart: unless-stopped
+        ports:
+            # We don't expose 80/443 directly to host to avoid conflict
+            # Instead we expose a different port OR rely on the internal network
+            - "8081:80" 
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx/conf.d:/etc/nginx/conf.d
+        networks:
+            - magicqc_network
+            - robionix_default 
+        depends_on:
+            - app
+
+    db:
+        image: mariadb:10.6
+        container_name: magicqc_db
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        volumes:
+            - dbdata:/var/lib/mysql
+        networks:
+            - magicqc_network
+
+    # Queue Worker
+    worker:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: magicqc_worker
+        restart: unless-stopped
+        working_dir: /var/www
+        command: php artisan queue:work --tries=3 --timeout=90
+        volumes:
+            - ./:/var/www
+        networks:
+            - magicqc_network
+        depends_on:
+            - app
+            - db
+
+networks:
+    magicqc_network:
+        driver: bridge
+    robionix_default:
+        external: true # Join the existing network of robionix project
+
+volumes:
+    dbdata:
+        driver: local

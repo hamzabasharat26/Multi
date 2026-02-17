@@ -1,0 +1,12 @@
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+/.idea
+/.vscode
+/.git
+/tests
+/phpunit.xml
+/package-lock.json
+/yarn.lock
