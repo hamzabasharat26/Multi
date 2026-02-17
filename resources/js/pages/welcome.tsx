@@ -123,8 +123,8 @@ export default function Welcome() {
                 {/* Navigation */}
                 <header
                     className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${navSolid
-                            ? 'bg-[#0a0f1a]/95 backdrop-blur-xl border-b border-white/5 shadow-2xl shadow-black/20'
-                            : 'bg-transparent'
+                        ? 'bg-[#0a0f1a]/95 backdrop-blur-xl border-b border-white/5 shadow-2xl shadow-black/20'
+                        : 'bg-transparent'
                         }`}
                 >
                     <div className="max-w-7xl mx-auto px-6 py-4">
@@ -421,7 +421,7 @@ export default function Welcome() {
                                 {
                                     step: '01',
                                     title: 'Capture',
-                                    description: 'Place the item on the measurement surface. The system automatically captures a high-resolution image for analysis.',
+                                    description: 'Place the item on the surface. The system captures a high-resolution image automatically.',
                                     icon: Camera,
                                 },
                                 {
