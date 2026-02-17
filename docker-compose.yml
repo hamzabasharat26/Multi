@@ -11,6 +11,7 @@ services:
             - ./:/var/www
             - /var/www/vendor
             - /var/www/node_modules
+            - /var/www/public/build
         depends_on:
             - db
 
@@ -24,6 +25,7 @@ services:
             - ./:/var/www
             - /var/www/vendor
             - /var/www/node_modules
+            - /var/www/public/build
             - ./docker/nginx/conf.d:/etc/nginx/conf.d
         networks:
             - default
@@ -53,6 +55,7 @@ services:
             - ./:/var/www
             - /var/www/vendor
             - /var/www/node_modules
+            - /var/www/public/build
         depends_on:
             - app
             - db
