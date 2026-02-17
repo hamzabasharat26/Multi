@@ -24,14 +24,17 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Copy existing application directory contents
-COPY . /var/www
-
 # Copy existing application directory permissions
 COPY --chown=www-data:www-data . /var/www
 
 # Change current user to www
 USER www-data
+
+# Install PHP dependencies
+RUN composer install --no-interaction --optimize-autoloader --no-dev
+
+# Install JS dependencies and build
+RUN npm install && npm run build
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
