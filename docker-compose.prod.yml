@@ -6,9 +6,15 @@ services:
     container_name: magicqc_app
     restart: unless-stopped
     volumes:
-      - app_storage:/var/www/html/storage
       - app_env:/var/www/html/.env-data
       - app_public:/var/www/html/public
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=magicqc
+      - DB_USERNAME=root
+      - DB_PASSWORD=magicqc@123
     depends_on:
       db:
         condition: service_healthy

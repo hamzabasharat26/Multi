@@ -3,7 +3,9 @@ set -e
 
 # Clear existing cache
 echo "Clearing cache..."
+echo "Current DB_CONNECTION: $DB_CONNECTION"
 php artisan optimize:clear
+php artisan config:clear
 
 # Cache configuration, routes, and views
 echo "Caching configuration..."
