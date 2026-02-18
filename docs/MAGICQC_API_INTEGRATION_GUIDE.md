@@ -1,1210 +1,823 @@
-# MagicQC — Complete API Integration Guide
+# MagicQC — GraphQL API Integration Guide
 
-> **For:** Desktop / Electron App Developers  
-> **Version:** 2.0 — February 2026  
-> **Server:** `https://magicqc.online`
+> **For:** Electron App Developers  
+> **Version:** 3.0 — February 2026  
+> **Server:** `https://magicqc.online`  
+> **Endpoint:** `POST /graphql`
 
 ---
 
-## Quick Start
+## 1. Quick Start
 
-```bash
-# 1. Test connection (no auth needed)
-curl https://magicqc.online/api/camera/ping
+### Single Endpoint, Single Auth Header
 
-# 2. Test with API key
-curl -H "X-API-Key: YOUR_KEY_HERE" https://magicqc.online/api/camera/ping
+Every query and mutation goes through **one endpoint**:
 
-# 3. Fetch all articles
-curl -H "X-API-Key: YOUR_KEY_HERE" https://magicqc.online/api/camera/articles
+```
+POST https://magicqc.online/graphql
+Headers:
+  Content-Type: application/json
+  X-API-Key: <your-64-char-api-key>
 ```
 
----
-
-## 1. Base URL & Configuration
-
-| Setting | Value |
-|---------|-------|
-| **Base URL** | `https://magicqc.online` |
-| **Protocol** | HTTPS (TLS) |
-| **Content-Type** | `application/json` |
-| **CORS** | Fully open — all origins allowed (`*`) |
-
-### Connection Example (TypeScript)
+### First Request
 
 ```typescript
-const API_BASE = 'https://magicqc.online';
-const API_KEY  = 'YOUR_API_KEY_HERE'; // Provided by MagicQC admin
-
-// Standard request helper
-async function apiRequest(endpoint: string, options: RequestInit = {}) {
-  const response = await fetch(`${API_BASE}${endpoint}`, {
-    ...options,
-    headers: {
-      'X-API-Key': API_KEY,
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
-  return response.json();
-}
+const response = await fetch('https://magicqc.online/graphql', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-API-Key': process.env.MAGICQC_API_KEY,
+  },
+  body: JSON.stringify({
+    query: `{ brands { id name } }`
+  }),
+});
+const { data, errors } = await response.json();
+console.log(data.brands); // [{ id: "1", name: "Nike" }, ...]
 ```
 
 ---
 
 ## 2. Authentication
 
-### API Key Header
+All GraphQL operations require the `X-API-Key` header. Without it, you get:
 
-Most endpoints require an API key sent via the `X-API-Key` HTTP header.
-
-| Header | Value |
-|--------|-------|
-| `X-API-Key` | Your 64-character API key |
-
-**Unauthenticated Response (401):**
 ```json
 {
-  "success": false,
-  "message": "Invalid or missing API key."
+  "errors": [{
+    "message": "Unauthenticated.",
+    "extensions": { "category": "authentication" }
+  }]
 }
 ```
 
-> **Note:** The `uploaded-annotations` endpoints do **NOT** require an API key (for backward compatibility with existing Electron apps). The `camera` and `annotations` endpoints **DO** require it.
-
-### Getting Your API Key
-
-Ask the MagicQC administrator to generate a key. Keys are managed in the database and can be created via the Laravel console:
-
-```bash
-php artisan tinker
->>> App\Models\ApiKey::createWithKey('electron-app')->key
-# Returns: "aB3d...64chars...xYz"
+Store the key in your Electron app's `.env`:
+```env
+MAGICQC_API_KEY=p7K2IY2aJYLGQ5rG8Fjiqpo...64chars
+MAGICQC_API_URL=https://magicqc.online/graphql
 ```
 
 ---
 
-## 3. API Endpoints — Full Reference
+## 3. Available Types
 
-### 3.1 Camera APIs
+Every type maps to a database table. You can request **any combination of fields** — only what you need.
 
-All camera endpoints require `X-API-Key` header.
-Prefix: `/api/camera`
-
----
-
-#### `GET /api/camera/ping`
-
-Test API connectivity. Works with or without an API key.
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "API connection successful!",
-  "authenticated": true,
-  "server_time": "2026-02-17T16:00:00.000000Z"
+### Brand
+```graphql
+type Brand {
+  id: ID!
+  name: String!
+  purchaseOrders: [PurchaseOrder!]!  # nested relationship
+  created_at: DateTime
+  updated_at: DateTime
 }
 ```
 
+### ArticleType
+```graphql
+type ArticleType {
+  id: ID!
+  name: String!
+  articles: [Article!]!
+}
+```
+
+### Article
+```graphql
+type Article {
+  id: ID!
+  brand_id: Int
+  article_type_id: Int
+  article_style: String
+  description: String
+  brand: Brand                 # parent
+  articleType: ArticleType     # parent
+  measurements: [Measurement!]!
+  images: [ArticleImage!]!
+}
+```
+
+### PurchaseOrder
+```graphql
+type PurchaseOrder {
+  id: ID!
+  po_number: String
+  date: Date                   # "2026-02-18"
+  brand_id: Int
+  country: String
+  status: String               # "Active", "Pending", "Completed"
+  brand: Brand
+  articles: [PurchaseOrderArticle!]!
+  clientReferences: [PurchaseOrderClientReference!]!
+}
+```
+
+### PurchaseOrderArticle
+```graphql
+type PurchaseOrderArticle {
+  id: ID!
+  purchase_order_id: Int
+  article_id: Int
+  article_color: String
+  order_quantity: Int
+  purchaseOrder: PurchaseOrder
+}
+```
+
+### Measurement
+```graphql
+type Measurement {
+  id: ID!
+  article_id: Int
+  code: String                 # "A", "B", "C"
+  measurement: String          # "Chest Width"
+  tol_plus: Float
+  tol_minus: Float
+  side: String                 # "front", "back"
+  article: Article
+  sizes: [MeasurementSize!]!   # size-specific values
+}
+```
+
+### MeasurementSize
+```graphql
+type MeasurementSize {
+  id: ID!
+  measurement_id: Int
+  size: String                 # "S", "M", "L"
+  value: Float                 # the expected value for this size
+}
+```
+
+### Operator
+```graphql
+type Operator {
+  id: ID!
+  full_name: String
+  employee_id: String
+  department: String
+  contact_number: String
+  # login_pin is NEVER exposed
+}
+```
+
+### Other Types
+`ArticleImage`, `UploadedAnnotation`, `ArticleAnnotation`, `InspectionRecord`, `PurchaseOrderClientReference` — all queryable with relationships.
+
 ---
 
-#### `GET /api/camera/articles`
+## 4. Queries (Read Data)
 
-Get all registered articles (garment styles).
+### 4.1 Get All Brands
 
-**Headers:** `X-API-Key: YOUR_KEY`
-
-**Response:**
-```json
+```graphql
 {
-  "success": true,
-  "articles": [
-    {
-      "id": 1,
-      "article_style": "ABC123",
-      "brand_name": "Brand X",
-      "description": "Men's T-Shirt"
-    },
-    {
-      "id": 2,
-      "article_style": "DEF456",
-      "brand_name": "Brand Y",
-      "description": "Women's Dress"
+  brands {
+    id
+    name
+  }
+}
+```
+
+### 4.2 Get Brands with Active Purchase Orders (Nested)
+
+```graphql
+{
+  brands {
+    id
+    name
+    purchaseOrders {
+      id
+      po_number
+      status
     }
-  ]
+  }
 }
 ```
 
----
+### 4.3 Get Purchase Orders (with Filters)
 
-#### `GET /api/camera/articles/{articleId}/images`
-
-Get all captured images for a specific article.
-
-**Headers:** `X-API-Key: YOUR_KEY`
-
-**Response:**
-```json
+```graphql
 {
-  "success": true,
-  "article": {
-    "id": 1,
-    "article_style": "ABC123"
-  },
-  "images": [
-    {
-      "id": 10,
-      "size": "M",
-      "image_path": "article-images/1/camera_20260217_120000_abcd1234.jpg",
-      "image_url": "https://magicqc.online/storage/article-images/1/camera_20260217_120000_abcd1234.jpg",
-      "image_name": "capture.jpg",
-      "created_at": "2026-02-17T12:00:00.000000Z"
+  purchaseOrders(status: "Active", brand_id: 1) {
+    id
+    po_number
+    date
+    country
+    brand {
+      name
     }
-  ]
-}
-```
-
----
-
-#### `POST /api/camera/upload`
-
-Upload a captured image.
-
-**Headers:** `X-API-Key: YOUR_KEY`  
-**Content-Type:** `multipart/form-data`
-
-**Body:**
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `article_id` | int | ✅ | ID of the article |
-| `size` | string | ✅ | Size: `S`, `M`, `L`, `XL`, `XXL` |
-| `image` | file | ✅ | Image file (max 20MB) |
-
-**Response (201):**
-```json
-{
-  "success": true,
-  "message": "Image uploaded successfully from camera.",
-  "image": {
-    "id": 11,
-    "article_id": 1,
-    "article_style": "ABC123",
-    "size": "M",
-    "image_path": "article-images/1/camera_20260217_120500_efgh5678.jpg",
-    "image_url": "https://magicqc.online/storage/article-images/1/camera_20260217_120500_efgh5678.jpg",
-    "created_at": "2026-02-17T12:05:00.000000Z"
-  }
-}
-```
-
-**TypeScript Example:**
-```typescript
-async function uploadImage(articleId: number, size: string, imageFile: File | Buffer) {
-  const formData = new FormData();
-  formData.append('article_id', articleId.toString());
-  formData.append('size', size);
-  formData.append('image', imageFile);
-
-  const response = await fetch(`${API_BASE}/api/camera/upload`, {
-    method: 'POST',
-    headers: { 'X-API-Key': API_KEY },
-    body: formData,
-  });
-  return response.json();
-}
-```
-
----
-
-#### `DELETE /api/camera/images/{imageId}`
-
-Delete a specific image.
-
-**Headers:** `X-API-Key: YOUR_KEY`
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Image deleted successfully."
-}
-```
-
----
-
-### 3.2 Annotations APIs (Camera-Captured)
-
-Annotations created from camera capture and in-browser annotation.
-Prefix: `/api/annotations`
-All endpoints require `X-API-Key` header.
-
----
-
-#### `GET /api/annotations`
-
-List all camera-captured annotations.
-
-**Response:**
-```json
-{
-  "success": true,
-  "annotations": [
-    {
-      "id": 1,
-      "article_style": "ABC123",
-      "size": "M",
-      "name": "Annotation for ABC123 - M",
-      "reference_image_path": "annotations/ABC123/ABC123_M.jpg",
-      "json_file_path": "annotations/ABC123/ABC123_M.json",
-      "created_at": "2026-02-17T10:00:00.000000Z",
-      "updated_at": "2026-02-17T10:00:00.000000Z"
+    articles {
+      id
+      article_color
+      order_quantity
     }
-  ],
-  "total": 1
-}
-```
-
----
-
-#### `GET /api/annotations/{articleStyle}/{size}`
-
-Get a specific annotation by article style and size.
-
-**Response:**
-```json
-{
-  "success": true,
-  "annotation": {
-    "id": 1,
-    "article_style": "ABC123",
-    "size": "M",
-    "name": "Annotation for ABC123 - M",
-    "annotations": { ... },
-    "reference_image_path": "annotations/ABC123/ABC123_M.jpg",
-    "json_file_path": "annotations/ABC123/ABC123_M.json",
-    "created_at": "2026-02-17T10:00:00.000000Z",
-    "updated_at": "2026-02-17T10:00:00.000000Z"
   }
 }
 ```
 
----
+### 4.4 Get Articles (with Filters)
 
-#### `POST /api/annotations/sync`
-
-Sync annotation data from an external script (e.g., Python) to the database.
-
-**Headers:** `X-API-Key: YOUR_KEY`  
-**Content-Type:** `application/json`
-
-**Body:**
-```json
+```graphql
 {
-  "article_style": "ABC123",
-  "size": "M",
-  "name": "Front panel annotation",
-  "annotations": {
-    "keypoints": [...],
-    "target_distances": {...}
+  articles(brand_id: 1, article_type_id: 2) {
+    id
+    article_style
+    description
+    brand { name }
+    articleType { name }
   }
 }
 ```
 
-**Response:**
-```json
+### 4.5 Get Article Types
+
+```graphql
 {
-  "success": true,
-  "message": "Annotation synced successfully.",
-  "annotation": {
-    "id": 1,
-    "article_style": "ABC123",
-    "size": "M",
-    "json_file_path": "annotations/ABC123/ABC123_M.json",
-    "reference_image_path": "annotations/ABC123/ABC123_M.jpg"
+  articleTypes {
+    id
+    name
   }
 }
 ```
 
----
+### 4.6 Get Measurements with Size-Specific Values
 
-### 3.3 Uploaded Annotations APIs (Admin-Curated)
-
-These are manually uploaded reference annotations with images.  
-**⚠️ No API key required** for these endpoints.
-
-Prefix: `/api/uploaded-annotations`
-
----
-
-#### `GET /api/uploaded-annotations`
-
-List all uploaded annotations.
-
-**Response:**
-```json
+```graphql
 {
-  "success": true,
-  "annotations": [
-    {
-      "id": 1,
-      "article_style": "ABC123",
-      "size": "M",
-      "side": "front",
-      "color": "red",
-      "name": "Front panel",
-      "annotation_data": {
-        "keypoints": [
-          { "x": 100, "y": 200, "label": "Point 1" }
-        ],
-        "target_distances": { "0-1": 45.5 },
-        "placement_box": { "x": 50, "y": 50, "width": 400, "height": 600 }
-      },
-      "reference_image_url": "/api/uploaded-annotations/ABC123/M/front/image",
-      "image_width": 1920,
-      "image_height": 1080,
-      "annotation_date": "2026-01-15T10:30:00Z",
-      "created_at": "2026-01-15T10:30:00Z",
-      "updated_at": "2026-01-15T10:30:00Z"
+  measurements(article_id: 5) {
+    id
+    code
+    measurement
+    tol_plus
+    tol_minus
+    side
+    sizes {
+      size
+      value
     }
-  ]
+  }
 }
 ```
 
----
+### 4.7 Get Measurement Sizes (Filtered)
 
-#### `GET /api/uploaded-annotations/{articleStyle}/{size}/{side}`
-
-Get a single annotation. `side` is optional (defaults to `front`).
-
-**Optional Query Params:** `?color=red`
-
-**Response:**
-```json
+```graphql
 {
-  "success": true,
-  "annotation": {
-    "id": 1,
-    "article_style": "ABC123",
-    "size": "M",
-    "side": "front",
-    "color": "red",
-    "color_suffix": "_red",
-    "standardized_name": "ABC123_M_front_red",
-    "name": "Front panel",
-    "annotation_data": {
-      "keypoints": [...],
-      "target_distances": {...},
-      "placement_box": {...}
-    },
-    "reference_image_url": "/api/uploaded-annotations/ABC123/M/front/image",
-    "image_width": 1920,
-    "image_height": 1080,
-    "annotation_date": "2026-01-15T10:30:00Z",
-    "created_at": "2026-01-15T10:30:00Z",
-    "updated_at": "2026-01-15T10:30:00Z"
+  measurementSizes(measurement_id: 10, size: "M") {
+    id
+    size
+    value
+  }
+}
+```
+
+### 4.8 Get All Operators
+
+```graphql
+{
+  operators {
+    id
+    full_name
+    employee_id
+    department
+  }
+}
+```
+
+### 4.9 Get Purchase Order Articles
+
+```graphql
+{
+  purchaseOrderArticles(purchase_order_id: 1) {
+    id
+    article_color
+    order_quantity
+    purchaseOrder {
+      po_number
+    }
+  }
+}
+```
+
+### 4.10 Find a Single Record by ID
+
+```graphql
+{
+  article(id: 5) {
+    id
+    article_style
+    description
+    brand { name }
+    measurements {
+      code
+      measurement
+      sizes { size value }
+    }
+  }
+}
+```
+
+### 4.11 Get Everything in One Call
+
+```graphql
+{
+  brands { id name }
+  articleTypes { id name }
+  operators { id full_name employee_id department }
+  purchaseOrders(status: "Active") {
+    id po_number
+    brand { name }
+    articles { article_color order_quantity }
   }
 }
 ```
 
 ---
 
-#### `GET /api/uploaded-annotations/{articleStyle}/{size}/{side}/image`
+## 5. Mutations (Write Data)
 
-Get the reference image as a binary file.
+### 5.1 Verify Operator PIN
 
-**Optional Query Params:** `?color=red`  
-**Returns:** Binary image (`Content-Type: image/jpeg`)
-
-```typescript
-// Display directly in an <img> tag
-<img src={`${API_BASE}/api/uploaded-annotations/ABC123/M/front/image`} />
-```
-
----
-
-#### `GET /api/uploaded-annotations/{articleStyle}/{size}/{side}/image-base64`
-
-Get the reference image as base64 JSON.
-
-**Response:**
-```json
-{
-  "success": true,
-  "image": {
-    "data": "/9j/4AAQSkZJRg...",
-    "mime_type": "image/jpeg",
-    "data_url": "data:image/jpeg;base64,/9j/4AAQ...",
-    "width": 1920,
-    "height": 1080
+```graphql
+mutation {
+  verifyPin(employee_id: "EMP001", pin: "1234") {
+    success
+    message
+    operator {
+      id
+      full_name
+      employee_id
+      department
+    }
   }
 }
 ```
 
----
-
-#### `GET /api/uploaded-annotations/fetch-image-base64`
-
-Same as above but uses **query parameters** (avoids URL encoding issues with slashes in size values).
-
-**Query Params:** `?article_style=ABC123&size=M&side=front`
-
----
-
-#### `GET /api/uploaded-annotations/operator-fetch` ⭐ (Recommended)
-
-**The primary endpoint for the Operator Panel.** Returns both annotation data AND reference image in a single request.
-
-**Query Params:**
-
-| Param | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `article_style` | ✅ | — | Article style code |
-| `size` | ✅ | — | Size designation |
-| `side` | ❌ | `front` | `front` or `back` |
-| `color` | ❌ | — | Color variant |
-
-**Fetch Priority:**
-1. **Uploaded annotations** (manually curated, highest quality)
-2. **Article annotations** (camera-captured, fallback)
-
-**Response:**
+**Response (success):**
 ```json
 {
-  "success": true,
-  "source": "uploaded_annotation",
-  "annotation": {
-    "id": 1,
-    "article_style": "ABC123",
-    "size": "M",
-    "side": "front",
-    "color": "red",
-    "color_suffix": "_red",
-    "standardized_name": "ABC123_M_front_red",
-    "name": "Front panel",
-    "annotation_data": {
-      "keypoints": [
-        { "x": 100, "y": 200, "label": "Shoulder Left" },
-        { "x": 300, "y": 200, "label": "Shoulder Right" }
-      ],
-      "target_distances": {
-        "0-1": 45.5,
-        "1-2": 32.0
-      },
-      "placement_box": {
-        "x": 50, "y": 50, "width": 400, "height": 600
+  "data": {
+    "verifyPin": {
+      "success": true,
+      "message": "PIN verified successfully.",
+      "operator": {
+        "id": "3",
+        "full_name": "John Doe",
+        "employee_id": "EMP001",
+        "department": "QC"
       }
+    }
+  }
+}
+```
+
+**Response (failure):**
+```json
+{
+  "data": {
+    "verifyPin": {
+      "success": false,
+      "message": "Invalid PIN.",
+      "operator": null
+    }
+  }
+}
+```
+
+### 5.2 Save Measurement Results (Bulk Upsert)
+
+```graphql
+mutation {
+  upsertMeasurementResults(results: [
+    {
+      purchase_order_article_id: 1
+      measurement_id: 10
+      size: "M"
+      article_style: "ABC123"
+      measured_value: 52.8
+      expected_value: 52.5
+      tol_plus: 1.0
+      tol_minus: 1.0
+      status: "PASS"
+      operator_id: 3
     },
-    "image_width": 1920,
-    "image_height": 1080,
-    "annotation_date": "2026-01-15T10:30:00Z"
-  },
-  "reference_image": {
-    "data": "/9j/4AAQSkZJRg...",
-    "mime_type": "image/jpeg",
-    "data_url": "data:image/jpeg;base64,/9j/4AAQ...",
-    "width": 1920,
-    "height": 1080
+    {
+      purchase_order_article_id: 1
+      measurement_id: 11
+      size: "M"
+      measured_value: 45.2
+      expected_value: 45.0
+      tol_plus: 0.5
+      tol_minus: 0.5
+      status: "FAIL"
+      operator_id: 3
+    }
+  ]) {
+    success
+    message
+    count
   }
 }
 ```
 
----
+### 5.3 Save Detailed Results (Per-Side)
 
-### 3.4 Operator Panel APIs (NEW)
-
-Endpoints for the Electron operator panel workflow: brands → articles → POs → measurements.
-All require `X-API-Key` header. Prefix: `/api/camera`
-
----
-
-#### `GET /api/camera/brands`
-
-Get brands that have active purchase orders.
-
-**Response:**
-```json
-{
-  "success": true,
-  "brands": [
-    { "id": 1, "name": "Brand X" },
-    { "id": 2, "name": "Brand Y" }
-  ]
-}
-```
-
----
-
-#### `GET /api/camera/article-types?brand_id=X`
-
-Get article types, optionally filtered by brand.
-
-**Response:**
-```json
-{
-  "success": true,
-  "article_types": [
-    { "id": 1, "name": "T-Shirt" },
-    { "id": 2, "name": "Polo" }
-  ]
-}
-```
-
----
-
-#### `GET /api/camera/articles-filtered?brand_id=X&type_id=Y`
-
-Get articles filtered by brand and/or type.
-
-**Response:**
-```json
-{
-  "success": true,
-  "articles": [
-    {
-      "id": 1,
-      "article_style": "ABC123",
-      "brand_id": 1,
-      "brand_name": "Brand X",
-      "article_type_id": 2,
-      "article_type_name": "Polo",
-      "description": "Men's Polo Shirt"
-    }
-  ]
-}
-```
-
----
-
-#### `GET /api/camera/purchase-orders?brand_id=X`
-
-Get active purchase orders, optionally filtered by brand.
-
-**Response:**
-```json
-{
-  "success": true,
-  "purchase_orders": [
-    {
-      "id": 1,
-      "po_number": "PO-2026-001",
-      "date": "2026-02-15",
-      "brand_id": 1,
-      "country": "Pakistan",
-      "status": "active"
-    }
-  ]
-}
-```
-
----
-
-#### `GET /api/camera/po-articles?po_id=X`
-
-Get articles in a purchase order.
-
-**Query Params:** `po_id` (required)
-
-**Response:**
-```json
-{
-  "success": true,
-  "po_articles": [
-    {
-      "id": 1,
-      "purchase_order_id": 1,
-      "po_number": "PO-2026-001",
-      "article_type_id": 2,
-      "article_type_name": "Polo",
-      "article_style": "ABC123",
-      "article_description": "Men's Polo",
-      "article_color": "Navy",
-      "order_quantity": 500
-    }
-  ]
-}
-```
-
----
-
-#### `GET /api/camera/measurement-specs?article_id=X&size=Y`
-
-Get measurement specs with 2-strategy lookup (size-specific values from `measurement_sizes` first).
-
-**Query Params:** `article_id` (required), `size` (optional)
-
-**Response:**
-```json
-{
-  "success": true,
-  "article_id": 1,
-  "size": "M",
-  "specs": [
-    {
-      "measurement_id": 10,
-      "code": "A",
-      "measurement": "Chest Width",
-      "expected_value": 52.5,
-      "tol_plus": 1.0,
-      "tol_minus": 1.0,
-      "side": "front"
-    }
-  ]
-}
-```
-
----
-
-#### `GET /api/camera/available-sizes?article_id=X`
-
-Get distinct sizes available for an article.
-
-**Response:**
-```json
-{
-  "success": true,
-  "article_id": 1,
-  "sizes": ["S", "M", "L", "XL"]
-}
-```
-
----
-
-#### `GET /api/camera/measurement-results?po_article_id=X&size=Y`
-
-Load existing measurement results.
-
-**Query Params:** `po_article_id` (required), `size` (optional)
-
-**Response:**
-```json
-{
-  "success": true,
-  "results": [
-    {
-      "id": 1,
-      "purchase_order_article_id": 1,
-      "measurement_id": 10,
-      "size": "M",
-      "measured_value": 52.8,
-      "expected_value": 52.5,
-      "status": "PASS",
-      "operator_id": 3
-    }
-  ]
-}
-```
-
----
-
-#### `POST /api/camera/measurement-results`
-
-Save/upsert measurement results in bulk.
-
-**Body:**
-```json
-{
-  "results": [
-    {
-      "purchase_order_article_id": 1,
-      "measurement_id": 10,
-      "size": "M",
-      "article_style": "ABC123",
-      "measured_value": 52.8,
-      "expected_value": 52.5,
-      "tol_plus": 1.0,
-      "tol_minus": 1.0,
-      "status": "PASS",
-      "operator_id": 3
-    }
-  ]
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Measurement results saved successfully.",
-  "count": 1
-}
-```
-
----
-
-#### `POST /api/camera/measurement-results-detailed`
-
-Save per-side measurement results (DELETE + INSERT for the given combination).
-
-**Body:**
-```json
-{
-  "purchase_order_article_id": 1,
-  "size": "M",
-  "side": "front",
-  "results": [
-    {
-      "measurement_id": 10,
-      "article_style": "ABC123",
-      "measured_value": 52.8,
-      "expected_value": 52.5,
-      "tol_plus": 1.0,
-      "tol_minus": 1.0,
-      "status": "PASS",
-      "operator_id": 3
-    }
-  ]
-}
-```
-
----
-
-#### `POST /api/camera/measurement-sessions`
-
-Save/upsert a QC session record.
-
-**Body:**
-```json
-{
-  "purchase_order_article_id": 1,
-  "size": "M",
-  "article_style": "ABC123",
-  "article_id": 5,
-  "purchase_order_id": 1,
-  "operator_id": 3,
-  "status": "in_progress",
-  "front_side_complete": true,
-  "back_side_complete": false,
-  "front_qc_result": "PASS",
-  "back_qc_result": null
-}
-```
-
----
-
-#### `POST /api/camera/verify-pin`
-
-Verify operator PIN for authentication.
-
-**Body:**
-```json
-{
-  "employee_id": "EMP001",
-  "pin": "1234"
-}
-```
-
-**Success Response:**
-```json
-{
-  "success": true,
-  "message": "PIN verified successfully.",
-  "operator": {
-    "id": 3,
-    "full_name": "John Doe",
-    "employee_id": "EMP001",
-    "department": "Quality Control"
+```graphql
+mutation {
+  upsertMeasurementResultsDetailed(
+    purchase_order_article_id: 1
+    size: "M"
+    side: "front"
+    results: [
+      {
+        measurement_id: 10
+        article_style: "ABC123"
+        measured_value: 52.8
+        expected_value: 52.5
+        tol_plus: 1.0
+        tol_minus: 1.0
+        status: "PASS"
+        operator_id: 3
+      }
+    ]
+  ) {
+    success
+    message
+    count
   }
 }
 ```
 
-**Failure Response (401):**
-```json
-{
-  "success": false,
-  "message": "Invalid PIN."
+### 5.4 Save QC Session
+
+```graphql
+mutation {
+  upsertMeasurementSession(
+    purchase_order_article_id: 1
+    size: "M"
+    article_style: "ABC123"
+    article_id: 5
+    purchase_order_id: 1
+    operator_id: 3
+    status: "in_progress"
+    front_side_complete: true
+    back_side_complete: false
+    front_qc_result: "PASS"
+    back_qc_result: null
+  ) {
+    success
+    message
+  }
 }
 ```
 
----
+### 5.5 Upload Image
 
-## 4. Complete TypeScript Integration Module
-
-Copy this into your Electron app as `api/magicqc.ts`:
+Image upload uses `multipart/form-data` (not JSON). Follow the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec):
 
 ```typescript
-// ============================================================
-// MagicQC API Client for Electron
-// ============================================================
+const formData = new FormData();
 
-const API_BASE = 'https://magicqc.online';
-const API_KEY  = 'YOUR_API_KEY_HERE';
+// 1. operations
+formData.append('operations', JSON.stringify({
+  query: `mutation ($file: Upload!) {
+    uploadImage(file: $file, name: "front-view", folder: "brand-x/article-123") {
+      success
+      message
+      path
+      url
+    }
+  }`,
+  variables: { file: null }
+}));
 
-// ---------- Types ----------
+// 2. map
+formData.append('map', JSON.stringify({ '0': ['variables.file'] }));
 
-interface Article {
-  id: number;
-  article_style: string;
-  brand_name: string;
-  description: string;
+// 3. file
+formData.append('0', fileBlob, 'photo.jpg');
+
+const response = await fetch('https://magicqc.online/graphql', {
+  method: 'POST',
+  headers: { 'X-API-Key': API_KEY },
+  body: formData,
+});
+```
+
+**Constraints:** jpg/jpeg/png only, max 10MB.  
+**Storage:** Files saved to `storage/app/public/uploads/{folder}/{name}.{ext}`  
+**URL returned:** `https://magicqc.online/storage/uploads/{folder}/{name}.{ext}`
+
+---
+
+## 6. Complete TypeScript Client
+
+Copy this into your Electron app as `api/magicqc-graphql.ts`:
+
+```typescript
+interface GraphQLResponse<T = any> {
+  data?: T;
+  errors?: Array<{ message: string; extensions?: any }>;
 }
 
-interface Keypoint {
-  x: number;
-  y: number;
-  label: string;
-}
-
-interface AnnotationData {
-  keypoints: Keypoint[];
-  target_distances: Record<string, number>;
-  placement_box?: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
-}
-
-interface Annotation {
-  id: number;
-  article_style: string;
-  size: string;
-  side: string;
-  color: string | null;
-  color_suffix: string | null;
-  standardized_name: string;
-  name: string;
-  annotation_data: AnnotationData;
-  image_width: number;
-  image_height: number;
-  annotation_date: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
-interface ReferenceImage {
-  data: string;        // base64 string
-  mime_type: string;
-  data_url: string;    // ready-to-use "data:image/jpeg;base64,..."
-  width: number;
-  height: number;
-}
-
-interface OperatorFetchResult {
-  success: boolean;
-  source: 'uploaded_annotation' | 'article_annotation';
-  annotation: Annotation;
-  reference_image: ReferenceImage | null;
-}
-
-interface ArticleImage {
-  id: number;
-  size: string;
-  image_path: string;
-  image_url: string;
-  image_name: string;
-  created_at: string;
-}
-
-// ---------- API Client ----------
-
-class MagicQCClient {
-  private baseUrl: string;
+class MagicQCGraphQL {
+  private url: string;
   private apiKey: string;
 
-  constructor(baseUrl: string = API_BASE, apiKey: string = API_KEY) {
-    this.baseUrl = baseUrl;
+  constructor(url: string, apiKey: string) {
+    this.url = url;
     this.apiKey = apiKey;
   }
 
-  private async request(endpoint: string, options: RequestInit = {}): Promise<any> {
-    const url = `${this.baseUrl}${endpoint}`;
-    const response = await fetch(url, {
-      ...options,
+  // ── Core query method ──────────────────────────────────────────
+  async query<T = any>(
+    graphqlQuery: string,
+    variables?: Record<string, any>
+  ): Promise<GraphQLResponse<T>> {
+    const response = await fetch(this.url, {
+      method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
         'X-API-Key': this.apiKey,
-        'Accept': 'application/json',
-        ...options.headers,
       },
+      body: JSON.stringify({ query: graphqlQuery, variables }),
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: response.statusText }));
-      throw new Error(error.message || `HTTP ${response.status}`);
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 
     return response.json();
   }
 
-  // ------ Connection ------
+  // ── Convenience methods ────────────────────────────────────────
 
-  async ping(): Promise<{ success: boolean; authenticated: boolean; server_time: string }> {
-    return this.request('/api/camera/ping');
+  async getBrands() {
+    return this.query<{ brands: Array<{ id: string; name: string }> }>(`
+      { brands { id name } }
+    `);
   }
 
-  // ------ Articles ------
-
-  async getArticles(): Promise<Article[]> {
-    const data = await this.request('/api/camera/articles');
-    return data.articles;
+  async getArticleTypes() {
+    return this.query<{ articleTypes: Array<{ id: string; name: string }> }>(`
+      { articleTypes { id name } }
+    `);
   }
 
-  async getArticleImages(articleId: number): Promise<ArticleImage[]> {
-    const data = await this.request(`/api/camera/articles/${articleId}/images`);
-    return data.images;
+  async getArticles(brandId?: number, typeId?: number) {
+    const filters: string[] = [];
+    if (brandId) filters.push(`brand_id: ${brandId}`);
+    if (typeId) filters.push(`article_type_id: ${typeId}`);
+    const args = filters.length ? `(${filters.join(', ')})` : '';
+
+    return this.query(`{
+      articles${args} {
+        id article_style description
+        brand { id name }
+        articleType { id name }
+      }
+    }`);
   }
 
-  // ------ Image Upload ------
+  async getPurchaseOrders(status?: string, brandId?: number) {
+    const filters: string[] = [];
+    if (status) filters.push(`status: "${status}"`);
+    if (brandId) filters.push(`brand_id: ${brandId}`);
+    const args = filters.length ? `(${filters.join(', ')})` : '';
 
-  async uploadImage(articleId: number, size: string, imageFile: File | Blob): Promise<any> {
+    return this.query(`{
+      purchaseOrders${args} {
+        id po_number date country status
+        brand { id name }
+        articles { id article_color order_quantity }
+      }
+    }`);
+  }
+
+  async getPOArticles(poId: number) {
+    return this.query(`{
+      purchaseOrderArticles(purchase_order_id: ${poId}) {
+        id article_color order_quantity
+        purchaseOrder { po_number }
+      }
+    }`);
+  }
+
+  async getMeasurements(articleId: number) {
+    return this.query(`{
+      measurements(article_id: ${articleId}) {
+        id code measurement tol_plus tol_minus side
+        sizes { size value }
+      }
+    }`);
+  }
+
+  async getMeasurementSizes(measurementId: number, size?: string) {
+    const filters: string[] = [`measurement_id: ${measurementId}`];
+    if (size) filters.push(`size: "${size}"`);
+
+    return this.query(`{
+      measurementSizes(${filters.join(', ')}) {
+        id size value
+      }
+    }`);
+  }
+
+  async getOperators() {
+    return this.query(`{
+      operators { id full_name employee_id department contact_number }
+    }`);
+  }
+
+  async verifyPin(employeeId: string, pin: string) {
+    return this.query(`
+      mutation {
+        verifyPin(employee_id: "${employeeId}", pin: "${pin}") {
+          success message
+          operator { id full_name employee_id department }
+        }
+      }
+    `);
+  }
+
+  async saveMeasurementResults(results: any[]) {
+    const resultsStr = JSON.stringify(results)
+      .replace(/"(\w+)":/g, '$1:');  // Convert to GraphQL format
+
+    return this.query(`
+      mutation {
+        upsertMeasurementResults(results: ${resultsStr}) {
+          success message count
+        }
+      }
+    `);
+  }
+
+  async saveDetailedResults(
+    poArticleId: number, size: string, side: string, results: any[]
+  ) {
+    const resultsStr = JSON.stringify(results)
+      .replace(/"(\w+)":/g, '$1:');
+
+    return this.query(`
+      mutation {
+        upsertMeasurementResultsDetailed(
+          purchase_order_article_id: ${poArticleId}
+          size: "${size}"
+          side: "${side}"
+          results: ${resultsStr}
+        ) { success message count }
+      }
+    `);
+  }
+
+  async saveSession(session: {
+    purchase_order_article_id: number;
+    size: string;
+    article_style?: string;
+    article_id?: number;
+    purchase_order_id?: number;
+    operator_id?: number;
+    status?: string;
+    front_side_complete?: boolean;
+    back_side_complete?: boolean;
+    front_qc_result?: string;
+    back_qc_result?: string;
+  }) {
+    const args = Object.entries(session)
+      .filter(([_, v]) => v !== undefined && v !== null)
+      .map(([k, v]) => typeof v === 'string' ? `${k}: "${v}"` : `${k}: ${v}`)
+      .join('\n      ');
+
+    return this.query(`
+      mutation {
+        upsertMeasurementSession(
+          ${args}
+        ) { success message }
+      }
+    `);
+  }
+
+  // ── Image upload ───────────────────────────────────────────────
+  async uploadImage(file: File | Blob, name: string, folder?: string) {
     const formData = new FormData();
-    formData.append('article_id', articleId.toString());
-    formData.append('size', size);
-    formData.append('image', imageFile);
 
-    return this.request('/api/camera/upload', {
+    const query = `mutation ($file: Upload!) {
+      uploadImage(file: $file, name: "${name}", folder: "${folder || ''}") {
+        success message path url
+      }
+    }`;
+
+    formData.append('operations', JSON.stringify({
+      query,
+      variables: { file: null },
+    }));
+    formData.append('map', JSON.stringify({ '0': ['variables.file'] }));
+    formData.append('0', file);
+
+    const response = await fetch(this.url, {
       method: 'POST',
+      headers: { 'X-API-Key': this.apiKey },
       body: formData,
-      headers: { 'X-API-Key': this.apiKey },  // Don't set Content-Type, let browser handle it
     });
-  }
 
-  async deleteImage(imageId: number): Promise<void> {
-    await this.request(`/api/camera/images/${imageId}`, { method: 'DELETE' });
-  }
-
-  // ------ Annotations (Camera-Captured) ------
-
-  async listAnnotations(): Promise<any[]> {
-    const data = await this.request('/api/annotations');
-    return data.annotations;
-  }
-
-  async getAnnotation(articleStyle: string, size: string): Promise<any | null> {
-    const data = await this.request(
-      `/api/annotations/${encodeURIComponent(articleStyle)}/${encodeURIComponent(size)}`
-    );
-    return data.annotation;
-  }
-
-  async syncAnnotation(articleStyle: string, size: string, annotations: any, name?: string): Promise<any> {
-    return this.request('/api/annotations/sync', {
-      method: 'POST',
-      headers: {
-        'X-API-Key': this.apiKey,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ article_style: articleStyle, size, annotations, name }),
-    });
-  }
-
-  // ------ Uploaded Annotations (Admin-Curated) ------
-  // NOTE: These endpoints do NOT require API key
-
-  async getUploadedAnnotations(): Promise<Annotation[]> {
-    const data = await this.request('/api/uploaded-annotations');
-    return data.annotations;
-  }
-
-  async getUploadedAnnotation(
-    articleStyle: string,
-    size: string,
-    side: string = 'front',
-    color?: string
-  ): Promise<Annotation | null> {
-    let url = `/api/uploaded-annotations/${encodeURIComponent(articleStyle)}/${encodeURIComponent(size)}/${side}`;
-    if (color) url += `?color=${encodeURIComponent(color)}`;
-
-    const data = await this.request(url);
-    return data.annotation;
-  }
-
-  async getImageBase64(
-    articleStyle: string,
-    size: string,
-    side: string = 'front'
-  ): Promise<ReferenceImage | null> {
-    const data = await this.request(
-      `/api/uploaded-annotations/fetch-image-base64?article_style=${encodeURIComponent(articleStyle)}&size=${encodeURIComponent(size)}&side=${side}`
-    );
-    return data.image;
-  }
-
-  /**
-   * ⭐ RECOMMENDED — Single call to get annotation + reference image.
-   * Uses smart priority: uploaded_annotations > article_annotations.
-   */
-  async operatorFetch(
-    articleStyle: string,
-    size: string,
-    side: string = 'front',
-    color?: string
-  ): Promise<OperatorFetchResult> {
-    const params = new URLSearchParams({ article_style: articleStyle, size, side });
-    if (color) params.append('color', color);
-    return this.request(`/api/uploaded-annotations/operator-fetch?${params}`);
+    return response.json();
   }
 }
 
-// ------ Export ------
-
-export const magicQC = new MagicQCClient();
-export { MagicQCClient };
-export type { Article, Annotation, AnnotationData, Keypoint, ReferenceImage, OperatorFetchResult, ArticleImage };
+// ── Usage ──────────────────────────────────────────────────────
+export const magicQC = new MagicQCGraphQL(
+  process.env.MAGICQC_API_URL || 'https://magicqc.online/graphql',
+  process.env.MAGICQC_API_KEY || ''
+);
 ```
 
 ---
 
-## 5. Usage Examples
+## 7. Migration from REST Endpoints
 
-### Test Connection
+If you were using the old REST endpoints, here's the mapping:
 
-```typescript
-import { magicQC } from './api/magicqc';
-
-const status = await magicQC.ping();
-console.log('Connected:', status.success);
-console.log('Authenticated:', status.authenticated);
-```
-
-### Load Annotation for QC Measurement
-
-```typescript
-// ⭐ Best approach — single request, gets everything
-const result = await magicQC.operatorFetch('ABC123', 'M', 'front', 'red');
-
-if (result.success) {
-  console.log('Source:', result.source);  // "uploaded_annotation" or "article_annotation"
-
-  // Annotation data
-  const keypoints = result.annotation.annotation_data.keypoints;
-  const distances = result.annotation.annotation_data.target_distances;
-  const box = result.annotation.annotation_data.placement_box;
-
-  // Display reference image
-  if (result.reference_image) {
-    const imgElement = document.getElementById('reference-img') as HTMLImageElement;
-    imgElement.src = result.reference_image.data_url;  // "data:image/jpeg;base64,..."
-  }
-}
-```
-
-### Upload a Camera Capture
-
-```typescript
-// From file input
-const fileInput = document.getElementById('camera-file') as HTMLInputElement;
-const file = fileInput.files[0];
-
-const result = await magicQC.uploadImage(1, 'M', file);
-console.log('Uploaded:', result.image.image_url);
-```
-
-### List All Articles and Their Images
-
-```typescript
-const articles = await magicQC.getArticles();
-for (const article of articles) {
-  console.log(`${article.article_style} — ${article.brand_name}`);
-  const images = await magicQC.getArticleImages(article.id);
-  console.log(`  Images: ${images.length}`);
-}
-```
+| Old REST Endpoint | GraphQL Equivalent |
+|---|---|
+| `GET /api/camera/brands` | `{ brands { id name } }` |
+| `GET /api/camera/article-types?brand_id=X` | `{ articleTypes { id name } }` |
+| `GET /api/camera/articles-filtered?brand_id=X&type_id=Y` | `{ articles(brand_id: X, article_type_id: Y) { ... } }` |
+| `GET /api/camera/purchase-orders?brand_id=X` | `{ purchaseOrders(brand_id: X, status: "Active") { ... } }` |
+| `GET /api/camera/purchase-orders-all?status=X` | `{ purchaseOrders(status: "X") { ... } }` |
+| `GET /api/camera/po-articles?po_id=X` | `{ purchaseOrderArticles(purchase_order_id: X) { ... } }` |
+| `GET /api/camera/measurement-specs?article_id=X&size=Y` | `{ measurements(article_id: X) { ... sizes(size: "Y") { ... } } }` |
+| `GET /api/camera/available-sizes?article_id=X` | `{ measurements(article_id: X) { sizes { size } } }` — get distinct sizes |
+| `GET /api/camera/measurement-results?po_article_id=X` | ⚠️ Use raw query (not in GraphQL schema — table may not exist) |
+| `POST /api/camera/measurement-results` | `mutation { upsertMeasurementResults(results: [...]) { ... } }` |
+| `POST /api/camera/measurement-results-detailed` | `mutation { upsertMeasurementResultsDetailed(...) { ... } }` |
+| `POST /api/camera/measurement-sessions` | `mutation { upsertMeasurementSession(...) { ... } }` |
+| `POST /api/camera/verify-pin` | `mutation { verifyPin(employee_id: "...", pin: "...") { ... } }` |
+| `GET /api/camera/operators` | `{ operators { id full_name employee_id department } }` |
 
 ---
 
-## 6. Error Handling
+## 8. Error Handling
 
-All endpoints return consistent error responses:
+GraphQL errors are returned in the `errors` array alongside `data`:
 
-| HTTP Status | Meaning | Example |
-|-------------|---------|---------|
-| `200` | Success | Normal response |
-| `201` | Created | Image uploaded successfully |
-| `400` | Bad Request | Missing required parameters |
-| `401` | Unauthorized | Invalid or missing API key |
-| `404` | Not Found | Annotation/image doesn't exist |
-| `422` | Validation Error | Invalid field values |
-| `500` | Server Error | Internal server error |
-
-**Error response format:**
 ```json
 {
-  "success": false,
-  "message": "Description of the error"
+  "data": null,
+  "errors": [
+    {
+      "message": "Unauthenticated.",
+      "extensions": { "category": "authentication" }
+    }
+  ]
 }
 ```
 
-**Robust error handling example:**
+**TypeScript error handling:**
 ```typescript
-try {
-  const result = await magicQC.operatorFetch('ABC123', 'M');
-  if (!result.success) {
-    console.error('API error:', result.message);
-    return;
-  }
-  // Use result...
-} catch (error) {
-  if (error.message.includes('401')) {
-    console.error('Invalid API key — contact admin for a new key');
-  } else if (error.message.includes('Failed to fetch')) {
-    console.error('Server unreachable — check internet connection');
+const { data, errors } = await magicQC.query('{ brands { id name } }');
+
+if (errors) {
+  const isAuthError = errors.some(e => e.extensions?.category === 'authentication');
+  if (isAuthError) {
+    console.error('Invalid API key — contact admin');
   } else {
-    console.error('Unexpected error:', error);
+    console.error('GraphQL errors:', errors.map(e => e.message));
   }
+  return;
 }
+
+// Use data safely
+console.log(data.brands);
 ```
 
 ---
 
-## 7. Endpoint Summary Table
+## 9. Remaining REST Endpoints (Still Active)
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| `GET` | `/api/camera/ping` | Optional | Test connection |
-| `GET` | `/api/camera/articles` | ✅ Key | List all articles |
+These REST endpoints are **NOT** part of GraphQL — use them directly:
+
+| Method | Endpoint | Auth | Purpose |
+|--------|----------|------|---------|
+| `GET` | `/api/camera/ping` | Optional | Health check |
+| `GET` | `/api/camera/articles` | ✅ Key | List articles (camera view) |
 | `GET` | `/api/camera/articles/{id}/images` | ✅ Key | Get article images |
 | `POST` | `/api/camera/upload` | ✅ Key | Upload camera image |
 | `DELETE` | `/api/camera/images/{id}` | ✅ Key | Delete an image |
-| `GET` | `/api/camera/brands` | ✅ Key | Brands with active POs |
-| `GET` | `/api/camera/article-types` | ✅ Key | Article types (filter by brand) |
-| `GET` | `/api/camera/articles-filtered` | ✅ Key | Articles (filter by brand+type) |
-| `GET` | `/api/camera/purchase-orders` | ✅ Key | Active purchase orders |
-| `GET` | `/api/camera/po-articles` | ✅ Key | Articles in a PO |
-| `GET` | `/api/camera/measurement-specs` | ✅ Key | Measurement specs (2-strategy) |
-| `GET` | `/api/camera/available-sizes` | ✅ Key | Available sizes for article |
-| `GET` | `/api/camera/measurement-results` | ✅ Key | Load measurement results |
-| `POST` | `/api/camera/measurement-results` | ✅ Key | Save/upsert results (bulk) |
-| `POST` | `/api/camera/measurement-results-detailed` | ✅ Key | Save per-side results |
-| `POST` | `/api/camera/measurement-sessions` | ✅ Key | Save QC session |
-| `POST` | `/api/camera/verify-pin` | ✅ Key | Operator PIN verification |
-| `GET` | `/api/annotations` | ✅ Key | List camera annotations |
-| `GET` | `/api/annotations/{style}/{size}` | ✅ Key | Get annotation |
-| `POST` | `/api/annotations/sync` | ✅ Key | Sync annotation from script |
-| `GET` | `/api/uploaded-annotations` | ❌ None | List uploaded annotations |
-| `GET` | `/api/uploaded-annotations/{style}/{size}/{side}` | ❌ None | Get single annotation |
-| `GET` | `/api/uploaded-annotations/{style}/{size}/{side}/image` | ❌ None | Get reference image (file) |
-| `GET` | `/api/uploaded-annotations/{style}/{size}/{side}/image-base64` | ❌ None | Get image (base64) |
-| `GET` | `/api/uploaded-annotations/fetch-image-base64` | ❌ None | Get image via query params |
-| `GET` | `/api/uploaded-annotations/operator-fetch` | ❌ None | ⭐ Get annotation + image |
+| `GET` | `/api/annotations/...` | ✅ Key | Camera annotations |
+| `GET` | `/api/uploaded-annotations/...` | ❌ None | Uploaded annotations |
 
 ---
 
-## 8. Notes & Best Practices
+## 10. Tips & Best Practices
 
-1. **CORS is fully open** — the Electron app can call any endpoint without restrictions.
-2. **Use `operator-fetch`** as the primary endpoint for the measurement operator panel — it resolves the correct annotation with the right priority in a single request.
-3. **Use `fetch-image-base64`** (query params) instead of the path-based image endpoint if your size values contain slashes (e.g., `1/2`).
-4. **Images are cached** — the image endpoints return `Cache-Control: public, max-age=31536000`. Your app can cache reference images locally.
-5. **File size limits**: Camera images max 20MB, annotation JSON max 10MB, uploaded annotation images max 50MB.
-6. **All timestamps** are in ISO 8601 format (UTC).
-7. **The API key** is a 64-character random string. Keep it secret and do not commit it to source control. Use environment variables:
-   ```typescript
-   const API_KEY = process.env.MAGICQC_API_KEY;
-   ```
-
----
-
-## 9. Troubleshooting
-
-| Problem | Solution |
-|---------|----------|
-| `Failed to fetch` | Check internet connection and that `https://magicqc.online` is reachable |
-| `401 Unauthorized` | Verify your API key is correct. Contact admin for a new key |
-| `404 Not Found` | The article/annotation doesn't exist. Check style and size values |
-| `CORS error in browser` | This shouldn't happen (CORS is open). Check if you're hitting the right URL |
-| `SSL certificate error` | Ensure you're using `https://` not `http://` |
-| `Empty reference image` | The annotation has no uploaded image yet. Ask admin to upload via dashboard |
-| `Timeout on image endpoints` | Large images may take time. Consider using base64 endpoints and caching locally |
+1. **Request only fields you need** — GraphQL won't fetch data you don't ask for, making responses faster.
+2. **Batch queries** — You can request `brands`, `purchaseOrders`, and `operators` in a single call.
+3. **Nested relationships** — Access related data without extra calls: `purchaseOrders { brand { name } articles { ... } }`.
+4. **CORS is fully open** — No restrictions from the Electron app.
+5. **The API key** is a 64-character string. Store in `.env`, never hardcode.
+6. **Image uploads** use `multipart/form-data`, not JSON. See Section 5.5.
+7. **All IDs** are returned as strings in GraphQL. Cast to number if needed: `parseInt(id)`.
