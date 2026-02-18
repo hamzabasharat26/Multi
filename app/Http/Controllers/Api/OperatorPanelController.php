@@ -572,4 +572,57 @@ class OperatorPanelController extends Controller
             ],
         ]);
     }
+
+    // =========================================================================
+    // 13. GET /api/camera/purchase-orders-all?status=Active
+    //     List ALL purchase orders across all brands (admin view)
+    // =========================================================================
+    public function getAllPurchaseOrders(Request $request): JsonResponse
+    {
+        if ($error = $this->requireApiKey($request)) return $error;
+
+        $query = PurchaseOrder::with('brand:id,name,description')
+            ->orderBy('date', 'desc')
+            ->orderBy('po_number', 'desc')
+            ->limit(50);
+
+        if ($request->query('status')) {
+            $query->where('status', $request->query('status'));
+        }
+
+        $pos = $query->get()->map(function ($po) {
+            return [
+                'id' => $po->id,
+                'po_number' => $po->po_number,
+                'date' => $po->date?->toDateString(),
+                'brand_id' => $po->brand_id,
+                'brand_name' => $po->brand->name ?? null,
+                'brand_description' => $po->brand->description ?? null,
+                'country' => $po->country,
+                'status' => $po->status,
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'purchase_orders' => $pos,
+        ]);
+    }
+
+    // =========================================================================
+    // 14. GET /api/camera/operators — List all operators (no PIN exposed)
+    // =========================================================================
+    public function getOperators(Request $request): JsonResponse
+    {
+        if ($error = $this->requireApiKey($request)) return $error;
+
+        $operators = Operator::select('id', 'full_name', 'employee_id', 'department', 'contact_number')
+            ->orderBy('full_name')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'operators' => $operators,
+        ]);
+    }
 }

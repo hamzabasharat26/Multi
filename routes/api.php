@@ -66,6 +66,12 @@ Route::prefix('camera')->group(function () {
 
     // Operator PIN verification
     Route::post('/verify-pin', [OperatorPanelController::class, 'verifyPin']);
+
+    // All purchase orders (admin view, cross-brand)
+    Route::get('/purchase-orders-all', [OperatorPanelController::class, 'getAllPurchaseOrders']);
+
+    // List all operators (no PIN exposed)
+    Route::get('/operators', [OperatorPanelController::class, 'getOperators']);
 });
 
 // Annotation API routes (protected by API key in controller)
