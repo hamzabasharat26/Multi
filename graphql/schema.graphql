@@ -1,0 +1,415 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"A date string with format `Y-m-d`, e.g. `2026-02-18`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+"Can be used as an argument to upload files using https://github.com/jaydenseric/graphql-multipart-request-spec"
+scalar Upload @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Upload")
+
+# ===========================================================================
+# TYPES — Each maps to an Eloquent model
+# ===========================================================================
+
+type Brand {
+    id: ID!
+    name: String!
+    purchaseOrders: [PurchaseOrder!]! @hasMany
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type ArticleType {
+    id: ID!
+    name: String!
+    articles: [Article!]! @hasMany
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Article {
+    id: ID!
+    brand_id: Int
+    article_type_id: Int
+    article_style: String
+    description: String
+    brand: Brand @belongsTo
+    articleType: ArticleType @belongsTo
+    measurements: [Measurement!]! @hasMany
+    images: [ArticleImage!]! @hasMany
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type PurchaseOrder {
+    id: ID!
+    po_number: String
+    date: Date
+    brand_id: Int
+    country: String
+    status: String
+    brand: Brand @belongsTo
+    articles: [PurchaseOrderArticle!]! @hasMany
+    clientReferences: [PurchaseOrderClientReference!]! @hasMany
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type PurchaseOrderArticle {
+    id: ID!
+    purchase_order_id: Int
+    article_id: Int
+    article_color: String
+    order_quantity: Int
+    purchaseOrder: PurchaseOrder @belongsTo
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type PurchaseOrderClientReference {
+    id: ID!
+    purchase_order_id: Int
+    reference_name: String
+    reference_value: String
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Measurement {
+    id: ID!
+    article_id: Int
+    code: String
+    measurement: String
+    tol_plus: Float
+    tol_minus: Float
+    side: String
+    article: Article @belongsTo
+    sizes: [MeasurementSize!]! @hasMany
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type MeasurementSize {
+    id: ID!
+    measurement_id: Int
+    size: String
+    value: Float
+    measurement_ref: Measurement @belongsTo(relation: "measurement")
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Operator {
+    id: ID!
+    full_name: String
+    employee_id: String
+    department: String
+    contact_number: String
+    "login_pin is always hidden (see Operator model $hidden)"
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type ArticleImage {
+    id: ID!
+    article_id: Int
+    image_path: String
+    article: Article @belongsTo
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type UploadedAnnotation {
+    id: ID!
+    article_style: String
+    size: String
+    side: String
+    annotation_data: String
+    reference_image_path: String
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type ArticleAnnotation {
+    id: ID!
+    article_style: String
+    size: String
+    annotation_data: String
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type InspectionRecord {
+    id: ID!
+    article_id: Int
+    purchase_order_id: Int
+    operator_id: Int
+    status: String
+    notes: String
+    article: Article @belongsTo
+    purchaseOrder: PurchaseOrder @belongsTo
+    operator: Operator @belongsTo
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+# --- Dynamically-created tables (no Eloquent model, custom resolvers) ---
+
+type MeasurementResult {
+    id: ID
+    purchase_order_article_id: Int
+    measurement_id: Int
+    size: String
+    article_style: String
+    measured_value: Float
+    expected_value: Float
+    tol_plus: Float
+    tol_minus: Float
+    status: String
+    operator_id: Int
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type MeasurementResultDetailed {
+    id: ID
+    purchase_order_article_id: Int
+    measurement_id: Int
+    size: String
+    side: String
+    article_style: String
+    measured_value: Float
+    expected_value: Float
+    tol_plus: Float
+    tol_minus: Float
+    status: String
+    operator_id: Int
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type MeasurementSession {
+    id: ID
+    purchase_order_article_id: Int
+    size: String
+    article_style: String
+    article_id: Int
+    purchase_order_id: Int
+    operator_id: Int
+    status: String
+    front_side_complete: Boolean
+    back_side_complete: Boolean
+    front_qc_result: String
+    back_qc_result: String
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+# ===========================================================================
+# QUERIES — Read data from any model
+# ===========================================================================
+
+type Query {
+    "Get all brands."
+    brands: [Brand!]! @all @guard(with: ["api-key"])
+
+    "Find a single brand by ID."
+    brand(id: ID! @eq): Brand @find @guard(with: ["api-key"])
+
+    "Get all article types."
+    articleTypes: [ArticleType!]! @all @guard(with: ["api-key"])
+
+    "Get articles with optional filtering."
+    articles(
+        brand_id: Int @eq
+        article_type_id: Int @eq
+    ): [Article!]! @all @guard(with: ["api-key"])
+
+    "Find a single article by ID."
+    article(id: ID! @eq): Article @find @guard(with: ["api-key"])
+
+    "Get purchase orders with optional filtering."
+    purchaseOrders(
+        brand_id: Int @eq
+        status: String @eq
+    ): [PurchaseOrder!]! @all @guard(with: ["api-key"])
+
+    "Find a single purchase order by ID."
+    purchaseOrder(id: ID! @eq): PurchaseOrder @find @guard(with: ["api-key"])
+
+    "Get purchase order articles with optional filtering."
+    purchaseOrderArticles(
+        purchase_order_id: Int @eq
+        article_id: Int @eq
+    ): [PurchaseOrderArticle!]! @all @guard(with: ["api-key"])
+
+    "Get measurements for an article."
+    measurements(
+        article_id: Int! @eq
+    ): [Measurement!]! @all @guard(with: ["api-key"])
+
+    "Get measurement sizes."
+    measurementSizes(
+        measurement_id: Int @eq
+        size: String @eq
+    ): [MeasurementSize!]! @all @guard(with: ["api-key"])
+
+    "Get all operators (login_pin is always hidden)."
+    operators: [Operator!]! @all @guard(with: ["api-key"])
+
+    "Find a single operator by ID."
+    operator(id: ID! @eq): Operator @find @guard(with: ["api-key"])
+
+    "Get article images."
+    articleImages(article_id: Int @eq): [ArticleImage!]! @all @guard(with: ["api-key"])
+
+    "Get uploaded annotations with optional filtering."
+    uploadedAnnotations(
+        article_style: String @eq
+        size: String @eq
+        side: String @eq
+    ): [UploadedAnnotation!]! @all @guard(with: ["api-key"])
+
+    "Get article annotations."
+    articleAnnotations(
+        article_style: String @eq
+        size: String @eq
+    ): [ArticleAnnotation!]! @all @guard(with: ["api-key"])
+
+    "Get inspection records."
+    inspectionRecords(
+        article_id: Int @eq
+        purchase_order_id: Int @eq
+        operator_id: Int @eq
+    ): [InspectionRecord!]! @all @guard(with: ["api-key"])
+
+    "Get saved measurement results (from dynamically-created table)."
+    measurementResults(
+        purchase_order_article_id: Int
+        measurement_id: Int
+        size: String
+    ): [MeasurementResult!]! @guard(with: ["api-key"])
+
+    "Get saved detailed measurement results (per-side)."
+    measurementResultsDetailed(
+        purchase_order_article_id: Int
+        size: String
+        side: String
+    ): [MeasurementResultDetailed!]! @guard(with: ["api-key"])
+
+    "Get saved measurement sessions."
+    measurementSessions(
+        purchase_order_article_id: Int
+        size: String
+    ): [MeasurementSession!]! @guard(with: ["api-key"])
+}
+
+# ===========================================================================
+# MUTATIONS — Write data
+# ===========================================================================
+
+type Mutation {
+    "Verify operator PIN and return operator details."
+    verifyPin(
+        employee_id: String!
+        pin: String!
+    ): VerifyPinResponse! @guard(with: ["api-key"])
+
+    "Upsert measurement results in bulk."
+    upsertMeasurementResults(
+        results: [MeasurementResultInput!]!
+    ): MutationResponse! @guard(with: ["api-key"])
+
+    "Save per-side detailed measurement results (DELETE + INSERT)."
+    upsertMeasurementResultsDetailed(
+        purchase_order_article_id: Int!
+        size: String!
+        side: String!
+        results: [DetailedResultInput!]!
+    ): MutationResponse! @guard(with: ["api-key"])
+
+    "Upsert a QC measurement session."
+    upsertMeasurementSession(
+        purchase_order_article_id: Int!
+        size: String!
+        article_style: String
+        article_id: Int
+        purchase_order_id: Int
+        operator_id: Int
+        status: String
+        front_side_complete: Boolean
+        back_side_complete: Boolean
+        front_qc_result: String
+        back_qc_result: String
+    ): SessionResponse! @guard(with: ["api-key"])
+
+    "Upload an image file (jpg/png/jpeg, max 10MB)."
+    uploadImage(
+        file: Upload!
+        name: String!
+        folder: String
+    ): UploadResponse! @guard(with: ["api-key"])
+}
+
+# ===========================================================================
+# INPUT TYPES
+# ===========================================================================
+
+input MeasurementResultInput {
+    purchase_order_article_id: Int!
+    measurement_id: Int!
+    size: String!
+    article_style: String
+    measured_value: Float
+    expected_value: Float
+    tol_plus: Float
+    tol_minus: Float
+    status: String
+    operator_id: Int
+}
+
+input DetailedResultInput {
+    measurement_id: Int!
+    article_style: String
+    measured_value: Float
+    expected_value: Float
+    tol_plus: Float
+    tol_minus: Float
+    status: String
+    operator_id: Int
+}
+
+# ===========================================================================
+# RESPONSE TYPES
+# ===========================================================================
+
+type VerifyPinResponse {
+    success: Boolean!
+    message: String!
+    operator: OperatorInfo
+}
+
+type OperatorInfo {
+    id: ID!
+    full_name: String
+    employee_id: String
+    department: String
+}
+
+type MutationResponse {
+    success: Boolean!
+    message: String!
+    count: Int
+}
+
+type SessionResponse {
+    success: Boolean!
+    message: String!
+}
+
+type UploadResponse {
+    success: Boolean!
+    message: String!
+    path: String
+    url: String
+}
