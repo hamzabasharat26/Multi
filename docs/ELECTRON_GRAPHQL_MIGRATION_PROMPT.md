@@ -12,8 +12,8 @@ The MagicQC Laravel backend has been fully migrated to **GraphQL** using Lightho
 
 ```
 Endpoint:    POST https://magicqc.online/graphql
-API Key:     <PASTE_YOUR_ELECTRON_API_KEY_HERE>
-Auth Header: X-API-Key: <key>
+API Key:     QGsiGUxtcN4TjZWuPpUgTFYp5MYdFMKk4qudgxMJmA2cmUZZRJfnLqGhUyG1wtRP
+Auth Header: X-API-Key: QGsiGUxtcN4TjZWuPpUgTFYp5MYdFMKk4qudgxMJmA2cmUZZRJfnLqGhUyG1wtRP
 ```
 
 ## What Changed Server-Side
